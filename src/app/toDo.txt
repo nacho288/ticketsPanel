@@ -1,0 +1,27 @@
+//// to ask /////
+
+> si el usuario va a poder ver todos los pedidos o si solo va a poder ver los suyos
+
+> en que etapas de la solicitud el usuario va a ser capaz de cancelar
+
+> que diferentes tipos de usuario vamos a a tener  
+
+> el campo de asignacion a 
+
+> si cualquier administrador va a poder aprovar cualquier solicitud.
+
+> si cualquiera administrador va a poder modificar cualquier producto
+
+
+> si quien da la marca de finalizado 
+
+
+
+//// to do ////
+
+>input de comentario agregar solicitud.
+
+>agregar cantidad minima y stock en agregar solicitud
+
+
+

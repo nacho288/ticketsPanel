@@ -1,0 +1,176 @@
+<div class="row mt-4 justify-content-center ">
+  <div class="col-lg-10">
+
+    <ng-container *ngIf="insumosData.loading">
+      <div class="row justify-content-center">
+          <div class="col  p-4 rounded bg-light mt-3">
+          
+            <div class="row">
+              <div class="col">
+                <h1 class="display-4 text-center">cargando</h1>
+              </div>
+            </div>
+          
+            <div class="row">
+              <div class="col">
+                <hr class="my-4">
+              </div>
+            </div>
+          
+            <div class="row">
+              <div class="col">
+                <p class="lead text-center text-secondary">...Por favor espere...</p>
+              </div>
+            </div>
+          
+          </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!insumosData.loading">
+
+          <div class="row">
+            <div class="col">
+              <h2>Nueva solicitud:</h2>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col">
+              <hr>
+            </div>
+          </div>
+          
+          <div class="row justify-content-center">
+            <div class="col">
+              <div class="card">
+                <div class="card-header">
+                  Agregar insumos:
+                </div>
+                <div class="card-body">
+                  <div class="row justify-content-between ">
+                    <div class="col">
+                      <div class="form-group">
+                        <select [(ngModel)]="insumoId" name="insu" id="insumo" class="form-control" name="">
+                          <option selected disabled value="undefined">insumo</option>
+                          <option *ngFor="let articulo of insumosData.insumos" value="{{articulo.id}}">{{articulo.nombre}}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col col-lg-3">
+                      <div class="form-group">
+                        <input [(ngModel)]="cantidad" name="canti" id="cantidad" class="form-control" type="number"
+                          placeholder="Cantidad" name="">
+                      </div>
+                    </div>
+                    <div class="col col-auto">
+                      <div class="row justify-content-end">
+                        <button (click)="agregar()" class="btn btn-success mr-3" type="button">+</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div *ngIf="pedido.insumos.length == 0" class="row mt-3 justify-content-center">
+            <div class="col">
+              <hr class="mb-4">
+              <h4 class="text-secondary text-center font-italic mt-3">.. sin elementos ..</h4>
+            </div>
+          </div>
+          
+          <div class="row justify-content-center mt-3">
+            <div class="col">
+              <table *ngIf="pedido.insumos.length != 0" class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">codigo</th>
+                    <th scope="col">Solicitado por</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of pedido.insumos; let i = index">
+                    <th scope="row">{{item.id}}</th>
+                    <td>{{item.nombre}}</td>
+                    <td> {{item.cantidad}}</td>
+                    <td>
+                      <button (click)="quitar(item.id)" class="btn btn-sm btn-danger ml-2">X</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col">
+              <hr>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label for="exampleFormControlTextarea1">Comentario...</label>
+                <textarea [(ngModel)]="comentario" name="coment" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col">
+              <hr>
+            </div>
+          </div>
+          
+          <div class="row justify-content-between">
+            <div class="col mr-3">
+              <div class="row justify-content-end">
+                <button class="btn btn-success" type="button" data-toggle="modal" data-target="#exampleModal">Enviar</button>
+              </div>
+            </div>
+          
+            <div class="col ml-3">
+              <div class="row justify-content-start">
+                <button class="btn btn-primary" routerLink="/inicio" type="button">Volver</button>
+              </div>
+            </div>
+          </div>
+
+    </ng-container>
+
+
+    
+
+
+
+
+  </div>
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Aviso</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Está seguro de que desea enviar esta solicitud?
+      </div>
+      <div class="modal-footer">
+        <button (click)="enviar()" data-dismiss="modal" type="button" class="btn btn-success">Enviar</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Volver</button>
+      </div>
+    </div>
+  </div>
+</div>

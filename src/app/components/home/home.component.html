@@ -1,0 +1,19 @@
+<div class="jumbotron mt-4">
+  <h1 class="display-4 text-center">¡Bienvenido!</h1>
+  <p class="lead text-center">Eliga una opción para comenzar...</p>
+  <hr class="my-4">
+  <div class="row justify-content-center">
+    <div class="col col-auto">
+      <div class="row justify-content-center">
+        <a *ngIf="loginData.type == 0" class="btn btn-diputado btn-lg btn-block text-uppercase mb-3" routerLink="/crear" role="button">nueva solucitud</a>
+      </div>
+      <div class="row justify-content-center">
+        <a *ngIf="loginData.type == 0" class="btn btn-diputado btn-lg btn-block text-uppercase mb-3" routerLink="/solicitudes" role="button">Mis solicitudes</a>
+      </div>
+      <div class="row justify-content-center">
+        <a *ngIf="loginData.type == 3" class="btn btn-diputado btn-lg btn-block text-uppercase mb-3" routerLink="/entrantes" role="button">solicitudes entrantes</a>
+      </div>
+    </div>
+  </div>
+</div>
+

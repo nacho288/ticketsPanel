@@ -1,0 +1,41 @@
+.grey {
+    background-color: #dfe5eb;
+}
+
+
+.navColor {
+  background-color:#0c2355;
+ }
+ 
+ .blued {
+  color: #0c2355;
+ }
+
+.navFont {
+     color: #cdd3d9;
+ }
+
+.navBtn {
+    height: 75px;
+    padding-top: 27px;
+    
+}
+
+.listText{
+  font-size: 16px;
+}
+
+.btn-diputado {
+  background-color: #0e2d70;
+  color: #ffffff;
+}
+
+.btn-diputado {
+  background-color: #354d80;
+  color: white;
+}
+
+/* .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+    background-color: #0c2355 !important;
+}
+ */

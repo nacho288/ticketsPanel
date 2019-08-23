@@ -1,0 +1,112 @@
+<div class="row justify-content-center mt-4 ">
+  <div class="col-lg-10">
+    
+    <div class="row justify-content-center">
+      <div class="col">
+          <div class="card">
+            <div class="card-header h3 d">
+              Bandeja de solicitudes
+            </div>
+            <div class="card-body">
+              <div class="row justify-content-lg-center">
+                <div class="col">
+                  <form>
+                    <div class="row justify-content-lg-center">
+
+                      <div class="col">
+                        <div class="form-group mr-lg-2">
+                          <label for="numero">Número</label>
+                          <input [(ngModel)]="idBusqueda" name="idBus" type="number" class="form-control" id="numero" aria-describedby="numero" placeholder="Número">
+                        </div>
+                      </div>
+
+                      <div class="col">
+                        <div class="form-group mr-lg-2">
+                          <label for="desde">Desde:</label>
+                          <input [(ngModel)]="fechaDesde" name="fechaDe" type="date" class="form-control" id="desde" placeholder="Desde">
+                        </div>
+                      </div>
+
+                      <div class="col">
+                        <div class="form-group mr-lg-2">
+                          <label for="hasta">Hasta:</label>
+                          <input [(ngModel)]="fechaHasta" name="fechaHa" type="date" class="form-control" id="hasta" aria-describedby="hasta" placeholder="hasta">
+                        </div>
+                      </div>
+
+                      <div class="col">
+                        <div class="form-group ">
+                          <label for="hasta">Estado:</label>
+                          <select [(ngModel)]="estadoBusqueda" name="estadoBu" class="form-control" id="estado" aria-describedby="estado" placeholder="estado">
+                            <option value="">todos</option>
+                            <option *ngFor="let estado of utils.estados" value="{{estado.id}}">{{estado.nombre}}</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                  </form>
+
+                  <div class="row justify-content-lg-end ">
+                    <div class="col col-auto">
+                      <button class="btn btn-light" (click)="limpiar()">Limpiar</button>
+                    </div>
+                    <div class="col col-auto">
+                        <button class="btn btn-primary" (click)="filtrar()">Buscar</button>
+                    </div>
+                  </div>
+                                      
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+   
+    </div>
+
+    <div *ngIf="registrosFiltrados.length == 0" class="row justify-content-center">
+      <div class="col">
+        <div  class="row mt-4 justify-content-center">
+          <div class="col">
+            <hr class="mb-4">
+            <h4 class="text-secondary text-center font-italic">.. sin elementos ..</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+
+          
+
+          <table *ngIf="registrosFiltrados.length != 0" class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Solicitado por</th>
+                <th scope="col">Creado en</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Aprovado por</th>
+                <th scope="col">Para</th>
+                <th scope="col">Opciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of registrosFiltrados; let i = index">
+                <th scope="row">{{item.id}}</th>
+                <td>{{item.nombre}}</td>
+                <td>{{utils.parseDate(item.fecha)}}</td>
+                <td [class]="utils.getColor(item.estado)">{{utils.getEstado(item.estado)}}</td>
+                <td>{{item.aprovadoPor}}</td>
+                <td></td>
+                <td>
+                  <button [routerLink]="['/detalles', item.id]"class="btn btn-sm btn-primary mr-2">O</button>
+                  <button *ngIf="item.estado <= 1" class="btn btn-sm btn-danger">X</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+
+  </div>
+</div>
