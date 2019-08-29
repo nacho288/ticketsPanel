@@ -1,35 +1,214 @@
-<ng-container *ngIf="insumosData.loading">
-  <div class="row justify-content-center">
-    <div class="col  p-4 rounded bg-light mt-3">
+<app-loading *ngIf="insumosData.loading"></app-loading>
 
-      <div class="row">
-        <div class="col">
-          <h1 class="display-4 text-center">cargando</h1>
-        </div>
+<!-- //////////////////////////////// -->
+
+<div *ngIf="!insumosData.loading && insumosData.ventana == 1" class="row justify-content-center mt-5 animated fadeIn">
+  <div class="col col-md-8 col-lg-6 bg-white rounded shadow-sm p-4">
+
+    <div class="row">
+      <div class="col col-auto">
+        <h2>Listado de bienes</h2>
       </div>
-
-      <div class="row">
-        <div class="col">
-          <hr class="my-4">
-        </div>
+      <div class="col text-right">
+        <button class="btn btn-diputado" (click)="cambioVentana(2)">Agregar</button>
       </div>
+    </div>
 
-      <div class="row">
-        <div class="col">
-          <p class="lead text-center text-secondary">...Por favor espere...</p>
-        </div>
+    <div *ngIf="this.insumosData.insumos.length > 0" class="row mt-3">
+
+      <div class="col">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Código</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Minimo</th>
+              <th scope="col">Maximo</th>
+              <th scope="col">Editar</th>
+              <th scope="col">Tratos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of this.insumosData.insumos">
+              <th scope="row">{{item.codigo}}</th>
+              <td>{{item.nombre}}</td>
+              <td>{{item.minimo}}</td>
+              <td>{{item.maximo}}</td>
+              <td>
+                <button (click)="toEditar(item.id)" class="btn btn-sm btn-diputado ">≡</button>
+              </td>
+              <td>
+                <button (click)="toTratos(item.id)" class="btn btn-sm btn-diputado ">≡</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
     </div>
-  </div>
-</ng-container>
 
-<div *ngIf="!insumosData.loading" class="row justify-content-center mt-5">
-  <div class="col col-lg-8">
+    <ng-container *ngIf="this.insumosData.insumos.length <= 0">
+
+      <div class="row">
+        <div class="col">
+          <hr>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col">
+          <h4 class="text-secondary text-center font-italic">...sin elementos...</h4>
+        </div>
+      </div>
+
+    </ng-container>
+
+  </div>
+</div>
+
+
+
+
+<!-- /////////////////////////////// -->
+
+
+
+<div *ngIf="insumosData.ventana == 2" class="row mt-5 justify-content-center animated fadeIn">
+  <div class="col col-md-6 col-lg-4 bg-white rounded shadow-sm p-4">
 
     <div class="row">
       <div class="col">
-        <h2>Listado de bienes:</h2>
+        <h2>Añadir bienes</h2>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <hr class="mt-2">        
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col">
+        <div class="form-group">
+          <label for="exampleInputPassword1">Nombre</label>
+          <input [(ngModel)]="nombre" name="nom" type="text" class="form-control" id="exampleInputPassword1"
+            placeholder="Nombre">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Código</label>
+          <input [(ngModel)]="codigo" name="cod" type="text" class="form-control" id="exampleInputEmail1"
+            aria-describedby="emailHelp" placeholder="Código">
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label for="exampleInputPassword1">Mínimo</label>
+          <input [(ngModel)]="minimo" name="min" type="number" class="form-control" id="exampleInputPassword1"
+            placeholder="Mínimo">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Máximo</label>
+          <input [(ngModel)]="maximo" name="max" type="number" class="form-control" id="exampleInputPassword1"
+            placeholder="Máximo">
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <hr class="mt-2">
+      </div>
+    </div>
+    
+    <div class="row ">
+      <div class="col text-center">
+        <button class="btn btn-diputado" (click)="enviar()">Enviar</button>
+      </div>
+      <div class="col text-center">
+        <button class="btn btn-diputado" (click)="cambioVentana(1)">Volver</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- /////////////////////////////// -->
+
+
+<div *ngIf="insumosData.ventana == 3 && !insumosData.loading" class="row mt-5 justify-content-center animated fadeIn">
+  <div class="col col-md-6 col-lg-4 bg-white rounded shadow-sm p-4">
+
+    <div class="row">
+      <div class="col">
+        <h2>Editar bienes</h2>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <hr class="mt-2">
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col">
+        <div class="form-group">
+          <label for="exampleInputPassword1">Nombre</label>
+          <input [(ngModel)]="insumoEdit.nombre" name="nom" type="text" class="form-control" id="exampleInputPassword1"
+            placeholder="Nombre">
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label for="exampleInputPassword1">Mínimo</label>
+          <input [(ngModel)]="insumoEdit.minimo" name="min" type="number" class="form-control" id="exampleInputPassword1"
+            placeholder="Mínimo">
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label for="exampleInputPassword1">Máximo</label>
+          <input [(ngModel)]="insumoEdit.maximo" name="max" type="number" class="form-control" id="exampleInputPassword1"
+            placeholder="Máximo">
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <hr class="mt-2">
+      </div>
+    </div>
+
+    <div class="row ">
+      <div class="col text-center">
+        <button class="btn btn-diputado" (click)="editar(insumoEdit.id)">Guardar</button>
+      </div>
+      <div class="col text-center">
+        <button class="btn btn-diputado" (click)="cambioVentana(1)">Volver</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- /////////////////////////////// -->
+
+
+<div *ngIf="insumosData.ventana == 4 && !insumosData.loading && !usuarios.loading" class="row mt-5 justify-content-center animated fadeIn">
+  <div class="col col-md-8 col-lg-5 bg-white rounded shadow-sm p-4">
+
+    <div class="row">
+      <div class="col col-auto mr-0">
+        <h2 class="mr-0">Tratos especiales:</h2>
+      </div>
+      <div class="col col-auto  p-0">
+        <h2 class="ml-0 text-secondary">{{insumosData.insumo.nombre}}</h2>
       </div>
     </div>
 
@@ -38,28 +217,53 @@
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">Codigo</th>
               <th scope="col">Nombre</th>
               <th scope="col">Minimo</th>
               <th scope="col">Maximo</th>
-              <th scope="col">editar</th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of this.insumosData.insumos">
-              <th scope="row">{{item.id}}</th>
-              <td>{{item.nombre}}</td>
+            <tr *ngFor="let item of this.insumosData.insumo.tratos">
+              <th scope="row">{{usuarios.getNombre(item.usuario_id)}}</th>
               <td>{{item.minimo}}</td>
               <td>{{item.maximo}}</td>
               <td>
-                <button (click)="eliminar(item.id)"  class="btn badge badge-danger">eliminar</button>
-               </td>
+                <button (click)="borrarTrato(item.id)" class="btn btn-danger" type="button">✘</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <select [(ngModel)]="tratoEnviar.usuario_id" name="insu" id="insumo" class="form-control">
+                  <option selected disabled value="undefined">Nombre usuario</option>
+                  <option *ngFor="let usuario of usuarios.usuarios" value="{{usuario.id}}">{{usuario.nombre}}
+                  </option>
+                </select>
+              </th>
+              <td><input [(ngModel)]="tratoEnviar.minimo" name="min" type="number" class="form-control" id="exampleInputPassword1"
+                placeholder="Minimo"></td>
+              <td><input [(ngModel)]="tratoEnviar.maximo" name="max" type="number" class="form-control" id="exampleInputPassword1"
+                placeholder="Maximo"></td>
+              <td>
+                <button (click)="enviarTrato()" class="btn btn-success" type="button">✚</button>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
 
+    <div class="row">
+      <div class="col">
+        <hr class="mt-2">
+      </div>
+    </div>
+
+    <div class="row ">
+      <div class="col text-center">
+        <button class="btn btn-diputado" (click)="cambioVentana(1)">Volver</button>
+      </div>
+    </div>
+
   </div>
 </div>
-

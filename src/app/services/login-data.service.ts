@@ -5,11 +5,19 @@ import { Injectable } from '@angular/core';
 })
 export class LoginDataService {
 
-  logged: Boolean = true;
+  logged: Boolean = false;
   type: number = 0;
+  id: number = null;
   error: number = 2;
   loading: boolean = false;
-  fullName: string = "Ignacio Nazzo";
+  fullName: string = "";
+
+/*   logged: Boolean = true;
+  type: number = 1;
+  id: number = 1;
+  error: number = 2;
+  loading: boolean = false;
+  fullName: string = "sdfsdfsd"; */
 
   constructor() { }
 }

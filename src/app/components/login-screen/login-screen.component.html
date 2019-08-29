@@ -3,14 +3,10 @@
   
 </div>
 
-<div class="row justify-content-center mt-5">
-  <div class="col">
-    <img src="assets/img/logo_cdsf.png"  class="mx-auto d-block" alt="">
-  </div>
-</div>
 
-<div *ngIf="!loginData.loading" class="row justify-content-center">
-  <div class="col col-lg-4 p-4 rounded bg-light mt-3">
+<div *ngIf="!loginData.loading" class="row justify-content-center animated fadeIn">
+  <div class="col col-lg-4 p-4 rounded bg-white shadow-sm mt-3">
+    
 
     <div class="row">
       <div class="col">
@@ -26,7 +22,7 @@
 
     <div class="row">
       <div class="col">
-        <hr class="my-4">
+        <hr class="mb-4">
       </div>
     </div>
 
@@ -37,54 +33,38 @@
           <div class="form-group">
             <label for="exampleInputEmail1">Nombre de usuario</label>
             <input [(ngModel)]="nombre" name="nombre" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-              placeholder="nombre">
+              placeholder="nombre de usuario">
           </div>
           <div class="form-group">
             <label for="exampleInputPassword1">Contraseña</label>
-            <input [(ngModel)]="password" name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+            <input [(ngModel)]="password" name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Contraseña">
           </div>
-          <button  class="btn btn-block btn-primary" (click)="enviarLogin()">Enviar</button>
+
+          <div class="row">
+            <div class="col">
+              <hr class="mt-1 mb-3">
+            </div>
+          </div>
+          
+          <button  class="btn btn-block btn-diputado" (click)="enviarLogin()">Enviar</button>
         </form>
 
       </div>
     </div>
 
-    
   </div>
 </div>
 
-<div *ngIf="(loginData.error == 0 && !loginData.loading)" class="row justify-content-center mt-3">
-  <div class="col col-lg-4 bg-light p-3 rounded">
+<div *ngIf="(loginData.error == 0 && !loginData.loading)" class="row justify-content-center mt-3 mb-0">
+  <div class="col col-auto bg-white p-3 rounded shadow-sm">
     <p class="text-danger text-center">el nombre de usuario ingresado es incorrecto</p>
   </div>
 </div>
 
-<div *ngIf="(loginData.error == 1 && !loginData.loading)" class="row justify-content-center mt-3">
-  <div class="col col-lg-4 bg-light p-3 rounded">
-    <p class="text-danger text-center">la contraseña es incorrecta</p>
+<div *ngIf="(loginData.error == 1 && !loginData.loading)" class="row justify-content-center mt-3 mb-0">
+  <div class="col col-auto bg-white p-3 rounded shadow-sm">
+    <p class="text-danger text-center mb-1">la contraseña es incorrecta</p>
   </div>
 </div>
 
-<div *ngIf="loginData.loading" class="row justify-content-center">
-  <div class="col col-lg-4 p-4 rounded bg-light mt-3">
-
-    <div class="row">
-      <div class="col">
-        <h1 class="display-4 text-center">cargando</h1>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col">
-        <hr class="my-4">
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col">
-        <p class="lead text-center text-secondary">...Por favor espere...</p>
-      </div>
-    </div>
-
-  </div>
-</div>
+<app-loading *ngIf="loginData.loading"></app-loading>

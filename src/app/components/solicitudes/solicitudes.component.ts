@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from './../../services/data.service';
 import { UtilsService } from './../../services/utils.service';
+import { ConectionsService } from './../../services/conections.service';
+import { PedidosDataService } from './../../services/pedidos-data.service';
+import { LoginDataService } from './../../services/login-data.service';
 
 @Component({
   selector: 'app-solicitudes',
@@ -10,20 +13,25 @@ import { UtilsService } from './../../services/utils.service';
 })
 export class SolicitudesComponent implements OnInit {
   
-  registros: any[];
-  registrosFiltrados: any[];
-
   idBusqueda: number;
   fechaDesde; 
   fechaHasta;
   estadoBusqueda: number
+  comentario;
+  toEstado = 0;
 
-  constructor(private data: DataService, public utils: UtilsService) { 
-    this.registros = this.data.getMisTickets(0);
+  constructor(
+    private data: DataService, 
+    public utils: UtilsService,
+    private conections: ConectionsService,
+    public pedidos: PedidosDataService,
+    public login: LoginDataService
+) { 
+
   }
 
   limpiar = () => {
-    this.registrosFiltrados = this.registros;
+    this.pedidos.pedidosFiltrados = this.pedidos.pedidos;
     this.idBusqueda = undefined;
     this.fechaDesde = undefined;
     this.fechaHasta = undefined;
@@ -31,14 +39,13 @@ export class SolicitudesComponent implements OnInit {
   };
 
   filtrar = () =>{
-    let resultado = this.registros
-    resultado = this.idBusqueda ? resultado.filter(r => r.id == this.idBusqueda) : resultado;
-    resultado = this.fechaDesde ? resultado.filter(r => r.fecha.getTime() >= this.formatearFecha(this.fechaDesde).getTime()) : resultado;
-    resultado = this.fechaHasta ? resultado.filter(r => r.fecha.getTime() <= this.formatearFecha(this.fechaHasta).getTime()) : resultado;
-    console.log(this.estadoBusqueda);
+    let resultado = this.pedidos.pedidos
+    resultado = this.idBusqueda ? resultado.filter(r => r.pedido_id == this.idBusqueda) : resultado;
+    resultado = this.fechaDesde ? resultado.filter(r => this.formatearFecha(r.fecha).getTime() >= this.formatearFecha(this.fechaDesde).getTime()) : resultado;
+    resultado = this.fechaHasta ? resultado.filter(r => this.formatearFecha(r.fecha).getTime() <= this.formatearFecha(this.fechaHasta).getTime()) : resultado;
     
     resultado = this.estadoBusqueda ? resultado.filter(r => r.estado == this.estadoBusqueda) : resultado;
-    this.registrosFiltrados = resultado;
+    this.pedidos.pedidosFiltrados = resultado;
   }
   
   formatearFecha = (cadena: string) => {
@@ -49,8 +56,27 @@ export class SolicitudesComponent implements OnInit {
     ));
   }
 
+  detalles = (id) => {
+    this.conections.getPedido(id);
+    this.comentario = "";
+    this.pedidos.ventana = 2;
+  }
+
+  volver= () => {
+    this.pedidos.ventana = 1
+    this.comentario = "";
+    this.conections.getPedidos();
+  }
+
+  update = () => {
+
+    this.conections.updatePedido(this.toEstado, this.comentario);
+  }
+  
+
   ngOnInit() {
-    this.registrosFiltrados = this.registros;
+    this.pedidos.ventana = 1
+    this.conections.getPedidos();
   }
 
 }

@@ -11,48 +11,60 @@ import { SolicitudDataService } from './../../services/solicitud-data.service';
 })
 export class CrearSolicitudComponent implements OnInit {
 
+  ventana = 1;
+
   insumoId;
   cantidad;
   comentario;
 
-
-  pedido = {
-    insumos: [],
-    comentarioUsuario: "",
-  };
-
-
-  constructor(private conections: ConectionsService, public insumosData: InsumosDataService,private solicitud: SolicitudDataService, private router : Router) { }
+  constructor(
+    private conections: ConectionsService, 
+    public insumosData: InsumosDataService,
+    public solicitud: SolicitudDataService, 
+    private router : Router) { }
 
   ngOnInit() {
-    this.conections.getProducts();
+    this.solicitud.ventana = 1;
+    this.conections.getProductsUser();
   }
 
   agregar = () => {
     if (this.insumoId && this.cantidad) {
-      let repetido = this.pedido.insumos.findIndex(p => p.id == this.insumoId);
+      let repetido = this.solicitud.solicitud.insumos.findIndex(p => p.id == this.insumoId);
       if (repetido != (-1)) {
-        this.pedido[repetido].cantidad += this.cantidad;
+        this.solicitud.solicitud.insumos[repetido].cantidad += this.cantidad;
       } else {
-        this.pedido.insumos.push({
+        let ins = this.insumosData.insumos.find(i => i.id == this.insumoId);
+
+        this.solicitud.solicitud.insumos.push({
           id: this.insumoId,
+          codigo: ins.codigo,
           nombre: this.insumosData.insumos.find(i => i.id == this.insumoId).nombre,
-          cantidad: this.cantidad
+          cantidad: this.cantidad,
+          minimo: ins.minimo,
+          maximo: ins.maximo,
         });  
       }
     }
   }
 
   quitar = (id) => {
-    this.pedido.insumos = this.pedido.insumos.filter(p => p.id != id);
+    this.solicitud.solicitud.insumos = this.solicitud.solicitud.insumos.filter(p => p.id != id);
   }
 
   enviar = () => {
-    this.pedido.comentarioUsuario = this.comentario;
-    this.solicitud.solicitud = this.pedido;
-    this.router.navigate(['/evaluar']);
+
+    if (this.solicitud.solicitud.insumos.length != 0) {
+      this.solicitud.solicitud.comentarioUsuario = this.comentario ? this.comentario : "";
+      this.conections.sendPedido();  
+    }
+    
+  }
+
+  volver = () => {
+    this.solicitud.reset();
+    this.comentario = "";
+    this.conections.getProductsUser();
   }
   
-  
-
 }

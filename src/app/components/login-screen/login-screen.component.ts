@@ -20,11 +20,9 @@ export class LoginScreenComponent implements OnInit {
   }
   
   enviarLogin = () => {
-    
+
     if (this.nombre && this.password) {
-      this.loginData.loading = true;
-      this.login.login(this.nombre, this.password);
-      
+      this.conections.login(this.nombre, this.password);
     }
     
   }

@@ -15,6 +15,10 @@
      color: #cdd3d9;
  }
 
+ .naranja {
+     color: #b8900f;
+ }
+
 .navBtn {
     height: 75px;
     padding-top: 27px;
@@ -30,12 +34,47 @@
   color: #ffffff;
 }
 
-.btn-diputado {
+.btn-diputado:hover {
   background-color: #354d80;
   color: white;
 }
 
-/* .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
-    background-color: #0c2355 !important;
+.btn-verde {
+  background-color: #0e2d70;
+  color: #ffffff;
 }
- */
+
+.btn-verde:hover {
+  background-color: #57688d;
+  color: white;
+}
+
+/* ////////////////////// */
+
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+.fast {
+  -webkit-animation-duration: 0.4s;
+  animation-duration: 0.4s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.fadeIn {
+  animation-name: fadeIn;
+}

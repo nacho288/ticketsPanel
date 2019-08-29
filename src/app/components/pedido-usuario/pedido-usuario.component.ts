@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from './../../services/data.service';
 import { ActivatedRoute } from '@angular/router';
 import { UtilsService } from './../../services/utils.service';
+import { ConectionsService } from 'src/app/services/conections.service';
 
 
 
@@ -17,10 +18,23 @@ export class PedidoUsuarioComponent implements OnInit {
   registro;
   
 
-  constructor(private data: DataService, private activatedRoute: ActivatedRoute, public utils: UtilsService) {
+  constructor(
+    private data: DataService, 
+    private activatedRoute: ActivatedRoute, 
+    public utils: UtilsService,
+    private conections: ConectionsService,
+    
+    ) {
+
     this.activatedRoute.params.subscribe((params) => {
       this.idRegistro = params.id;
-    })
+    });
+
+    console.log("wii");
+    
+
+    this.conections.getPedidos();
+
    }
 
   ngOnInit() {

@@ -27,7 +27,7 @@ export class CrearBienesComponent implements OnInit {
         nombre: this.nombre,
         minimo: this.minimo ? this.minimo : 0,
         maximo: this.maximo ? this.maximo : 0,
-        id: this.codigo,
+        codigo: this.codigo,
       })
     }
     
