@@ -92,6 +92,8 @@ export class BienesComponent implements OnInit {
     this.cambioVentana(3);
     let insumo = this.insumosData.insumos.find( item => item.id == id);
     this.insumoEdit = insumo;
+    console.log(this.insumosData.alerta);
+    
   }
 
   toStock = (id) => {

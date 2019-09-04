@@ -94,6 +94,7 @@ export class ConectionsService {
   checkAlerta = () => {
     
     this.insumos.insumosAlerta = [];
+    
     this.insumos.alerta = false;
 
     this.insumos.insumos.forEach(insumo => {
@@ -110,9 +111,16 @@ export class ConectionsService {
     this.insumos.insumos = [];
     this.insumos.loading = true;
 
+    this.insumos.insumosAlerta = [];
+    this.insumos.alerta = false;
+
     this.http.get(this.serverUrl + '/productos').subscribe((res: any) => {
       if (!res.error) {
       res.forEach(item => {
+        if (parseInt(item.stock) < parseInt(item.alerta)) {
+          this.insumos.alerta = true;
+          this.insumos.insumosAlerta.push(item);
+        }
 
         this.insumos.insumos.push(item);
       
@@ -120,7 +128,7 @@ export class ConectionsService {
         this.insumos.loading = false;
       } 
 
-      this.checkAlerta();
+     
 
       this.insumos.loading = false;
       
@@ -131,6 +139,8 @@ export class ConectionsService {
   getProductsUser = () => {
     this.insumos.insumos = [];
     this.insumos.loading = true;
+    this.insumos.insumosAlerta = [];
+    this.insumos.alerta = false;
 
     let id = this.loginData.id.toString();
     let params = new HttpParams().set('usuario_id', id);
@@ -138,11 +148,15 @@ export class ConectionsService {
     this.http.get(this.serverUrl + '/uproductos', { "params": params }).subscribe((res: any) => {
       if (!res.error) {
       res.forEach(item => {
+        if (parseInt(item.stock) < parseInt(item.alerta)) {
+          this.insumos.alerta = true;
+          this.insumos.insumosAlerta.push(item);
+        }
         this.insumos.insumos.push(item);
       });
         this.insumos.loading = false;
       } 
-      this.checkAlerta();
+  
       this.insumos.loading = false;
       
     });
@@ -157,7 +171,6 @@ export class ConectionsService {
         this.insumos.insumo = res;
         this.insumos.loading = false;
       }
-      this.checkAlerta();
       this.insumos.loading = false;
     });
   }
@@ -173,7 +186,6 @@ export class ConectionsService {
 
         res.forEach(item => {
           this.insumos.insumos.push(item);
-          this.checkAlerta();
           this.insumos.loading = false;
         });
 
@@ -187,28 +199,22 @@ export class ConectionsService {
     this.insumos.insumos = [];
     this.insumos.loading = true;
     this.insumos.ventana = 1;
+    this.insumos.insumosAlerta = [];
+    this.insumos.alerta = false;
+
 
     this.http.post(this.serverUrl + '/productos',
       product)
       .subscribe((res: any[]) => {
           
           res.forEach(item => {
-
-            this.insumos.insumos.push({
-              id: item.id,
-              codigo: item.codigo,
-              nombre: item.nombre,
-              minimo: item.minimo,
-              maximo: item.maximo,
-              stock: item.stock,
-              alerta: item.alerta,
-            })
-            this.insumos.loading = false;
-            this.checkAlerta();
-            this.insumos.loading = false;
-            
+            if (parseInt(item.stock) < parseInt(item.alerta)) {
+              this.insumos.alerta = true;
+              this.insumos.insumosAlerta.push(item);
+            }
+            this.insumos.insumos.push(item);
           });
-
+        this.insumos.loading = false;
         }
       );
 
@@ -221,18 +227,18 @@ export class ConectionsService {
     this.insumos.insumos = [];
     this.insumos.loading = true;
     trato.producto_id = this.insumos.insumo.id;
+    this.insumos.insumosAlerta = [];
+    this.insumos.alerta = false;
 
     this.http.post(this.serverUrl + '/tratos',
       trato)
       .subscribe((res: any[]) => {
         res.forEach(item => {
-          this.insumos.insumos.push({
-            id: item.id,
-            codigo: item.codigo,
-            nombre: item.nombre,
-            minimo: item.minimo,
-            maximo: item.maximo
-          })
+          if (parseInt(item.stock) < parseInt(item.alerta)) {
+            this.insumos.alerta = true;
+            this.insumos.insumosAlerta.push(item);
+          }
+          this.insumos.insumos.push(item)
         });
         
         this.getProduct(this.insumos.insumo.id);
@@ -245,23 +251,19 @@ export class ConectionsService {
 
     this.insumos.insumos = [];
     this.insumos.loading = true;
-
+    this.insumos.insumosAlerta = [];
+    this.insumos.alerta = false;
 
     this.http.delete(this.serverUrl + '/tratos/' + id)
       .subscribe((res: any[]) => {
-
         res.forEach(item => {
-          this.insumos.insumos.push({
-            id: item.id,
-            codigo: item.codigo,
-            nombre: item.nombre,
-            minimo: item.minimo,
-            maximo: item.maximo
-          })
-          
-          this.getProduct(this.insumos.insumo.id);
+          if (parseInt(item.stock) < parseInt(item.alerta)) {
+            this.insumos.alerta = true;
+            this.insumos.insumosAlerta.push(item);
+          }
+          this.insumos.insumos.push(item);
         });
-
+        this.getProduct(this.insumos.insumo.id);
       }
       );
 
@@ -275,20 +277,21 @@ export class ConectionsService {
     this.insumos.insumos = [];
     this.insumos.loading = true;
     this.insumos.ventana = 1;
+    this.insumos.insumosAlerta = [];
+    this.insumos.alerta = false;
 
     product.usuario_id = this.loginData.id;
 
     this.http.put(this.serverUrl + '/productos/' + product.id,
       product)
       .subscribe((res: any[]) => {
-
         res.forEach(item => {
-
+          if (parseInt(item.stock) < parseInt(item.alerta)) {
+            this.insumos.alerta = true;
+            this.insumos.insumosAlerta.push(item);
+          }
           this.insumos.insumos.push(item);
-          
-
         });
-        this.checkAlerta();
         this.insumos.loading = false;
       }
       );
@@ -300,6 +303,8 @@ export class ConectionsService {
     this.insumos.insumos = [];
     this.insumos.loading = true;
     this.insumos.ventana = 1;
+    this.insumos.insumosAlerta = [];
+    this.insumos.alerta = false;
 
     let product = {
       usuario_id: this.loginData.id,
@@ -311,9 +316,12 @@ export class ConectionsService {
       .subscribe((res: any[]) => {
 
         res.forEach(item => {
+          if (parseInt(item.stock) < parseInt(item.alerta)) {
+            this.insumos.alerta = true;
+            this.insumos.insumosAlerta.push(item);
+          }
           this.insumos.insumos.push(item);
         });
-        this.checkAlerta();
         this.insumos.loading = false;
       }
       );
