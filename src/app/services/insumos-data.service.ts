@@ -13,5 +13,9 @@ export class InsumosDataService {
 
   loading: boolean = true;
 
+  alerta = false;
+
+  insumosAlerta: any[] = [];
+
   constructor() { }
 }

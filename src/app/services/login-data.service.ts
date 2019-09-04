@@ -11,13 +11,13 @@ export class LoginDataService {
   error: number = 2;
   loading: boolean = false;
   fullName: string = "";
-
-/*   logged: Boolean = true;
+/* 
+  logged: Boolean = true;
   type: number = 1;
   id: number = 1;
   error: number = 2;
   loading: boolean = false;
-  fullName: string = "sdfsdfsd"; */
-
+  fullName: string = "sdfsdfsd";
+ */
   constructor() { }
 }

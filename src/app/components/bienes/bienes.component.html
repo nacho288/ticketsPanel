@@ -22,23 +22,20 @@
             <tr>
               <th scope="col">Código</th>
               <th scope="col">Nombre</th>
-              <th scope="col">Minimo</th>
-              <th scope="col">Maximo</th>
-              <th scope="col">Editar</th>
-              <th scope="col">Tratos</th>
+              <th scope="col">stock</th>
+              <th class="text-center" scope="col">Mod. stock</th>
+              <th class="text-center" scope="col">detalles</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of this.insumosData.insumos">
               <th scope="row">{{item.codigo}}</th>
               <td>{{item.nombre}}</td>
-              <td>{{item.minimo}}</td>
-              <td>{{item.maximo}}</td>
-              <td>
-                <button (click)="toEditar(item.id)" class="btn btn-sm btn-diputado ">≡</button>
-              </td>
-              <td>
-                <button (click)="toTratos(item.id)" class="btn btn-sm btn-diputado ">≡</button>
+              <td>{{item.stock}}</td>
+              <td  class="text-center"><button (click)="toStock(item.id)" class="btn btn-sm btn-diputado " data-toggle="modal"
+                data-target="#exampleModal">≡</button></td>
+              <td class="text-center">
+                <button (click)="toDetalles(item.id)" class="btn btn-sm btn-diputado ">≡</button>
               </td>
             </tr>
           </tbody>
@@ -66,7 +63,40 @@
   </div>
 </div>
 
+<div *ngIf="!insumosData.loading && insumosData.ventana == 1 && insumosData.alerta" class="row justify-content-center mt-3">
+  <div class="col col-md-8 col-lg-6 bg-white rounded shadow-sm p-4">
+    <div class="row justify-content-center">
+      <div class="col">
+        <h5 class="text-center font-italic">Uno o mas bienes tienen su stock por debajo del punto de pedido</h5>
+      </div>
+      <div class="col col-auto text-center">
+        <button class="btn btn-diputado mt-1" data-toggle="modal" data-target="#alertaModal">Ver</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+<div class="modal fade mt-4" id="alertaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Bienes por debajo del punto de pedido:</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul>
+          <li class="alertaText" *ngFor="let item of insumosData.insumosAlerta">{{item.nombre}}</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-diputado" data-dismiss="modal">volver</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <!-- /////////////////////////////// -->
@@ -96,21 +126,31 @@
             placeholder="Nombre">
         </div>
         <div class="form-group">
-          <label for="exampleInputEmail1">Código</label>
-          <input [(ngModel)]="codigo" name="cod" type="text" class="form-control" id="exampleInputEmail1"
-            aria-describedby="emailHelp" placeholder="Código">
-        </div>
-      </div>
-      <div class="col">
-        <div class="form-group">
-          <label for="exampleInputPassword1">Mínimo</label>
+          <label for="exampleInputPassword1">Mínimo en pedido</label>
           <input [(ngModel)]="minimo" name="min" type="number" class="form-control" id="exampleInputPassword1"
             placeholder="Mínimo">
         </div>
         <div class="form-group">
-          <label for="exampleInputPassword1">Máximo</label>
+          <label for="exampleInputPassword1">Mínimo en stock</label>
+          <input [(ngModel)]="alerta" name="StockMin" type="number" class="form-control" id="exampleInputPassword1"
+            placeholder="Mínimo en stock<">
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label for="exampleInputEmail1">Código</label>
+          <input [(ngModel)]="codigo" name="cod" type="text" class="form-control" id="exampleInputEmail1"
+            aria-describedby="emailHelp" placeholder="Código">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Máximo en pedido</label>
           <input [(ngModel)]="maximo" name="max" type="number" class="form-control" id="exampleInputPassword1"
             placeholder="Máximo">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">stock inicial</label>
+          <input [(ngModel)]="stock" name="stocki" type="number" class="form-control" id="exampleInputPassword1"
+            placeholder="Stock inicial">
         </div>
       </div>
     </div>
@@ -159,6 +199,13 @@
             placeholder="Nombre">
         </div>
       </div>
+      <div class="col">
+        <div class="form-group">
+          <label for="exampleInputPassword1">Mínimo en stock</label>
+          <input [(ngModel)]="insumoEdit.alerta" name="StockMin" type="number" class="form-control" id="exampleInputPassword1"
+            placeholder="Mínimo en stock">
+        </div>
+      </div>
     </div>
 
     <div class="row">
@@ -177,6 +224,8 @@
         </div>
       </div>
     </div>
+
+    
 
     <div class="row">
       <div class="col">
@@ -201,55 +250,24 @@
 
 
 <div *ngIf="insumosData.ventana == 4 && !insumosData.loading && !usuarios.loading" class="row mt-5 justify-content-center animated fadeIn">
-  <div class="col col-md-8 col-lg-5 bg-white rounded shadow-sm p-4">
+  <div class="col col-md-8 col-lg-6 bg-white rounded shadow-sm p-4">
 
-    <div class="row">
-      <div class="col col-auto mr-0">
-        <h2 class="mr-0">Tratos especiales:</h2>
+    <div class="row align-items-center">
+      
+      <div class="col col-auto">
+        <div class="row">
+          <div class="col col-auto mr-0">
+            <h2 class="mr-0">Detalles:</h2>
+          </div>
+          <div class="col col-auto  p-0">
+            <h2 class="ml-0 text-secondary">{{insumosData.insumo.nombre}}</h2>
+          </div>
+        </div>
       </div>
-      <div class="col col-auto  p-0">
-        <h2 class="ml-0 text-secondary">{{insumosData.insumo.nombre}}</h2>
-      </div>
-    </div>
 
-    <div class="row mt-3">
-      <div class="col">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Nombre</th>
-              <th scope="col">Minimo</th>
-              <th scope="col">Maximo</th>
-              <th scope="col"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of this.insumosData.insumo.tratos">
-              <th scope="row">{{usuarios.getNombre(item.usuario_id)}}</th>
-              <td>{{item.minimo}}</td>
-              <td>{{item.maximo}}</td>
-              <td>
-                <button (click)="borrarTrato(item.id)" class="btn btn-danger" type="button">✘</button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">
-                <select [(ngModel)]="tratoEnviar.usuario_id" name="insu" id="insumo" class="form-control">
-                  <option selected disabled value="undefined">Nombre usuario</option>
-                  <option *ngFor="let usuario of usuarios.usuarios" value="{{usuario.id}}">{{usuario.nombre}}
-                  </option>
-                </select>
-              </th>
-              <td><input [(ngModel)]="tratoEnviar.minimo" name="min" type="number" class="form-control" id="exampleInputPassword1"
-                placeholder="Minimo"></td>
-              <td><input [(ngModel)]="tratoEnviar.maximo" name="max" type="number" class="form-control" id="exampleInputPassword1"
-                placeholder="Maximo"></td>
-              <td>
-                <button (click)="enviarTrato()" class="btn btn-success" type="button">✚</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+
+      <div class="col text-right">
+        <button (click)="toEditar(insumosData.insumo.id)" class="btn btn-diputado ">Editar</button>
       </div>
     </div>
 
@@ -259,11 +277,182 @@
       </div>
     </div>
 
+
+    <div class="row">
+      <div class="col">
+        <ul>
+          <li><b>Nombre: </b>{{insumosData.insumo.nombre}}</li>
+          <li><b>Código: </b>{{insumosData.insumo.codigo}}</li>
+          <li><b>Stock: </b>{{insumosData.insumo.stock}}</li>
+        </ul>
+      </div>
+      <div class="col">
+        <ul>
+          <li><b>Mínimo por pedido: </b>{{insumosData.insumo.minimo}}</li>
+          <li><b>Mínimo por pedido: </b>{{insumosData.insumo.maximo}}</li>
+          <li><b>Punto de pedido: </b>{{insumosData.insumo.alerta}}</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <hr class="mt-2">
+      </div>
+    </div>
+
+
+    <div class="accordion mt-1" id="accordionExample">
+      <div class="card">
+        <div class="card-header" id="headingOne">
+          <h2 class="mb-0">
+            <button class="btn btn-link text-dark sectionText" type="button" data-toggle="collapse" data-target="#collapseOne"
+              aria-expanded="true" aria-controls="collapseOne">
+              Tratos especiales
+            </button>
+          </h2>
+        </div>
+    
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+          <div class="card-body">
+
+                <div class="row mt-3">
+                  <div class="col">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Nombre</th>
+                          <th scope="col">Minimo</th>
+                          <th scope="col">Maximo</th>
+                          <th scope="col"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of this.insumosData.insumo.tratos">
+                          <th scope="row">{{usuarios.getNombre(item.usuario_id)}}</th>
+                          <td>{{item.minimo}}</td>
+                          <td>{{item.maximo}}</td>
+                          <td>
+                            <button (click)="borrarTrato(item.id)" class="btn btn-danger" type="button">✘</button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th scope="row">
+                            <select [(ngModel)]="tratoEnviar.usuario_id" name="insu" id="insumo" class="form-control">
+                              <option selected disabled value="undefined">Nombre usuario</option>
+                              <option *ngFor="let usuario of usuarios.usuarios" value="{{usuario.id}}">{{usuario.nombre}}
+                              </option>
+                            </select>
+                          </th>
+                          <td><input [(ngModel)]="tratoEnviar.minimo" name="min" type="number" class="form-control"
+                              id="exampleInputPassword1" placeholder="Minimo"></td>
+                          <td><input [(ngModel)]="tratoEnviar.maximo" name="max" type="number" class="form-control"
+                              id="exampleInputPassword1" placeholder="Maximo"></td>
+                          <td>
+                            <button (click)="enviarTrato()" class="btn btn-success" type="button">✚</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" id="headingTwo">
+          <h2 class="mb-0">
+            <button class="btn btn-link text-dark sectionText collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo"
+              aria-expanded="false" aria-controls="collapseTwo">
+              Historial de stock
+            </button>
+          </h2>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+          <div class="card-body">
+
+
+            <div class="row mt-0">
+              <div class="col">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Fecha</th>
+                      <th scope="col">anterior</th>
+                      <th scope="col">actual</th>
+                      <th scope="col">acción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of this.insumosData.insumo.movimientos">
+                      <th>{{item.fecha}}</th>
+                      <td><ng-container *ngIf="item.tipo_id != 0">{{item.original}}</ng-container></td>
+                      <td>{{item.nuevo}}</td>
+                      <td>
+                        <ng-container *ngIf="item.tipo_id == 0">Stock inicial</ng-container>
+                        <ng-container *ngIf="item.tipo_id == 1">Modificado por {{usuarios.getNombre(item.usuario_id)}}</ng-container>
+                        <ng-container *ngIf="item.tipo_id == 2">Restado por solicitud de {{usuarios.getNombre(item.usuario_id)}}</ng-container>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <hr class="mt-3">
+      </div>
+    </div>
+
     <div class="row ">
       <div class="col text-center">
         <button class="btn btn-diputado" (click)="cambioVentana(1)">Volver</button>
       </div>
     </div>
 
+  </div>
+</div>
+
+
+
+<!-- /////////////////////////////////////////////////// -->
+
+
+
+<div class="modal fade mt-5" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modificar Stock: {{insumoStock.nombre}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <div class="form-group">
+        <label for="nuevoStock">Nuevo Stock</label>
+        <input [(ngModel)]="insumoStock.stock" name="stockmod" type="number" class="form-control" id="nuevoStock"
+          placeholder="Stock">
+      </div>
+      </div>
+      <div class="modal-footer">
+        <div class="row">
+          <div class="col text-left">
+            <button (click)="updateStock()" type="button" class="btn btn-success" data-dismiss="modal">Guardar</button>
+          </div>
+          <div class="col text-right">
+            <button type="button" class="btn btn-diputado" data-dismiss="modal">Volver</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

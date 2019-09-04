@@ -13,6 +13,8 @@ export class BienesComponent implements OnInit {
   nombre;
   minimo;
   maximo;
+  stock;
+  alerta;
   codigo;
 
   insumoEdit ={
@@ -21,6 +23,8 @@ export class BienesComponent implements OnInit {
     minimo: 0,
     maximo: 0,
     codigo: 0,
+    stock: 0,
+    alerta: 0,
   };
 
   tratoEnviar = {
@@ -29,11 +33,29 @@ export class BienesComponent implements OnInit {
     maximo: 0,
   };
 
+  insumoStock: {
+    id: 0,
+    nombre: "",
+    minimo: 0,
+    maximo: 0,
+    codigo: 0,
+    stock: 0
+  };
+
 
   constructor(
     private conections: ConectionsService ,
     public insumosData: InsumosDataService,
-    public usuarios: UsuariosDataService) { }
+    public usuarios: UsuariosDataService) {
+    this.insumoStock = {
+      id: 0,
+      nombre: "",
+      minimo: 0,
+      maximo: 0,
+      codigo: 0,
+      stock: 0
+  };
+     }
 
   ngOnInit() {
     this.conections.getProducts();
@@ -51,12 +73,17 @@ export class BienesComponent implements OnInit {
   enviar = () => {
 
     if (this.nombre && this.codigo && this.maximo) {
-      this.conections.sendProduct({
+
+      let pack = {
         nombre: this.nombre,
         minimo: this.minimo ? this.minimo : 0,
         maximo: this.maximo,
+        stock: this.stock,
+        alerta: this.alerta,
         codigo: this.codigo,
-      })
+      };
+  
+      this.conections.sendProduct(pack);
     }
 
   }
@@ -67,11 +94,18 @@ export class BienesComponent implements OnInit {
     this.insumoEdit = insumo;
   }
 
+  toStock = (id) => {
+    let insumo = this.insumosData.insumos.find(item => item.id == id);
+    this.insumoStock = {
+      ...insumo
+    };
+  }
+
   editar = (id) => {
     this.conections.updateProduct(this.insumoEdit);
   }
 
-  toTratos = (id) => {
+  toDetalles = (id) => {
     this.cambioVentana(4);
     this.conections.getUsuarios();
     this.conections.getProduct(id);
@@ -87,6 +121,11 @@ export class BienesComponent implements OnInit {
   borrarTrato = (id) => {
     this.conections.deleteTrato(id);
   }
+
+  updateStock = () => {
+    this.conections.updateProductStock(this.insumoStock);
+  }
+  
 
 
 }

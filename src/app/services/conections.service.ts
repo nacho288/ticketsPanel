@@ -16,6 +16,8 @@ import { UsuariosDataService } from './usuarios-data.service';
 export class ConectionsService {
 
   serverUrl: string = "https://server-tickets.herokuapp.com/api";
+/* 
+  serverUrl: string = "http://127.0.0.1:8000/api"; */
 
   list: any[];
 
@@ -88,6 +90,21 @@ export class ConectionsService {
     });
 
   }
+
+  checkAlerta = () => {
+    
+    this.insumos.insumosAlerta = [];
+    this.insumos.alerta = false;
+
+    this.insumos.insumos.forEach(insumo => {
+    if (insumo.stock < insumo.alerta) {
+      this.insumos.alerta = true;
+      this.insumos.insumosAlerta.push(insumo);
+    }
+    });
+
+  }
+  
   
   getProducts = () => {
     this.insumos.insumos = [];
@@ -97,16 +114,12 @@ export class ConectionsService {
       if (!res.error) {
       res.forEach(item => {
 
-        this.insumos.insumos.push({
-          id: item.id,
-          codigo: item.codigo,
-          nombre: item.nombre,
-          minimo: item.minimo,
-          maximo: item.maximo
-        })
+        this.insumos.insumos.push(item);
 
       });
       } 
+
+      this.checkAlerta();
 
       this.insumos.loading = false;
       
@@ -124,18 +137,10 @@ export class ConectionsService {
     this.http.get(this.serverUrl + '/uproductos', { "params": params }).subscribe((res: any) => {
       if (!res.error) {
       res.forEach(item => {
-
-        this.insumos.insumos.push({
-          id: item.id,
-          codigo: item.codigo,
-          nombre: item.nombre,
-          minimo: item.minimo,
-          maximo: item.maximo
-        })
-
+        this.insumos.insumos.push(item);
       });
       } 
-
+      this.checkAlerta();
       this.insumos.loading = false;
       
     });
@@ -149,8 +154,7 @@ export class ConectionsService {
       if (!res.error) {
         this.insumos.insumo = res;
       }
-      /* console.log(res); */
-      
+      this.checkAlerta();
       this.insumos.loading = false;
     });
   }
@@ -165,13 +169,8 @@ export class ConectionsService {
       .subscribe((res: any[]) => {
 
         res.forEach(item => {
-          this.insumos.insumos.push({
-            id: item.id,
-            codigo: item.codigo,
-            nombre: item.nombre,
-            minimo: item.minimo,
-            maximo: item.maximo
-          })
+          this.insumos.insumos.push(item);
+          this.checkAlerta();
           this.insumos.loading = false;
         });
 
@@ -197,8 +196,11 @@ export class ConectionsService {
               codigo: item.codigo,
               nombre: item.nombre,
               minimo: item.minimo,
-              maximo: item.maximo
+              maximo: item.maximo,
+              stock: item.stock,
+              alerta: item.alerta,
             })
+            this.checkAlerta();
             this.insumos.loading = false;
             
           });
@@ -228,6 +230,7 @@ export class ConectionsService {
             maximo: item.maximo
           })
         });
+        
         this.getProduct(this.insumos.insumo.id);
       }
       );
@@ -251,6 +254,7 @@ export class ConectionsService {
             minimo: item.minimo,
             maximo: item.maximo
           })
+          
           this.getProduct(this.insumos.insumo.id);
         });
 
@@ -268,23 +272,45 @@ export class ConectionsService {
     this.insumos.loading = true;
     this.insumos.ventana = 1;
 
+    product.usuario_id = this.loginData.id;
+
     this.http.put(this.serverUrl + '/productos/' + product.id,
       product)
       .subscribe((res: any[]) => {
 
         res.forEach(item => {
 
-          this.insumos.insumos.push({
-            id: item.id,
-            codigo: item.codigo,
-            nombre: item.nombre,
-            minimo: item.minimo,
-            maximo: item.maximo
-          })
-          this.insumos.loading = false;
+          this.insumos.insumos.push(item);
+          
 
         });
+        this.checkAlerta();
+        this.insumos.loading = false;
+      }
+      );
 
+  };
+
+  updateProductStock = (pack) => {
+
+    this.insumos.insumos = [];
+    this.insumos.loading = true;
+    this.insumos.ventana = 1;
+
+    let product = {
+      usuario_id: this.loginData.id,
+      stock: pack.stock
+    }  
+
+    this.http.put(this.serverUrl + '/productos/' + pack.id,
+      product)
+      .subscribe((res: any[]) => {
+
+        res.forEach(item => {
+          this.insumos.insumos.push(item);
+        });
+        this.checkAlerta();
+        this.insumos.loading = false;
       }
       );
 
@@ -374,11 +400,12 @@ export class ConectionsService {
       .subscribe((res: any) => {
         
         if (res.sucess) {
-          console.log("exito");
-          
+          this.pedidos.ventana = 1;
+          this.getPedidos();
+        } else {
+          this.pedidos.ventana = 3;
+          this.pedidos.loading = false;
         }
-        this.pedidos.ventana = 1;
-        this.getPedidos();
         
       });
 
