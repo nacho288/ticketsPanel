@@ -115,8 +115,9 @@ export class ConectionsService {
       res.forEach(item => {
 
         this.insumos.insumos.push(item);
-
+      
       });
+        this.insumos.loading = false;
       } 
 
       this.checkAlerta();
@@ -139,6 +140,7 @@ export class ConectionsService {
       res.forEach(item => {
         this.insumos.insumos.push(item);
       });
+        this.insumos.loading = false;
       } 
       this.checkAlerta();
       this.insumos.loading = false;
@@ -153,6 +155,7 @@ export class ConectionsService {
     this.http.get(this.serverUrl + '/productos/' + id).subscribe((res: any) => {
       if (!res.error) {
         this.insumos.insumo = res;
+        this.insumos.loading = false;
       }
       this.checkAlerta();
       this.insumos.loading = false;
@@ -200,6 +203,7 @@ export class ConectionsService {
               stock: item.stock,
               alerta: item.alerta,
             })
+            this.insumos.loading = false;
             this.checkAlerta();
             this.insumos.loading = false;
             
