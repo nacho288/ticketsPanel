@@ -19,12 +19,6 @@ import { BienesComponent } from './components/bienes/bienes.component';
 import { LoadingComponent } from './components/loading/loading.component';
 import { CategoriasComponent } from './components/categorias/categorias.component';
 
-/* import { EvaluarComponent } from './components/evaluar/evaluar.component';
-import { CrearBienesComponent } from './components/crear-bienes/crear-bienes.component';
-import { EditarBienesComponent } from './components/editar-bienes/editar-bienes.component';
-import { EntrantesComponent } from './components/entrantes/entrantes.component';
-import { PedidoUsuarioComponent } from './components/pedido-usuario/pedido-usuario.component'; */
-
 
 @NgModule({
   declarations: [
