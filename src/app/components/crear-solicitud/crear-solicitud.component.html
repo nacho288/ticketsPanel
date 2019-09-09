@@ -1,6 +1,6 @@
-<app-loading *ngIf="insumosData.loading || solicitud.loading"></app-loading>
+<app-loading *ngIf="insumosData.loading || solicitud.loading || categoriasData.loading"></app-loading>
 
-<div *ngIf="!insumosData.loading && !solicitud.loading" class="row mt-4 justify-content-center">
+<div *ngIf="!insumosData.loading && !solicitud.loading && !categoriasData.loading" class="row mt-4 justify-content-center">
   <div class="col-lg-10">
 
       <div *ngIf="solicitud.ventana == 1" class="row justify-content-center animated fadeIn">
@@ -28,10 +28,24 @@
                   <div class="row justify-content-between ">
                     <div class="col">
                       <div class="form-group">
-                        <select [(ngModel)]="insumoId" name="insu" id="insumo" class="form-control" name="">
+                        <select [(ngModel)]="categoria" name="cat" id="insumo" class="form-control" >
+                          <option selected disabled value="undefined">Categorias</option>
+                          <option value="0">Todas</option>
+                          <ng-container *ngFor="let cat of categoriasData.categorias">
+                            <option disabled>-- {{cat.nombre}} -- </option>
+                            <option *ngFor="let sub of cat.subcategorias" [selected]="sub.id == 1" [value]="sub.id">{{sub.nombre}}</option>
+                          </ng-container>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-group">
+                        <select [(ngModel)]="insumoId" name="insu" id="insumo" class="form-control">
                           <option selected disabled value="undefined">insumo</option>
-                          <option *ngFor="let articulo of insumosData.insumos" value="{{articulo.id}}">{{articulo.nombre}}
-                          </option>
+                          <ng-container *ngFor="let articulo of insumosData.insumos">
+                            <option *ngIf="articulo.subcategoria_id == categoria  || categoria == 0"  value="{{articulo.id}}">{{articulo.nombre}}
+                            </option>
+                          </ng-container>
                         </select>
                       </div>
                     </div>

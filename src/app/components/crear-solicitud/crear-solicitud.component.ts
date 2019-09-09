@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ConectionsService } from './../../services/conections.service';
 import { InsumosDataService } from './../../services/insumos-data.service';
+import { CategoriasDataService } from './../../services/categorias-data.service';
 import { Router } from '@angular/router';
 
 import { SolicitudDataService } from './../../services/solicitud-data.service';
+
 
 @Component({
   selector: 'app-crear-solicitud',
@@ -17,11 +19,13 @@ export class CrearSolicitudComponent implements OnInit {
   cantidad;
   comentario;
   errorVacio = false;
+  categoria; 
 
   constructor(
     private conections: ConectionsService, 
     public insumosData: InsumosDataService,
     public solicitud: SolicitudDataService, 
+    public categoriasData: CategoriasDataService,
     private router : Router) { 
     this.solicitud.ventana = 1;
     this.conections.getProductsUser();
@@ -50,6 +54,10 @@ export class CrearSolicitudComponent implements OnInit {
           maximo: ins.maximo,
         });  
       }
+
+      this.insumoId = undefined;
+      this.cantidad = undefined;
+      this.categoria = undefined;
     }
   }
 
