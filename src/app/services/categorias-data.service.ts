@@ -3,21 +3,15 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export class InsumosDataService {
-
-  insumos: any[] = [];
+export class CategoriasDataService {
 
   categorias: any[] = [];
 
-  insumo;
+  categoria;
 
   ventana = 1;
 
-  loading: boolean = true;
-
-  alerta = false;
-
-  insumosAlerta: any[] = [];
+  loading: boolean = false;
 
   constructor() { }
 }

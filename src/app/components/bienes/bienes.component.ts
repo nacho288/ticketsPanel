@@ -2,13 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { InsumosDataService } from 'src/app/services/insumos-data.service';
 import { ConectionsService } from 'src/app/services/conections.service';
 import { UsuariosDataService } from './../../services/usuarios-data.service';
+import { FormControl} from '@angular/forms';
+import { CategoriasDataService } from 'src/app/services/categorias-data.service';
+
+
 
 @Component({
   selector: 'app-bienes',
-  templateUrl: './bienes.component.html',
-  styleUrls: ['./bienes.component.css']
+  templateUrl: './bienes.component.html'
 })
 export class BienesComponent implements OnInit {
+
+  control = new FormControl();
 
   nombre;
   minimo;
@@ -16,6 +21,7 @@ export class BienesComponent implements OnInit {
   stock;
   alerta;
   codigo;
+  subCategoria: any = 1;
 
   insumoEdit ={
     id: 0,
@@ -25,6 +31,7 @@ export class BienesComponent implements OnInit {
     codigo: 0,
     stock: 0,
     alerta: 0,
+    subcategoria_id: 0,
   };
 
   tratoEnviar = {
@@ -46,6 +53,7 @@ export class BienesComponent implements OnInit {
   constructor(
     private conections: ConectionsService ,
     public insumosData: InsumosDataService,
+    public categoriasData: CategoriasDataService,
     public usuarios: UsuariosDataService) {
     this.insumoStock = {
       id: 0,
@@ -81,19 +89,34 @@ export class BienesComponent implements OnInit {
         stock: this.stock,
         alerta: this.alerta,
         codigo: this.codigo,
+        subcategoria_id: parseInt(this.subCategoria),
       };
-  
+
+      console.log(pack);
+      
       this.conections.sendProduct(pack);
+
+      this.nombre = "";
+      this.minimo = null;
+      this.maximo = null;
+      this.stock = null;
+      this.alerta = null;
+      this.codigo = "";
+      this.subCategoria = 1;
     }
 
   }
 
+  toCrear = () => {
+    this.conections.getCategorias();
+    this.cambioVentana(2);
+  }
+
   toEditar = (id) => {
     this.cambioVentana(3);
+    this.conections.getCategorias();
     let insumo = this.insumosData.insumos.find( item => item.id == id);
     this.insumoEdit = insumo;
-    console.log(this.insumosData.alerta);
-    
   }
 
   toStock = (id) => {
@@ -128,6 +151,4 @@ export class BienesComponent implements OnInit {
     this.conections.updateProductStock(this.insumoStock);
   }
   
-
-
 }

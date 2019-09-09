@@ -75,11 +75,11 @@
               <table *ngIf="solicitud.solicitud.insumos.length != 0" class="table">
                 <thead>
                   <tr>
-                    <th scope="col">codigo</th>
-                    <th scope="col">Solicitado por</th>
+                    <th scope="col">Código</th>
+                    <th scope="col">Nombre</th>
                     <th scope="col">Cantidad</th>
-                    <th scope="col">Min.</th>
-                    <th scope="col">Max.</th>
+<!--                     <th scope="col">Min.</th>
+                    <th scope="col">Max.</th> -->
                     <th scope="col"></th>
                   </tr>
                 </thead>
@@ -88,10 +88,10 @@
                     <th scope="row">{{item.codigo}}</th>
                     <td>{{item.nombre}}</td>
                     <td> {{item.cantidad}}</td>
-                    <td class="text-danger" *ngIf="item.cantidad < item.minimo"> {{item.minimo}}</td>
+<!--                     <td class="text-danger" *ngIf="item.cantidad < item.minimo"> {{item.minimo}}</td>
                     <td class="" *ngIf="item.cantidad >= item.minimo"> {{item.minimo}}</td>
                     <td class="text-danger" *ngIf="item.cantidad > item.maximo"> {{item.maximo}}</td>
-                    <td class="" *ngIf="item.cantidad <= item.maximo"> {{item.maximo}}</td>
+                    <td class="" *ngIf="item.cantidad <= item.maximo"> {{item.maximo}}</td> -->
                     <td>
                       <button (click)="quitar(item.id)" class="btn btn-sm btn-danger ml-2">X</button>
                     </td>
@@ -110,12 +110,31 @@
           <div class="row">
             <div class="col">
               <div class="form-group">
-                <label for="exampleFormControlTextarea1">Comentario...</label>
+                <label for="exampleFormControlTextarea1">Comentario:</label>
                 <textarea [(ngModel)]="comentario" name="coment" class="form-control" id="exampleFormControlTextarea1"
                   rows="3"></textarea>
               </div>
             </div>
           </div>
+
+          <ng-container *ngIf="errorVacio">
+
+            <div class="row">
+              <div class="col">
+                <hr class="mt-0 animated fadeIn">
+              </div>
+            </div>
+
+            <div class="row px-3">
+              
+              <div class="col border rounded shadow-sm text-center p-3 animated fadeIn">
+                <h5 class="text-danger">Debe agregar almenos un item para poder enviar la solicitud</h5>
+              </div>
+
+            </div>
+
+          </ng-container>
+          
           
           <div class="row">
             <div class="col">
@@ -190,3 +209,4 @@
 </div>
 
 
+<!-- ////////// -->

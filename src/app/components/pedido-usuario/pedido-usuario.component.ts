@@ -9,7 +9,6 @@ import { ConectionsService } from 'src/app/services/conections.service';
 @Component({
   selector: 'app-pedido-usuario',
   templateUrl: './pedido-usuario.component.html',
-  styleUrls: ['./pedido-usuario.component.css'],
   providers: [DataService, UtilsService]
 })
 export class PedidoUsuarioComponent implements OnInit {

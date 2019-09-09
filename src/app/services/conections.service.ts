@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ServerService } from './server.service';
 import { LoginDataService } from './login-data.service';
 import { InsumosDataService } from './insumos-data.service';
 import { HttpClient, HttpParams  } from '@angular/common/http';
@@ -7,6 +6,7 @@ import { SolicitudDataService } from './solicitud-data.service';
 import { PedidosDataService } from './pedidos-data.service';
 import { Router } from "@angular/router";
 import { UsuariosDataService } from './usuarios-data.service';
+import { CategoriasDataService } from './categorias-data.service';
 
 
 
@@ -16,17 +16,17 @@ import { UsuariosDataService } from './usuarios-data.service';
 export class ConectionsService {
 
   serverUrl: string = "https://server-tickets.herokuapp.com/api";
-/* 
-  serverUrl: string = "http://127.0.0.1:8000/api"; */
+
+/*   serverUrl: string = "http://127.0.0.1:8000/api"; */
 
   list: any[];
 
   constructor(
       private http: HttpClient, 
-      private server: ServerService,
       private router: Router, 
       private loginData: LoginDataService, 
-      private insumos: InsumosDataService, 
+      private insumos: InsumosDataService,
+      private categorias: CategoriasDataService, 
       private solicitud: SolicitudDataService,
       private pedidos: PedidosDataService,
       private usuarios: UsuariosDataService
@@ -106,7 +106,67 @@ export class ConectionsService {
 
   }
   
-  
+  getCategorias = () => {
+    this.categorias.categorias = [];
+    this.categorias.loading = true;
+
+    this.http.get(this.serverUrl + '/categorias').subscribe((res: any) => {
+      if (!res.error) {
+        res.forEach(item => {
+          this.categorias.categorias.push(item);
+        });
+      }
+      console.log(this.categorias.categorias);
+      
+      this.categorias.loading = false;
+    });
+
+  }
+
+  sendCategoria = (categoria) => {
+
+    this.categorias.loading = true;
+
+    this.http.post(this.serverUrl + '/categorias',
+      categoria)
+      .subscribe((res: any[]) => {
+        console.log(res);
+        this.getCategorias();
+      }
+      );
+
+  };
+
+  sendSubcategoria = (Subcategoria) => {
+
+    this.categorias.loading = true;
+
+    this.http.post(this.serverUrl + '/subcategorias',
+      Subcategoria)
+      .subscribe((res: any[]) => {
+        console.log(res);
+        this.getCategorias();
+      }
+      );
+
+  };
+
+  updateCategoria = (categoria) => {
+
+    this.categorias.loading = true;
+
+    this.http.put(this.serverUrl + '/categorias/' + categoria.idEditarCat,
+      categoria)
+      .subscribe((res: any[]) => {
+          console.log(res);
+          this.getCategorias();
+      }
+      );
+
+  };
+
+
+
   getProducts = () => {
     this.insumos.insumos = [];
     this.insumos.loading = true;
@@ -206,14 +266,19 @@ export class ConectionsService {
     this.http.post(this.serverUrl + '/productos',
       product)
       .subscribe((res: any[]) => {
-          
-          res.forEach(item => {
-            if (parseInt(item.stock) < parseInt(item.alerta)) {
-              this.insumos.alerta = true;
-              this.insumos.insumosAlerta.push(item);
-            }
-            this.insumos.insumos.push(item);
-          });
+
+        console.log(res);
+        
+        this.insumos.insumos = res;
+
+        console.log(this.insumos.insumos);
+        
+        res.forEach(item => {
+          if (parseInt(item.stock) < parseInt(item.alerta)) {
+            this.insumos.alerta = true;
+            this.insumos.insumosAlerta.push(item);
+          }
+        });
         this.insumos.loading = false;
         }
       );
@@ -423,8 +488,12 @@ export class ConectionsService {
 
   }
 
+
+  
+
   
   }
+
   
 
 

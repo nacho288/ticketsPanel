@@ -8,7 +8,6 @@ import { LoginDataService } from './../../services/login-data.service';
 @Component({
   selector: 'app-solicitudes',
   templateUrl: './solicitudes.component.html',
-  styleUrls: ['./solicitudes.component.css'],
   providers: [DataService, UtilsService]
 })
 export class SolicitudesComponent implements OnInit {

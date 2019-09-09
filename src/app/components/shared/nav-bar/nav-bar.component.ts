@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { LoginDataService } from './../../../services/login-data.service';
-import { LoginService } from './../../../services/login.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -11,7 +10,7 @@ import { LoginService } from './../../../services/login.service';
 })
 export class NavBarComponent implements OnInit {
 
-  constructor(public loginData: LoginDataService, public login: LoginService) { }
+  constructor(public loginData: LoginDataService) { }
 
   ngOnInit() {
   }

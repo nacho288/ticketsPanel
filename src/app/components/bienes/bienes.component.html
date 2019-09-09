@@ -1,4 +1,4 @@
-<app-loading *ngIf="insumosData.loading"></app-loading>
+<app-loading *ngIf="insumosData.loading || categoriasData.loading"></app-loading>
 
 <!-- //////////////////////////////// -->
 
@@ -10,7 +10,7 @@
         <h2>Listado de bienes</h2>
       </div>
       <div class="col text-right">
-        <button class="btn btn-diputado" (click)="cambioVentana(2)">Agregar</button>
+        <button class="btn btn-diputado" (click)="toCrear()">Agregar</button>
       </div>
     </div>
 
@@ -22,6 +22,7 @@
             <tr>
               <th scope="col">Código</th>
               <th scope="col">Nombre</th>
+              <th scope="col">Categoria</th>
               <th scope="col">stock</th>
               <th class="text-center" scope="col">Mod. stock</th>
               <th class="text-center" scope="col">detalles</th>
@@ -31,6 +32,9 @@
             <tr *ngFor="let item of this.insumosData.insumos">
               <th scope="row">{{item.codigo}}</th>
               <td>{{item.nombre}}</td>
+              <ng-container *ngIf="item.subcategoria">
+                <td>{{item.subcategoria.categoria.nombre}} / {{item.subcategoria.nombre}}</td>
+              </ng-container>
               <td>{{item.stock}}</td>
               <td  class="text-center"><button (click)="toStock(item.id)" class="btn btn-sm btn-diputado " data-toggle="modal"
                 data-target="#exampleModal">≡</button></td>
@@ -103,7 +107,7 @@
 
 
 
-<div *ngIf="insumosData.ventana == 2" class="row mt-5 justify-content-center animated fadeIn">
+<div *ngIf="insumosData.ventana == 2 && !categoriasData.loading" class="row mt-5 justify-content-center animated fadeIn">
   <div class="col col-md-6 col-lg-4 bg-white rounded shadow-sm p-4">
 
     <div class="row">
@@ -133,7 +137,16 @@
         <div class="form-group">
           <label for="exampleInputPassword1">Mínimo en stock</label>
           <input [(ngModel)]="alerta" name="StockMin" type="number" class="form-control" id="exampleInputPassword1"
-            placeholder="Mínimo en stock<">
+            placeholder="Mínimo en Stock">
+        </div>
+        <div class="form-group">
+          <label for="exampleFormControlSelect1">Categoria</label>
+          <select [(ngModel)]="subCategoria" name="cat" class="form-control" id="exampleFormControlSelect1">
+            <ng-container *ngFor="let cat of categoriasData.categorias" >
+              <option disabled>-{{cat.nombre}}</option>
+              <option *ngFor="let sub of cat.subcategorias" [selected]="sub.id == 1" [value]="sub.id">{{sub.nombre}}</option>
+            </ng-container>
+          </select>
         </div>
       </div>
       <div class="col">
@@ -152,6 +165,11 @@
           <input [(ngModel)]="stock" name="stocki" type="number" class="form-control" id="exampleInputPassword1"
             placeholder="Stock inicial">
         </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
       </div>
     </div>
 
@@ -225,6 +243,20 @@
       </div>
     </div>
 
+    <div class="row justify-content-center">
+      <div class="col col-auto">
+        <div class="form-group">
+          <label for="exampleFormControlSelect1">Categoria</label>
+          <select [(ngModel)]="insumoEdit.subcategoria_id" name="cat" class="form-control" id="exampleFormControlSelect1">
+            <ng-container *ngFor="let cat of categoriasData.categorias">
+              <option disabled>-{{cat.nombre}}</option>
+              <option *ngFor="let sub of cat.subcategorias" [selected]="sub.id == insumoEdit.subcategoria_id" [value]="sub.id">{{sub.nombre}}</option>
+            </ng-container>
+          </select>
+        </div>
+      </div>
+    </div>
+
     
 
     <div class="row">
@@ -283,7 +315,8 @@
         <ul>
           <li><b>Nombre: </b>{{insumosData.insumo.nombre}}</li>
           <li><b>Código: </b>{{insumosData.insumo.codigo}}</li>
-          <li><b>Stock: </b>{{insumosData.insumo.stock}}</li>
+          <li><b>Categoria: </b>{{insumosData.insumo.subcategoria.categoria.nombre}}</li>
+          <li><b>Sub-categoria: </b>{{insumosData.insumo.subcategoria.nombre}}</li>
         </ul>
       </div>
       <div class="col">
@@ -291,6 +324,7 @@
           <li><b>Mínimo por pedido: </b>{{insumosData.insumo.minimo}}</li>
           <li><b>Mínimo por pedido: </b>{{insumosData.insumo.maximo}}</li>
           <li><b>Punto de pedido: </b>{{insumosData.insumo.alerta}}</li>
+          <li><b>Stock: </b>{{insumosData.insumo.stock}}</li>
         </ul>
       </div>
     </div>
@@ -420,11 +454,7 @@
   </div>
 </div>
 
-
-
 <!-- /////////////////////////////////////////////////// -->
-
-
 
 <div class="modal fade mt-5" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">

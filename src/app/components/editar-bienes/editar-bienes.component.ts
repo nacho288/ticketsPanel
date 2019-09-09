@@ -6,7 +6,6 @@ import { ActivatedRoute } from "@angular/router";
 @Component({
   selector: 'app-editar-bienes',
   templateUrl: './editar-bienes.component.html',
-  styleUrls: ['./editar-bienes.component.css']
 })
 export class EditarBienesComponent implements OnInit {
 

@@ -11,9 +11,9 @@ export class LoginDataService {
   error: number = 2;
   loading: boolean = false;
   fullName: string = "";
-/* 
-  logged: Boolean = true;
-  type: number = 1;
+
+/*   logged: Boolean = true;
+  type: number = 0;
   id: number = 1;
   error: number = 2;
   loading: boolean = false;

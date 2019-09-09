@@ -123,5 +123,10 @@
       }
     }
   },
-  "defaultProject": "ticket"
+  "defaultProject": "ticket",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }

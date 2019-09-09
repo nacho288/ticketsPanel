@@ -14,6 +14,7 @@
         routerLink="solicitudes">Mis solicitudes</a>
       <a *ngIf="loginData.type != 0" class="nav-item nav-link mr-3 h5" [routerLinkActive]="['active']" routerLink="solicitudes">Solicitudes entrantes</a>
       <a *ngIf="loginData.type != 0" class="nav-item nav-link mr-3 h5" [routerLinkActive]="['active']" routerLink="bienes">Bienes</a>
+      <a *ngIf="loginData.type != 0" class="nav-item nav-link mr-3 h5" [routerLinkActive]="['active']" routerLink="categorias">Categorias</a>
     </div>
   </div>
   <div class="navbar-collapse order-3 mr-3">
