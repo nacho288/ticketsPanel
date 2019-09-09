@@ -13,7 +13,7 @@
       <a *ngIf="loginData.type == 0" class="nav-item nav-link mr-3 h5" [routerLinkActive]="['active']"
         routerLink="solicitudes">Mis solicitudes</a>
       <a *ngIf="loginData.type != 0" class="nav-item nav-link mr-3 h5" [routerLinkActive]="['active']" routerLink="solicitudes">Solicitudes entrantes</a>
-      <li class="nav-item dropdown">
+      <li *ngIf="loginData.type != 0" class="nav-item dropdown">
         <a class="nav-link dropdown-toggle mr-3 h5" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
           Bienes

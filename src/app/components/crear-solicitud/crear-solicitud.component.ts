@@ -25,6 +25,7 @@ export class CrearSolicitudComponent implements OnInit {
     private router : Router) { 
     this.solicitud.ventana = 1;
     this.conections.getProductsUser();
+    this.conections.getCategorias();
     }
 
   ngOnInit() {

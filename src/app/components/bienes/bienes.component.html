@@ -143,7 +143,7 @@
           <label for="exampleFormControlSelect1">Categoria</label>
           <select [(ngModel)]="subCategoria" name="cat" class="form-control" id="exampleFormControlSelect1">
             <ng-container *ngFor="let cat of categoriasData.categorias" >
-              <option disabled>-{{cat.nombre}}</option>
+              <option disabled>-- {{cat.nombre}} -- </option>
               <option *ngFor="let sub of cat.subcategorias" [selected]="sub.id == 1" [value]="sub.id">{{sub.nombre}}</option>
             </ng-container>
           </select>
