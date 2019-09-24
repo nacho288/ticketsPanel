@@ -12,8 +12,8 @@
         routerLink="crear">Nueva solicitud</a>
       <a *ngIf="loginData.type == 0" class="nav-item nav-link mr-3 h5" [routerLinkActive]="['active']"
         routerLink="solicitudes">Mis solicitudes</a>
-      <a *ngIf="loginData.type != 0" class="nav-item nav-link mr-3 h5" [routerLinkActive]="['active']" routerLink="solicitudes">Solicitudes entrantes</a>
-      <li *ngIf="loginData.type != 0" class="nav-item dropdown">
+      <a *ngIf="loginData.type == 1" class="nav-item nav-link mr-3 h5" [routerLinkActive]="['active']" routerLink="solicitudes">Solicitudes entrantes</a>
+      <li *ngIf="loginData.type == 1" class="nav-item dropdown">
         <a class="nav-link dropdown-toggle mr-3 h5" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
           Bienes
@@ -23,10 +23,32 @@
           <a class="dropdown-item" routerLink="categorias">Categorias</a>
         </div>
       </li>
+      <a *ngIf="loginData.type == 9" class="nav-item nav-link mr-3 h5" [routerLinkActive]="['active']"
+        routerLink="almacenes">Almacenes</a>
+      <a *ngIf="loginData.type == 9" class="nav-item nav-link mr-3 h5" [routerLinkActive]="['active']"
+        routerLink="oficinas">Oficinas</a>
+      <a *ngIf="loginData.type == 9" class="nav-item nav-link mr-3 h5" [routerLinkActive]="['active']"
+        routerLink="usuarios">Usuarios</a>
     </div>
   </div>
   <div class="navbar-collapse order-3 mr-3">
     <ul class="navbar-nav ml-auto">
+      <li *ngIf="loginData.type != 9" class="nav-item mr-3">
+        <div class="dropdown">
+          <button class="btn btn-verde dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <ng-container *ngIf="loginData.type == 0">
+              {{loginData.oficinaLogin.nombre}}
+            </ng-container>
+            <ng-container *ngIf="loginData.type == 1">
+              {{loginData.almacenLogin.nombre}}
+            </ng-container>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right mt-2" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#" data-toggle="modal" (click)="cambiar()" data-target="#exampleModal">Cambiar</a>
+          </div>
+        </div>
+      </li>
       <li class="nav-item">
         <div class="dropdown">
           <button class="btn btn-verde dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
@@ -34,8 +56,8 @@
             {{loginData.fullName}}
           </button>
           <div class="dropdown-menu dropdown-menu-right mt-2" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#" data-toggle="modal" (click)="conections.logOut()" data-target="#exampleModal">Cerrar cuenta</a>
-            <!-- <a class="dropdown-item" href="#">Cambiar contraseña</a> -->
+            <a class="dropdown-item" href="#" data-toggle="modal" (click)="conections.logOut()"
+              data-target="#exampleModal">Cerrar cuenta</a>
           </div>
         </div>
       </li>

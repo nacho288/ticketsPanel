@@ -26,12 +26,12 @@ export class CategoriasComponent implements OnInit {
   }
 
   crearCategoria = () => {
-    this.conections.sendCategoria({nombre: this.nombreCrearCat});
+    this.conections.sendCategoria(this.nombreCrearCat);
     this.nombreCrearCat = "";
   }
 
   editarCategoria = () => {
-    this.conections.updateCategoria({ nombre: this.nombreEditarCat, idEditarCat: this.idEditarCat});
+    this.conections.updateCategoria(this.nombreEditarCat, this.idEditarCat);
   }
 
   toEditarCat = (nombre, id) => {
@@ -44,7 +44,7 @@ export class CategoriasComponent implements OnInit {
   }
 
   crearSub = (id) => {
-    this.conections.sendSubcategoria({ nombre: this.nombreCrearSub, categoria_id: id});
+    this.conections.sendSubcategoria(this.nombreCrearSub, id);
     this.nombreCrearSub = "";
   }
 

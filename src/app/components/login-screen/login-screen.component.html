@@ -1,70 +1,174 @@
+<app-loading *ngIf="loginData.loading"></app-loading>
+
 
 <div class="row my-5">
   
 </div>
 
+<ng-container *ngIf="loginData.ventana == 1 && !loginData.loading">
 
-<div *ngIf="!loginData.loading" class="row justify-content-center animated fadeIn">
-  <div class="col col-lg-4 p-4 rounded bg-white shadow-sm mt-3">
-    
+  <div class="row justify-content-center animated fadeIn">
+    <div class="col col-lg-4 p-4 rounded bg-white shadow-sm mt-3">
+      
 
-    <div class="row">
-      <div class="col">
-        <h1 class="display-4 text-center">¡Bienvenido!</h1>
+      <div class="row">
+        <div class="col">
+          <h1 class="display-4 text-center">¡Bienvenido!</h1>
+        </div>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="col">
-        <p class="lead text-center text-secondary">Ingrese sus datos para comenzar...</p>
+      <div class="row">
+        <div class="col">
+          <p class="lead text-center text-secondary">Ingrese sus datos para comenzar...</p>
+        </div>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="col">
-        <hr class="mb-4">
+      <div class="row">
+        <div class="col">
+          <hr class="mb-4">
+        </div>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="col">
-    
-        <form>
-          <div class="form-group">
-            <label for="exampleInputEmail1">Nombre de usuario</label>
-            <input [(ngModel)]="nombre" name="nombre" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-              placeholder="nombre de usuario">
-          </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">Contraseña</label>
-            <input [(ngModel)]="password" name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Contraseña">
-          </div>
-
-          <div class="row">
-            <div class="col">
-              <hr class="mt-1 mb-3">
+      <div class="row">
+        <div class="col">
+      
+          <form>
+            <div class="form-group">
+              <label for="exampleInputEmail1">E-mail</label>
+              <input [(ngModel)]="email" name="email" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                placeholder="E-mail">
             </div>
-          </div>
-          
-          <button  class="btn btn-block btn-diputado" (click)="enviarLogin()">Enviar</button>
-        </form>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Contraseña</label>
+              <input [(ngModel)]="password" name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Contraseña">
+            </div>
 
+            <div class="row">
+              <div class="col">
+                <hr class="mt-1 mb-3">
+              </div>
+            </div>
+            
+            <button  class="btn btn-block btn-diputado" (click)="enviarLogin()">Enviar</button>
+          </form>
+
+        </div>
       </div>
+
     </div>
-
   </div>
-</div>
 
-<div *ngIf="(loginData.error == 0 && !loginData.loading)" class="row justify-content-center mt-3 mb-0">
-  <div class="col col-auto bg-white p-3 rounded shadow-sm">
-    <p class="text-danger text-center">el nombre de usuario ingresado es incorrecto</p>
+  <div *ngIf="(loginData.error == 0 && !loginData.loading)" class="row justify-content-center mt-3 mb-0">
+    <div class="col col-auto bg-white p-3 rounded shadow-sm">
+      <p class="text-danger text-center">Los datos son incorrectos</p>
+    </div>
   </div>
-</div>
 
-<div *ngIf="(loginData.error == 1 && !loginData.loading)" class="row justify-content-center mt-3 mb-0">
-  <div class="col col-auto bg-white p-3 rounded shadow-sm">
-    <p class="text-danger text-center mb-1">la contraseña es incorrecta</p>
+  <div *ngIf="(loginData.error == 1 && !loginData.loading)" class="row justify-content-center mt-3 mb-0">
+    <div class="col col-auto bg-white p-3 rounded shadow-sm">
+      <p class="text-danger text-center mb-1">Los datos son incorrectos</p>
+    </div>
   </div>
-</div>
 
-<app-loading *ngIf="loginData.loading"></app-loading>
+</ng-container>
+
+<ng-container *ngIf="loginData.ventana == 2 && !loginData.loading">
+
+  <div class="row justify-content-center animated fadeIn">
+    <div class="col col-lg-4 p-4 rounded bg-white shadow-sm mt-3">
+
+
+      <div class="row">
+        <div class="col">
+          <h4 class="display-4 text-center">¡Saludos {{loginData.fullName}}!</h4>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <p *ngIf="loginData.type == 0" class="lead text-center text-secondary">Elija una oficina para comenzar...</p>
+          <p *ngIf="loginData.type == 1" class="lead text-center text-secondary">Elija un almacén para comenzar...</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <hr class="mb-4">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+
+            <ng-container *ngIf="loginData.type == 1" >
+
+              <ng-container *ngIf="loginData.userAlmacenes.length > 0">
+
+                <div class="form-group">
+                  <label for="exampleFormControlSelect2">Almacén:</label>
+                  <select [(ngModel)]="almacen_id" class="form-control" id="exampleFormControlSelect2">
+                    <option selected disabled [value]="null">Almacén</option>
+                    <option *ngFor="let al of loginData.userAlmacenes" [value]='al.id'>{{al.nombre}}</option>
+                  </select>
+                </div>
+
+                <div class="row">
+                  <div class="col">
+                    <hr class="mt-1 mb-3">
+                  </div>
+                </div>
+                
+                <button class="btn btn-block btn-diputado" (click)="segundoPaso()">Comenzar</button>
+
+              </ng-container>
+
+              <div *ngIf="loginData.userAlmacenes.length == 0" class="row">
+                <div class="col">
+                  <h4 class="text-secondary text-center font-italic">...sin almacenes asignados...</h4>
+                </div>
+              </div>
+
+              
+            </ng-container>
+            
+            <ng-container *ngIf="loginData.type == 0">
+
+              <ng-container *ngIf="loginData.userOficinas.length > 0">
+
+                <div class="form-group">
+                  <label for="exampleFormControlSelect2">Oficina:</label>
+                  <select [(ngModel)]="oficina_id" class="form-control" id="exampleFormControlSelect2">
+                    <option selected disabled [value]="null">Oficina</option>
+                    <option *ngFor="let ofi of loginData.userOficinas" [value]='ofi.id'>{{ofi.nombre}}</option>
+                  </select>
+                </div>
+
+                <div class="row">
+                  <div class="col">
+                    <hr class="mt-1 mb-3">
+                  </div>
+                </div>
+
+                <button class="btn btn-block btn-diputado" (click)="segundoPaso()">Comenzar</button>
+                
+              </ng-container>
+
+              <div *ngIf="loginData.userOficinas.length == 0" class="row">
+                <div class="col">
+                  <h4 class="text-secondary text-center font-italic">...sin almacenes asignados...</h4>
+                </div>
+              </div>
+
+            </ng-container>
+       
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+</ng-container>
+
+
+

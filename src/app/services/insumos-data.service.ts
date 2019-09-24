@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 export class InsumosDataService {
 
   insumos: any[] = [];
+  sinCategorias: any[] = [];
 
   categorias: any[] = [];
 
@@ -13,7 +14,7 @@ export class InsumosDataService {
 
   ventana = 1;
 
-  loading: boolean = true;
+  loading: boolean = false;
 
   alerta = false;
 

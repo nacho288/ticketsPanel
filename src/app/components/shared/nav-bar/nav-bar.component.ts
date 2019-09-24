@@ -16,4 +16,8 @@ export class NavBarComponent implements OnInit {
   ngOnInit() {
   }
 
+  cambiar = () => {
+    this.loginData.logged = false;
+  }
+  
 }

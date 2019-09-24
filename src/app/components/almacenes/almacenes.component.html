@@ -1,0 +1,316 @@
+<app-loading *ngIf="almacenes.loading || usuarios.loading || oficinas.loading"></app-loading>
+
+<!-- //////////////////////////////// -->
+
+<div *ngIf="!almacenes.loading && !usuarios.loading && !oficinas.loading && almacenes.ventana == 1"  class="row justify-content-center mt-5 animated fadeIn">
+  <div class="col col-lg-10 col-xl-7 bg-white rounded shadow-sm p-4">
+
+      <div class="row">
+        <div class="col col-auto">
+          <h2>Listado de Almacenes</h2>
+        </div>
+        <div class="col text-right">
+          <button class="btn btn-diputado" data-toggle="collapse" href="#collapseAnadir" role="button" aria-expanded="false"
+            aria-controls="collapseAnadir">Agregar</button>
+        </div>
+      </div>
+      
+      <div class="collapse" id="collapseAnadir">
+        <div class="row">
+          <div class="col">
+            <hr>
+          </div>
+        </div>
+      
+        <div class="row px-3">
+          <div class="col border rounded pt-3">
+      
+            <div class="row">
+              <div class="col col-auto">
+                <h4>Añadir almacén:</h4>
+              </div>
+            </div>
+      
+            <div class="row">
+              <div class="col">
+                <hr class="my-0">
+              </div>
+            </div>
+      
+            <div class="row justify-content-lg-between align-items-center mt-3">
+              <div class="col">
+                <div class="form-group">
+                  <label for="inputCategoria">Nombre</label>
+                  <input [(ngModel)]="nombreCrear" name="crearCat" type="text" class="form-control" id="inputCategoria"
+                    placeholder="Nombre">
+                </div>
+              </div>
+              <div class="col text-right">
+                <button (click)="crearAlmacen()" class="btn btn-diputado">Enviar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col">
+          <hr>
+        </div>
+      </div>
+      
+      <div *ngIf="this.almacenes.almacenes.length == 0" class="row">
+        <div class="col">
+          <h4 class="text-secondary text-center font-italic">...sin elementos...</h4>
+        </div>
+      </div>
+      
+      <div *ngIf="this.almacenes.almacenes.length > 0" class="row">
+        <div class="col">
+          <ul class="list-group">
+      
+            <li *ngFor="let item of this.almacenes.almacenes; let i=index" class="list-group-item">
+              <div class="row">
+                <div class="col col-auto">
+                  <a class="text-dark" data-toggle="collapse"  [href]="'#collapse1' + i.toString()"
+                    role="button" aria-expanded="false" aria-controls="collapse1">
+                    <h4>{{item.nombre}}</h4>
+                  </a>
+                </div>
+                
+                <div class="col text-right">
+                  <div class="collapse" [id]="'collapse1' + i.toString()">
+                  <button (click)="toEditar(item)" data-toggle="modal" data-target="#editarModal"
+                    class="btn btn-sm btn-diputado">Editar</button>
+                  </div>
+                </div>
+                
+              </div>
+              <div class="collapse" [id]="'collapse1' + i.toString()">
+
+                <div class="row">
+                  <div class="col">
+                    <hr class="my-2">
+                  </div>
+                </div>
+
+                <div class="row p-3">
+                  
+                  <div class="col mr-3">
+                    <div class="row">
+                      <div class="col border mt-3">
+
+                    <div class="row mt-3">
+                      <div class="col">
+                        <h4 class="text-center">Oficinas asignadas</h4>
+                      </div>
+                    </div>
+
+                    <ng-container *ngIf="item.oficinas.length == 0">
+                      <div class="row">
+                        <div class="col">
+                          <hr class="mb-3 mt-0">
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <div class="col text-center">
+                          <h5 class="text-secondary">(Sin oficinas asignadas)</h5>
+                        </div>
+                      </div>
+                    </ng-container>
+
+                    <div *ngIf="item.oficinas.length > 0" class="row mt-2">
+                      <div class="col">
+
+                        <table *ngIf="item.oficinas.length > 0" class="table mb-0">
+                          <tbody>
+                            <tr *ngFor="let oficina of item.oficinas">
+                              <td>{{oficina.nombre}}</td>
+                              <td class="text-center">
+                                <button (click)="quitarOficina(item.id, oficina.id)" class="btn btn-danger btn-sm">X</button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col">
+                        <hr class="mb-3 mt-0">
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <div class="col text-center">
+                        <button class="btn btn-sm btn-diputado" (click)="filtrarOficinas(item)" data-toggle="modal" data-target="#exampleModal">Asignar</button>
+                      </div>
+                    </div>
+
+                  </div>
+
+                    </div>
+                  </div>
+
+                  <div class="col ml-3">
+                    <div class="row">
+                      <div class="col border mt-3">
+                      
+                        <div class="row mt-3">
+                          <div class="col">
+                            <h4 class="text-center">Administradores asignados</h4>
+                          </div>
+                        </div>
+                      
+                        <ng-container *ngIf="item.administradores.length == 0">
+                          <div class="row">
+                            <div class="col">
+                              <hr class="mb-3 mt-0">
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+                            <div class="col text-center">
+                              <h5 class="text-secondary">(Sin administradores asignados)</h5>
+                            </div>
+                          </div>
+                        </ng-container>
+                      
+                        <div *ngIf="item.administradores.length > 0" class="row mt-2">
+                          <div class="col">
+                      
+                            <table *ngIf="item.administradores.length > 0" class="table mb-0">
+                              <tbody>
+                                <tr *ngFor="let administrador of item.administradores">
+                                  <td>{{administrador.name}}</td>
+                                  <td class="text-center">
+                                    <button (click)="quitarAdmin(item.id, administrador.id)" class="btn btn-danger btn-sm">X</button>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                      
+                          </div>
+                        </div>
+                      
+                        <div class="row">
+                          <div class="col">
+                            <hr class="mb-3 mt-0">
+                          </div>
+                        </div>
+                      
+                        <div class="row mb-3">
+                          <div class="col text-center">
+                            <button class="btn btn-sm btn-diputado" (click)="filtrarAdmins(item)" data-toggle="modal"
+                              data-target="#adminModal">Asignar</button>
+                          </div>
+                        </div>
+                      
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                
+              </div>
+            </li>
+      
+          </ul>
+        </div>
+      </div>
+
+
+  </div>
+</div>
+
+
+<!-- ///////////////// -->
+
+<div class="modal fade mt-3" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Asignar oficina</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div *ngIf="listaOficinas.length > 0" class="form-group">
+            <label for="oficina">Oficina</label>
+            <select [(ngModel)]="oficinaAgregarId" name='ofi' class="form-control" id="oficina">
+              <option *ngFor="let item of listaOficinas" value="{{item.id}}">{{item.nombre}}</option>
+            </select>
+          </div>
+          <h5 *ngIf="listaOficinas.length == 0" class="text-center">No hay oficinas para asignar</h5>
+      </div>
+      <div class="modal-footer">
+        <button *ngIf="listaOficinas.length > 0" (click)="agregarOficina()" type="button" class="btn btn-diputado" data-dismiss="modal">Añadir</button>
+        <button type="button" class="btn btn-diputado" data-dismiss="modal">Volver</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ///////////////// -->
+
+<div class="modal fade mt-3" id="adminModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Asignar Administradores</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="listaAdmins.length > 0" class="form-group">
+          <label for="adm">Administradores:</label>
+          <select [(ngModel)]="adminAgregarId" name='adm' class="form-control" id="adm">
+            <option *ngFor="let item of listaAdmins" value="{{item.id}}">{{item.name}}</option>
+          </select>
+        </div>
+        <h5 *ngIf="listaAdmins.length == 0" class="text-center">No hay administradores para asignar</h5>
+      </div>
+      <div class="modal-footer">
+        <button *ngIf="listaAdmins.length > 0" (click)="agregarAdmin()" type="button" class="btn btn-diputado"
+          data-dismiss="modal">Añadir</button>
+        <button type="button" class="btn btn-diputado" data-dismiss="modal">Volver</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ///////////////// -->
+
+<div class="modal fade mt-3" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Asignar oficina</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input [(ngModel)]="editarPack.nombre" type="text" class="form-control" id="nombre" placeholder="Nombre...">
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button (click)="cambiarNombre()" type="button" class="btn btn-diputado"
+          data-dismiss="modal">Guardar</button>
+        <button type="button" class="btn btn-diputado" data-dismiss="modal">Volver</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

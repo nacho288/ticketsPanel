@@ -25,5 +25,13 @@ export class SolicitudDataService {
 
   }
 
+  limpiar = () => {
+    this.solicitud = {
+      insumos: [],
+      comentarioUsuario: "",
+    };
+  }
+  
+
   constructor() { }
 }

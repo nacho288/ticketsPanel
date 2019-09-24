@@ -58,19 +58,19 @@
           </div>
         </div>
 
-        <div *ngIf="this.categoriasData.categorias.length <= 1" class="row">
+        <div *ngIf="this.categoriasData.categorias.length == 0" class="row">
           <div class="col">
             <h4 class="text-secondary text-center font-italic">...sin elementos...</h4>
           </div>
         </div>
         
-        <div *ngIf="this.categoriasData.categorias.length > 1" class="row">
+        <div *ngIf="this.categoriasData.categorias.length > 0" class="row">
           <div class="col">
             <ul class="list-group">
 
               <ng-container *ngFor="let item of this.categoriasData.categorias; let i=index">
 
-                <li *ngIf="item.id != 1" class="list-group-item">
+                <li class="list-group-item">
                   <div class="row">
                     <div class="col col-auto">
                       <a class="text-dark" data-toggle="collapse" (click)="limpiarSub()" [href]="'#collapse1' + i.toString()" role="button"

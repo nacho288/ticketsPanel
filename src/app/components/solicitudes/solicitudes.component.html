@@ -118,20 +118,24 @@
           <thead>
             <tr>
               <th scope="col">#</th>
+              <th *ngIf="login.type == 0" scope="col">Almacén</th>
               <th scope="col">Creado en</th>
               <th scope="col">Estado</th>
               <th *ngIf="login.type != 0" scope="col">Solicitado por</th>
-              <th *ngIf="login.type == 0" scope="col">Aprobado por</th>
+              <th *ngIf="login.type == 0" scope="col">Evaluado por</th>
               <th scope="col">Detalles</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of pedidos.pedidosFiltrados; let i = index">
               <th scope="row">{{item.pedido_id}}</th>
-              <td>{{item.fecha}}</td>
+              <td *ngIf="login.type == 0">{{item.almacen}}</td>
+              <td>{{utils.parseDate(item.fecha)}}</td>
               <td [class]="utils.getColor(item.estado)">{{utils.getEstado(item.estado)}}</td>
-              <td *ngIf="login.type != 0">{{item.usuario}}</td>
-              <td *ngIf="login.type == 0">{{item.aprovadoPor}}</td>
+              <td *ngIf="login.type != 0">{{item.oficina}}</td>
+              <td *ngIf="login.type == 0">
+                <ng-container *ngIf="item.estado != 0 && !item.evaluado_por">Sistema</ng-container>{{item.evaluado_por}}
+              </td>
               <td>
                 <button (click)="detalles(item.pedido_id)" class="btn btn-sm btn-diputado ">≡</button>
               </td>
@@ -170,11 +174,16 @@
             <div class="card-body">
               <h5 class="card-title">Detalles</h5>
               <ul>
-                <li>Creado por: {{pedidos.pedido.usuario_nombre}}</li>
-                <li *ngIf="pedidos.pedido.estado != 0 && pedidos.pedido.estado != 4">Aprobado por: {{pedidos.pedido.aprobado_por}}</li>
-                <li *ngIf="pedidos.pedido.estado == 4">Rechazado por: {{pedidos.pedido.aprobado_por}}</li>
+                <li>Creado por: {{pedidos.pedido.user}}</li>
+                <li>Oficina: {{pedidos.pedido.oficina}}</li>
+                <li>Almacen: {{pedidos.pedido.almacen}}</li>
+                <li *ngIf="pedidos.pedido.estado != 0 && pedidos.pedido.estado != 4">Evaluado por: 
+                  <ng-container *ngIf="pedidos.pedido.estado != 0 && !pedidos.pedido.evaluado_por">Sistema</ng-container>
+                  {{pedidos.pedido.evaluado_por}}</li>
+                <li *ngIf="pedidos.pedido.estado == 4 && !pedidos.pedido.evaluado_por">Cancelado por: oficina de origen</li>
+                <li *ngIf="pedidos.pedido.estado == 4 && pedidos.pedido.evaluado_por">Rechazado por: {{pedidos.pedido.evaluado_por}}</li>
                 <li>Estado: {{utils.getEstado(pedidos.pedido.estado)}}</li>
-                <li>Fecha: {{pedidos.pedido.fecha}}</li>
+                <li>Fecha: {{utils.parseDate(pedidos.pedido.fecha)}}</li>
               </ul>
             </div>
           </div>
@@ -198,6 +207,7 @@
                     <th scope="col">#</th>
                     <th scope="col">Producto</th>
                     <th scope="col">Cantidad</th>
+                    <th scope="col">Estado</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -205,6 +215,7 @@
                     <th scope="row">{{item.codigo}}</th>
                     <td>{{item.nombre}}</td>
                     <td>{{item.cantidad}}</td>
+                    <td [class]="utils.getColorProducto(item.estado)">{{utils.getEstadoProducto(item.estado)}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -251,11 +262,11 @@
           data-toggle="modal" data-target="#exampleModal">
           Cancelar pedido
         </button>
-        <button (click)="toEstado = 1" *ngIf="pedidos.pedido.estado == 0 && login.type != 0" type="button" class="btn btn-diputado mr-4"
-          data-toggle="modal" data-target="#exampleModal">
-          Marcar aprobado
+        <button (click)="toEvaluar()" *ngIf="pedidos.pedido.estado == 0 && login.type != 0" type="button" class="btn btn-diputado mr-4"
+          data-toggle="modal" data-target="#evaluarModal">
+          Evaluar
         </button>
-        <button (click)="toEstado = 2" *ngIf="pedidos.pedido.estado == 1 && login.type != 0" type="button" class="btn btn-diputado mr-4"
+        <button (click)="toEstado = 2" *ngIf="(pedidos.pedido.estado == 1 || pedidos.pedido.estado == 5) && login.type != 0" type="button" class="btn btn-diputado mr-4"
           data-toggle="modal" data-target="#exampleModal">
           Marcar en proceso
         </button>
@@ -301,6 +312,60 @@
     </div>
   </div>
 </div>
+
+<div *ngIf="!pedidos.loading && pedidos.ventana == 2" class="modal fade" id="evaluarModal" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="exampleModalLabel">Evaluar Pedido</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="row mt-0">
+          <div class="col px-3">
+
+            <ng-container  *ngFor="let producto of packEvaluar">
+
+              <div class="row justify-content-between">
+                <div class="col col-auto">
+                  <h5>{{producto.nombre}}</h5>
+                </div>
+                <div class="col col-auto text-right">
+                  <button (click)="producto.aprobado = true" *ngIf="!producto.aprobado" class="btn btn-sm btn-secondary">Aprobado</button>
+                  <button (click)="producto.aprobado = false" *ngIf="producto.aprobado" class="btn btn-sm btn-diputado">Aprobado</button>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col">
+                  <hr>
+                </div>
+              </div>
+
+            </ng-container>
+
+            <div class="row justify-content-between">
+              <div class="col col-auto">
+                <button (click)="updateEvaluar()" data-dismiss="modal" class="btn btn-diputado">Confirmar</button>
+              </div>
+              <div class="col col-auto">
+                <button type="button" class="btn btn-diputado" data-dismiss="modal">Volver</button>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
 
 
 <!-- /////////////////////////////////////////////// -->

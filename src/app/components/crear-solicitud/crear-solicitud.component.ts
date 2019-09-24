@@ -5,6 +5,7 @@ import { CategoriasDataService } from './../../services/categorias-data.service'
 import { Router } from '@angular/router';
 
 import { SolicitudDataService } from './../../services/solicitud-data.service';
+import { LoginDataService } from 'src/app/services/login-data.service';
 
 
 @Component({
@@ -19,17 +20,28 @@ export class CrearSolicitudComponent implements OnInit {
   cantidad;
   comentario;
   errorVacio = false;
-  categoria; 
+  categoria:any;
+  almacen_id: any = null;
 
   constructor(
     private conections: ConectionsService, 
     public insumosData: InsumosDataService,
     public solicitud: SolicitudDataService, 
     public categoriasData: CategoriasDataService,
-    private router : Router) { 
-    this.solicitud.ventana = 1;
-    this.conections.getProductsUser();
-    this.conections.getCategorias();
+    public loginData: LoginDataService,
+    private router : Router) {
+    this.conections.kickToHome(1);
+    this.conections.kickToHome(9);
+
+    if (this.loginData.almacen_id) {
+      this.conections.getProducts();
+      this.conections.getCategorias();
+      this.solicitud.ventana = 1;
+    } else {
+      console.log('te chache');
+      this.solicitud.ventana = 3
+    }
+
     }
 
   ngOnInit() {
@@ -69,7 +81,8 @@ export class CrearSolicitudComponent implements OnInit {
 
     if (this.solicitud.solicitud.insumos.length != 0) {
       this.solicitud.solicitud.comentarioUsuario = this.comentario ? this.comentario : "";
-      this.conections.sendPedido();  
+      this.conections.sendPedido();
+      this.solicitud.limpiar();
     } else {
       this.errorVacio = true;
     }
@@ -79,26 +92,23 @@ export class CrearSolicitudComponent implements OnInit {
   volver = () => {
     this.solicitud.reset();
     this.comentario = "";
-    this.conections.getProductsUser();
+    this.conections.getProducts();
   }
 
+  elegirAlmacen = () => {
+    this.loginData.almacen_id = this.almacen_id;
+    this.loginData.almacenSolicitud = this.loginData.oficinaLogin.almacenes.find((al) => {
+      return al.id == this.loginData.almacen_id
+    }).nombre; 
+    this.conections.getProducts();
+    this.conections.getCategorias();
+    this.solicitud.ventana = 1;
+  }
 
-/*   agrupar = () => {
-    
-    let categorias = [];
-
-    this.insumosData.insumos.forEach(insumo => {
-      
-      let catId = insumo.subcategoria.categoria.id;
-      let subId = insumo.categoria.id;
-
-    });
-
-    
-
-
-  } */
-  
+  aElegir = () => {
+    this.solicitud.ventana = 3;
+    this.solicitud.limpiar();
+  }
   
 
 }

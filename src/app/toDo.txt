@@ -19,9 +19,10 @@
 
 //// to do ////
 
->input de comentario agregar solicitud.
 
->agregar cantidad minima y stock en agregar solicitud
+> evitar que se manden dos tratos de la misma persona 
 
+>mejorar tratos  que no envien productos y modifificar la verificancion 
+sacando el almacen_id del $request
 
-
+> agregar usuariod de la oficina en el registro de movimientos

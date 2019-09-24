@@ -11,6 +11,8 @@ export class PedidosDataService {
 
   pedido;
 
+  packAprobado: any[] = [];
+
   ventana = 1;
 
   loading: boolean = true;

@@ -42,6 +42,18 @@
             <a *ngIf="loginData.type == 1" class="btn btn-diputado btn-lg btn-block text-uppercase mb-3" routerLink="/bienes"
               role="button">Administrar bienes</a>
           </div>
+          <div class="row justify-content-center">
+            <a *ngIf="loginData.type == 9" class="btn btn-diputado btn-lg btn-block text-uppercase mb-3" routerLink="/almacenes"
+              role="button">Administrar almacenes</a>
+          </div>
+          <div class="row justify-content-center">
+            <a *ngIf="loginData.type == 9" class="btn btn-diputado btn-lg btn-block text-uppercase mb-3" routerLink="/oficinas"
+              role="button">Administrar oficinas</a>
+          </div>
+          <div class="row justify-content-center">
+            <a *ngIf="loginData.type == 9" class="btn btn-diputado btn-lg btn-block text-uppercase mb-3" routerLink="/usuarios"
+              role="button">Administrar usuarios</a>
+          </div>
         </div>
 
   </div>

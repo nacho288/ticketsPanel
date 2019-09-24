@@ -2,8 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { NbChoicesModule } from 'nb-choices';
-
 
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -18,6 +16,9 @@ import { LoginScreenComponent } from './components/login-screen/login-screen.com
 import { BienesComponent } from './components/bienes/bienes.component';
 import { LoadingComponent } from './components/loading/loading.component';
 import { CategoriasComponent } from './components/categorias/categorias.component';
+import { AlmacenesComponent } from './components/almacenes/almacenes.component';
+import { OficinasComponent } from './components/oficinas/oficinas.component';
+import { UsuariosComponent } from './components/usuarios/usuarios.component';
 
 
 @NgModule({
@@ -31,6 +32,9 @@ import { CategoriasComponent } from './components/categorias/categorias.componen
     BienesComponent,
     LoadingComponent,
     CategoriasComponent,
+    AlmacenesComponent,
+    OficinasComponent,
+    UsuariosComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,7 +42,6 @@ import { CategoriasComponent } from './components/categorias/categorias.componen
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    NbChoicesModule 
   ],
   providers: [],
   bootstrap: [AppComponent]

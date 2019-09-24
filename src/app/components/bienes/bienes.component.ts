@@ -4,6 +4,9 @@ import { ConectionsService } from 'src/app/services/conections.service';
 import { UsuariosDataService } from './../../services/usuarios-data.service';
 import { FormControl} from '@angular/forms';
 import { CategoriasDataService } from 'src/app/services/categorias-data.service';
+import { OficinasDataService } from './../../services/oficinas-data.service';
+import { LoginDataService } from 'src/app/services/login-data.service';
+import { UtilsService } from 'src/app/services/utils.service';
 
 
 
@@ -21,7 +24,7 @@ export class BienesComponent implements OnInit {
   stock;
   alerta;
   codigo;
-  subCategoria: any = 1;
+  subCategoria: any = null;
 
   insumoEdit ={
     id: 0,
@@ -31,11 +34,11 @@ export class BienesComponent implements OnInit {
     codigo: 0,
     stock: 0,
     alerta: 0,
-    subcategoria_id: 0,
+    subcategoria_id: null,
   };
 
   tratoEnviar = {
-    usuario_id: 0,
+    oficina_id: null,
     minimo: 0,
     maximo: 0,
   };
@@ -52,9 +55,14 @@ export class BienesComponent implements OnInit {
 
   constructor(
     private conections: ConectionsService ,
+    public utils: UtilsService,
     public insumosData: InsumosDataService,
     public categoriasData: CategoriasDataService,
-    public usuarios: UsuariosDataService) {
+    public usuarios: UsuariosDataService,
+    public oficinas: OficinasDataService,
+    public loginData: LoginDataService) {
+    this.conections.kickToHome(0);
+    this.conections.kickToHome(9);
     this.insumoStock = {
       id: 0,
       nombre: "",
@@ -62,7 +70,7 @@ export class BienesComponent implements OnInit {
       maximo: 0,
       codigo: 0,
       stock: 0
-  };
+      };
      }
 
   ngOnInit() {
@@ -102,7 +110,7 @@ export class BienesComponent implements OnInit {
       this.stock = null;
       this.alerta = null;
       this.codigo = "";
-      this.subCategoria = 1;
+      this.subCategoria = null;
     }
 
   }
@@ -113,8 +121,8 @@ export class BienesComponent implements OnInit {
   }
 
   toEditar = (id) => {
-    this.cambioVentana(3);
     this.conections.getCategorias();
+    this.cambioVentana(3);
     let insumo = this.insumosData.insumos.find( item => item.id == id);
     this.insumoEdit = insumo;
   }
@@ -131,15 +139,16 @@ export class BienesComponent implements OnInit {
   }
 
   toDetalles = (id) => {
-    this.cambioVentana(4);
-    this.conections.getUsuarios();
+    this.conections.getAlmacen();
+    this.conections.getOficinas();
     this.conections.getProduct(id);
+    this.cambioVentana(4);
   }
 
   enviarTrato = () => {
-    if (this.tratoEnviar.usuario_id) {
+    if (this.tratoEnviar.oficina_id) {
       this.conections.sendTrato(this.tratoEnviar);
-      this.conections.getUsuarios();
+      this.conections.getOficinas();
     }
   }
 
@@ -148,7 +157,7 @@ export class BienesComponent implements OnInit {
   }
 
   updateStock = () => {
-    this.conections.updateProductStock(this.insumoStock);
+    this.conections.updateProductStock(this.insumoStock.stock, this.insumoStock.id);
   }
   
 }

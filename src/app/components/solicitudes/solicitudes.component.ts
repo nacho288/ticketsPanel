@@ -19,6 +19,8 @@ export class SolicitudesComponent implements OnInit {
   comentario;
   toEstado = 0;
 
+  packEvaluar: any[] = [];
+
   constructor(
     private data: DataService, 
     public utils: UtilsService,
@@ -26,7 +28,7 @@ export class SolicitudesComponent implements OnInit {
     public pedidos: PedidosDataService,
     public login: LoginDataService
 ) { 
-
+    this.conections.kickToHome(9);
   }
 
   limpiar = () => {
@@ -68,14 +70,33 @@ export class SolicitudesComponent implements OnInit {
   }
 
   update = () => {
-
     this.conections.updatePedido(this.toEstado, this.comentario);
+  }
+
+  updateEvaluar = () => {
+    this.pedidos.packAprobado = this.packEvaluar;
+    this.conections.updatePedido(1, this.comentario);
+  }
+  
+  toEvaluar = () => {
+
+    this.packEvaluar = [];
+
+    this.pedidos.pedido.productos.forEach(pro => {
+      this.packEvaluar.push({
+        ...pro,
+        aprobado: false
+      })
+    });
+
+    console.log(this.packEvaluar);
+
   }
   
 
   ngOnInit() {
-    this.pedidos.ventana = 1
     this.conections.getPedidos();
+    this.pedidos.ventana = 1
   }
 
 }

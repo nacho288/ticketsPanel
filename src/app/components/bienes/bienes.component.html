@@ -1,4 +1,4 @@
-<app-loading *ngIf="insumosData.loading || categoriasData.loading"></app-loading>
+<app-loading *ngIf="insumosData.loading || categoriasData.loading || loginData.loading"></app-loading>
 
 <!-- //////////////////////////////// -->
 
@@ -35,6 +35,7 @@
               <ng-container *ngIf="item.subcategoria">
                 <td>{{item.subcategoria.categoria.nombre}} / {{item.subcategoria.nombre}}</td>
               </ng-container>
+              <td *ngIf="!item.subcategoria">(Sin asignar)</td>
               <td>{{item.stock}}</td>
               <td  class="text-center"><button (click)="toStock(item.id)" class="btn btn-sm btn-diputado " data-toggle="modal"
                 data-target="#exampleModal">≡</button></td>
@@ -142,6 +143,8 @@
         <div class="form-group">
           <label for="exampleFormControlSelect1">Categoria</label>
           <select [(ngModel)]="subCategoria" name="cat" class="form-control" id="exampleFormControlSelect1">
+            <option [selected]="true" [value]="null">
+              Sin asignar</option>
             <ng-container *ngFor="let cat of categoriasData.categorias" >
               <option disabled>-- {{cat.nombre}} -- </option>
               <option *ngFor="let sub of cat.subcategorias" [selected]="sub.id == 1" [value]="sub.id">{{sub.nombre}}</option>
@@ -248,6 +251,8 @@
         <div class="form-group">
           <label for="exampleFormControlSelect1">Categoria</label>
           <select [(ngModel)]="insumoEdit.subcategoria_id" name="cat" class="form-control" id="exampleFormControlSelect1">
+              <option [selected]="insumoEdit.subcategoria_id == null" [value]="null">
+                Sin asignar</option>
             <ng-container *ngFor="let cat of categoriasData.categorias">
               <option disabled>-{{cat.nombre}}</option>
               <option *ngFor="let sub of cat.subcategorias" [selected]="sub.id == insumoEdit.subcategoria_id" [value]="sub.id">{{sub.nombre}}</option>
@@ -281,7 +286,7 @@
 <!-- /////////////////////////////// -->
 
 
-<div *ngIf="insumosData.ventana == 4 && !insumosData.loading && !usuarios.loading" class="row mt-5 justify-content-center animated fadeIn">
+<div *ngIf="insumosData.ventana == 4 && !insumosData.loading && !usuarios.loading && !loginData.loading" class="row mt-5 justify-content-center animated fadeIn">
   <div class="col col-md-8 col-lg-6 bg-white rounded shadow-sm p-4">
 
     <div class="row align-items-center">
@@ -315,8 +320,22 @@
         <ul>
           <li><b>Nombre: </b>{{insumosData.insumo.nombre}}</li>
           <li><b>Código: </b>{{insumosData.insumo.codigo}}</li>
-          <li><b>Categoria: </b>{{insumosData.insumo.subcategoria.categoria.nombre}}</li>
-          <li><b>Sub-categoria: </b>{{insumosData.insumo.subcategoria.nombre}}</li>
+          <li><b>Categoria: </b>
+            <ng-container *ngIf="insumosData.insumo.subcategoria">
+              {{insumosData.insumo.subcategoria.categoria.nombre}}
+            </ng-container>
+            <ng-container *ngIf="!insumosData.insumo.subcategoria">
+              (Sin asignar)
+            </ng-container>
+          </li>
+          <li><b>Sub-categoria: </b>
+            <ng-container *ngIf="insumosData.insumo.subcategoria">
+              {{insumosData.insumo.subcategoria.nombre}}
+            </ng-container>
+            <ng-container *ngIf="!insumosData.insumo.subcategoria">
+              (Sin asignar)
+            </ng-container>
+          </li>
         </ul>
       </div>
       <div class="col">
@@ -355,7 +374,7 @@
                     <table class="table">
                       <thead>
                         <tr>
-                          <th scope="col">Nombre</th>
+                          <th scope="col">Oficina</th>
                           <th scope="col">Minimo</th>
                           <th scope="col">Maximo</th>
                           <th scope="col"></th>
@@ -363,7 +382,7 @@
                       </thead>
                       <tbody>
                         <tr *ngFor="let item of this.insumosData.insumo.tratos">
-                          <th scope="row">{{usuarios.getNombre(item.usuario_id)}}</th>
+                          <th scope="row">{{loginData.getNombreOfiAlmacen(item.oficina_id)}}</th>
                           <td>{{item.minimo}}</td>
                           <td>{{item.maximo}}</td>
                           <td>
@@ -371,13 +390,13 @@
                           </td>
                         </tr>
                         <tr>
-                          <th scope="row">
-                            <select [(ngModel)]="tratoEnviar.usuario_id" name="insu" id="insumo" class="form-control">
-                              <option selected disabled value="undefined">Nombre usuario</option>
-                              <option *ngFor="let usuario of usuarios.usuarios" value="{{usuario.id}}">{{usuario.nombre}}
+                          <td>
+                            <select [(ngModel)]="tratoEnviar.oficina_id" name="insu" id="insumo" class="form-control">
+                              <option selected disabled [value]="null">Oficina</option>
+                              <option *ngFor="let oficina of loginData.almacen.oficinas" value="{{oficina.id}}">{{oficina.nombre}}
                               </option>
                             </select>
-                          </th>
+                          </td>
                           <td><input [(ngModel)]="tratoEnviar.minimo" name="min" type="number" class="form-control"
                               id="exampleInputPassword1" placeholder="Minimo"></td>
                           <td><input [(ngModel)]="tratoEnviar.maximo" name="max" type="number" class="form-control"
@@ -420,13 +439,13 @@
                   </thead>
                   <tbody>
                     <tr *ngFor="let item of this.insumosData.insumo.movimientos">
-                      <th>{{item.fecha}}</th>
-                      <td><ng-container *ngIf="item.tipo_id != 0">{{item.original}}</ng-container></td>
+                      <th>{{utils.parseDate(item.fecha)}}</th>
+                      <td><ng-container *ngIf="item.tipo != 0">{{item.original}}</ng-container></td>
                       <td>{{item.nuevo}}</td>
                       <td>
-                        <ng-container *ngIf="item.tipo_id == 0">Stock inicial</ng-container>
-                        <ng-container *ngIf="item.tipo_id == 1">Modificado por {{usuarios.getNombre(item.usuario_id)}}</ng-container>
-                        <ng-container *ngIf="item.tipo_id == 2">Restado por solicitud de {{usuarios.getNombre(item.usuario_id)}}</ng-container>
+                        <ng-container *ngIf="item.tipo == 0">Stock inicial</ng-container>
+                        <ng-container *ngIf="item.tipo == 1">Modificado por {{loginData.getNombreAdminAlmacen(item.user_id)}}</ng-container>
+                        <ng-container *ngIf="item.tipo == 2">Restado por solicitud de la oficina {{loginData.getNombreOfiAlmacen(item.oficina_id)}}</ng-container>
                       </td>
                     </tr>
                   </tbody>

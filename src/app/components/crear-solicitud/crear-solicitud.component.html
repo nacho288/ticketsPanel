@@ -7,8 +7,11 @@
         <div class="col col-md-8 col-lg-7 bg-white rounded shadow-sm p-4">
           
           <div class="row">
-            <div class="col">
-              <h2>Nueva solicitud:</h2>
+            <div class="col col-auto">
+              <h2>Nueva solicitud a {{this.loginData.almacenSolicitud}}:</h2>
+            </div>
+            <div class="col text-right">
+              <button class="btn btn-diputado" (click)="aElegir()">Cambiar</button>
             </div>
           </div>
           
@@ -32,8 +35,9 @@
                           <option selected disabled value="undefined">Categorias</option>
                           <option value="0">Todas</option>
                           <ng-container *ngFor="let cat of categoriasData.categorias">
-                            <option disabled>-- {{cat.nombre}} -- </option>
-                            <option *ngFor="let sub of cat.subcategorias" [selected]="sub.id == 1" [value]="sub.id">{{sub.nombre}}</option>
+                            <optgroup label="{{cat.nombre}}">
+                              <option *ngFor="let sub of cat.subcategorias" [value]="sub.id">{{sub.nombre}}</option>
+                            </optgroup>
                           </ng-container>
                         </select>
                       </div>
@@ -43,7 +47,7 @@
                         <select [(ngModel)]="insumoId" name="insu" id="insumo" class="form-control">
                           <option selected disabled value="undefined">insumo</option>
                           <ng-container *ngFor="let articulo of insumosData.insumos">
-                            <option *ngIf="articulo.subcategoria_id == categoria  || categoria == 0"  value="{{articulo.id}}">{{articulo.nombre}}
+                            <option *ngIf="articulo.subcategoria_id == categoria || categoria == 0"  value="{{articulo.id}}">{{articulo.nombre}}
                             </option>
                           </ng-container>
                         </select>
@@ -173,7 +177,6 @@
         </div>
       </div>
 
-
         <ng-container *ngIf="solicitud.ventana == 2">
           <div class="row justify-content-center animated fadeIn">
             <div class="col col-lg-7 p-4 rounded bg-light mt-3">
@@ -213,7 +216,51 @@
           </div>
         </ng-container>
 
+        <ng-container *ngIf="solicitud.ventana == 3">
+          <div class="row justify-content-center animated fadeIn">
+            <div class="col col-lg-7 p-4 rounded bg-light mt-3">
+        
+              <div class="row">
+                <div class="col">
+                  <h4 class="display-4 text-center">Elegir Almacén</h4>
+                </div>
+              </div>
+        
+              <div class="row">
+                <div class="col">
+                  <hr class="mt-1 mb-3">
+                </div>
+              </div>
+        
+              <div class="row">
+                <div class="col">
+              
+                  <div class="form-group">
+                    <label for="exampleFormControlSelect2">Almacén:</label>
+                    <select [(ngModel)]="almacen_id" class="form-control" id="exampleFormControlSelect2">
+                      <option selected disabled [value]="null">Almacén</option>
+                      <option *ngFor="let al of loginData.oficinaLogin.almacenes" [value]='al.id'>{{al.nombre}}</option>
+                    </select>
+                  </div>
+             
+                </div>
+              </div>
 
+              <div class="row">
+                <div class="col">
+                  <hr class="mt-1 mb-4">
+                </div>
+              </div>
+        
+              <div class="row">
+                <div class="col text-center">
+                  <button class="btn btn-diputado" (click)="elegirAlmacen()" type="button">Elegir</button>
+                </div>
+              </div>
+        
+            </div>
+          </div>
+        </ng-container>
     
 
 
