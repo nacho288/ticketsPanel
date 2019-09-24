@@ -131,6 +131,9 @@ export class ConectionsService {
         this.loginData.id = res.id;
         this.loginData.error = 2;
         this.loginData.fullName = res.name;
+        if (res.type == 0) {
+          this.loginData.almacen_id = null;
+        }
         if (res.almacenes) {
           this.loginData.userAlmacenes = res.almacenes; 
         }
