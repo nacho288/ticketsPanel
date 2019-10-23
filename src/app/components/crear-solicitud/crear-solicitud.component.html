@@ -45,9 +45,9 @@
                     <div class="col">
                       <div class="form-group">
                         <select [(ngModel)]="insumoId" name="insu" id="insumo" class="form-control">
-                          <option selected disabled value="undefined">insumo</option>
+                          <option selected disabled value="undefined"><b>Insumo</b></option>
                           <ng-container *ngFor="let articulo of insumosData.insumos">
-                            <option *ngIf="articulo.subcategoria_id == categoria || categoria == 0"  value="{{articulo.id}}">{{articulo.nombre}}
+                            <option *ngIf="articulo.subcategoria_id == categoria || categoria == 0" [disabled]="articulo.stock == 0"  value="{{articulo.id}}">{{articulo.nombre}}
                             </option>
                           </ng-container>
                         </select>
@@ -128,7 +128,7 @@
           <div class="row">
             <div class="col">
               <div class="form-group">
-                <label for="exampleFormControlTextarea1">Comentario:</label>
+                <label for="exampleFormControlTextarea1"><h5>Justificación de pedido:</h5></label>
                 <textarea [(ngModel)]="comentario" name="coment" class="form-control" id="exampleFormControlTextarea1"
                   rows="3"></textarea>
               </div>

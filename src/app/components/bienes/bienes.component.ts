@@ -23,8 +23,12 @@ export class BienesComponent implements OnInit {
   maximo;
   stock;
   alerta;
-  codigo;
+/*   codigo; */
+  frecuencia;
+  preparacion;
   subCategoria: any = null;
+
+  comentarioStock = "";
 
   insumoEdit ={
     id: 0,
@@ -35,6 +39,8 @@ export class BienesComponent implements OnInit {
     stock: 0,
     alerta: 0,
     subcategoria_id: null,
+    frecuencia: 0,
+    preparacion: 0
   };
 
   tratoEnviar = {
@@ -49,7 +55,8 @@ export class BienesComponent implements OnInit {
     minimo: 0,
     maximo: 0,
     codigo: 0,
-    stock: 0
+    stock: 0,
+    comentario: ''
   };
 
 
@@ -69,7 +76,8 @@ export class BienesComponent implements OnInit {
       minimo: 0,
       maximo: 0,
       codigo: 0,
-      stock: 0
+      stock: 0,
+      comentario: ''
       };
      }
 
@@ -88,7 +96,7 @@ export class BienesComponent implements OnInit {
 
   enviar = () => {
 
-    if (this.nombre && this.codigo && this.maximo) {
+    if (this.nombre && this.maximo && this.frecuencia && this.subCategoria) {
 
       let pack = {
         nombre: this.nombre,
@@ -96,8 +104,9 @@ export class BienesComponent implements OnInit {
         maximo: this.maximo,
         stock: this.stock,
         alerta: this.alerta,
-        codigo: this.codigo,
-        subcategoria_id: parseInt(this.subCategoria),
+        frecuencia: this.frecuencia,
+        preparacion: this.preparacion,
+        subcategoria_id: parseInt(this.subCategoria)
       };
 
       console.log(pack);
@@ -109,8 +118,9 @@ export class BienesComponent implements OnInit {
       this.maximo = null;
       this.stock = null;
       this.alerta = null;
-      this.codigo = "";
       this.subCategoria = null;
+      this.frecuencia = null;
+      this.preparacion = null;
     }
 
   }
@@ -134,7 +144,7 @@ export class BienesComponent implements OnInit {
     };
   }
 
-  editar = (id) => {
+  editar = () => {
     this.conections.updateProduct(this.insumoEdit);
   }
 
@@ -157,7 +167,12 @@ export class BienesComponent implements OnInit {
   }
 
   updateStock = () => {
-    this.conections.updateProductStock(this.insumoStock.stock, this.insumoStock.id);
+    this.conections.updateProductStock(this.insumoStock.stock, this.insumoStock.comentario, this.insumoStock.id);
   }
+
+  toComentarioStock = (i) => {
+    this.comentarioStock = this.insumosData.insumo.movimientos[i].comentario;
+  }
+  
   
 }

@@ -50,6 +50,8 @@
             </div>
             
             <button  class="btn btn-block btn-diputado" (click)="enviarLogin()">Enviar</button>
+            <button class="btn btn-block btn-diputado" (click)="quickLogin()">quick admin</button>
+            <button class="btn btn-block btn-diputado" (click)="quickLogin2()">quick user</button>
           </form>
 
         </div>
@@ -155,7 +157,7 @@
 
               <div *ngIf="loginData.userOficinas.length == 0" class="row">
                 <div class="col">
-                  <h4 class="text-secondary text-center font-italic">...sin almacenes asignados...</h4>
+                  <h4 class="text-secondary text-center font-italic">...sin oficinas asignadas...</h4>
                 </div>
               </div>
 

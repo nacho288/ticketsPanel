@@ -17,9 +17,9 @@ import { OficinasDataService } from './oficinas-data.service';
 })
 export class ConectionsService {
 
-  serverUrl: string = "https://server-tickets.herokuapp.com/api";
+/*   serverUrl: string = "https://server-tickets.herokuapp.com/api"; */
 
-  /* serverUrl: string = "http://127.0.0.1:8000/api"; */
+  serverUrl: string = "http://127.0.0.1:8000/api";
 
   list: any[];
 
@@ -662,6 +662,10 @@ export class ConectionsService {
       this.insumos.insumos = [];
       this.insumos.insumosAlerta = [];
       this.insumos.sinCategorias = [];
+
+      console.log(res);
+      
+
       if (!res.error) {
       res.forEach(item => {
         if (parseInt(item.stock) < parseInt(item.alerta)) {
@@ -858,7 +862,7 @@ export class ConectionsService {
   }
 
 
-  updateProductStock = (stock, id) => {
+  updateProductStock = (stock, comentario, id) => {
 
     this.insumos.insumos = [];
     this.insumos.loading = true;
@@ -869,7 +873,8 @@ export class ConectionsService {
     let pack = {
       'stock': stock,
       'user_id': this.loginData.id,
-      'almacene_id': this.loginData.almacen_id
+      'almacene_id': this.loginData.almacen_id,
+      'comentario': comentario
     }
 
     const httpOptions = {
@@ -1036,10 +1041,37 @@ export class ConectionsService {
 
   }
 
+  updatePreparacionPedido = (cantidadDias) => {
 
-  
+    this.pedidos.loading = true;
 
-  
+    let pack= {
+      preparacion: cantidadDias,
+      almacene_id: this.loginData.almacen_id
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': 'Bearer ' + this.loginData.token
+      })
+    };
+
+    this.http.put(this.serverUrl + '/auth/pedidos/' + this.pedidos.pedido.pedido_id, pack, httpOptions
+    )
+      .subscribe((res: any) => {
+
+        if (res.sucess === false) {
+          this.pedidos.ventana = 3;
+          this.pedidos.loading = false;
+        } else {
+          this.pedidos.ventana = 1;
+          this.getPedidos();
+        }
+        console.log(res);
+      });
+
+  }
+
   }
 
   

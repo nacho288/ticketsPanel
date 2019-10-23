@@ -18,6 +18,7 @@ export class SolicitudesComponent implements OnInit {
   estadoBusqueda: number
   comentario;
   toEstado = 0;
+  nuevaPreparacion = 0;
 
   packEvaluar: any[] = [];
 
@@ -91,6 +92,14 @@ export class SolicitudesComponent implements OnInit {
 
     console.log(this.packEvaluar);
 
+  }
+
+  casillaPreparacion = (cantidadDias) => {
+    this.nuevaPreparacion = cantidadDias;
+  };
+  
+  enviarPreparacion = () => {
+    this.conections.updatePreparacionPedido(this.nuevaPreparacion);
   }
   
 

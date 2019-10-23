@@ -34,6 +34,18 @@ export class LoginScreenComponent implements OnInit {
     
   }
 
+  quickLogin = () => {
+    let hEmail = 'admin1@gmail.com';
+    let hPassword = '123123123';
+    this.conections.login(hEmail, hPassword);
+  }
+
+  quickLogin2 = () => {
+    let hEmail = 'user1@gmail.com';
+    let hPassword = '123123123';
+    this.conections.login(hEmail, hPassword);
+  }
+
   segundoPaso = () => {
     
     if (this.loginData.type == 0 && this.oficina_id) {

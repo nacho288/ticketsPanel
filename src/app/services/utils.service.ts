@@ -32,12 +32,12 @@ export class UtilsService {
     },
     {
       id: 3,
-      nombre: "finalizado",
+      nombre: "entregado",
       color: "text-success"
     },
     {
       id: 4,
-      nombre: "rechazado",
+      nombre: "cancelado",
       color: "text-danger"
     },
     {

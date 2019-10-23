@@ -154,9 +154,9 @@
       </div>
       <div class="col">
         <div class="form-group">
-          <label for="exampleInputEmail1">Código</label>
-          <input [(ngModel)]="codigo" name="cod" type="text" class="form-control" id="exampleInputEmail1"
-            aria-describedby="emailHelp" placeholder="Código">
+          <label for="exampleInputEmail1">Frecuencia de pedido</label>
+          <input [(ngModel)]="frecuencia" name="cod" type="number" class="form-control" id="exampleInputEmail1"
+            aria-describedby="emailHelp" placeholder="cantidad de días">
         </div>
         <div class="form-group">
           <label for="exampleInputPassword1">Máximo en pedido</label>
@@ -164,9 +164,14 @@
             placeholder="Máximo">
         </div>
         <div class="form-group">
-          <label for="exampleInputPassword1">stock inicial</label>
+          <label for="exampleInputPassword1">Stock inicial</label>
           <input [(ngModel)]="stock" name="stocki" type="number" class="form-control" id="exampleInputPassword1"
             placeholder="Stock inicial">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Tiempo de preparación</label>
+          <input [(ngModel)]="preparacion" name="cod" type="number" class="form-control" id="exampleInputEmail1"
+            aria-describedby="emailHelp" placeholder="cantidad de días">
         </div>
       </div>
     </div>
@@ -232,16 +237,33 @@
     <div class="row">
       <div class="col">
         <div class="form-group">
-          <label for="exampleInputPassword1">Mínimo</label>
+          <label for="exampleInputPassword1">Mínimo por pedido</label>
           <input [(ngModel)]="insumoEdit.minimo" name="min" type="number" class="form-control" id="exampleInputPassword1"
             placeholder="Mínimo">
         </div>
       </div>
       <div class="col">
         <div class="form-group">
-          <label for="exampleInputPassword1">Máximo</label>
+          <label for="exampleInputPassword1">Máximo en rango</label>
           <input [(ngModel)]="insumoEdit.maximo" name="max" type="number" class="form-control" id="exampleInputPassword1"
             placeholder="Máximo">
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label for="exampleInputPassword1">Tiempo de preparación</label>
+          <input [(ngModel)]="insumoEdit.preparacion" name="pre" type="number" class="form-control" id="exampleInputPassword1"
+            placeholder="Días de preparación">
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label for="exampleInputPassword1">Frecuencia de pedido</label>
+          <input [(ngModel)]="insumoEdit.frecuencia" name="fre" type="number" class="form-control" id="exampleInputPassword1"
+            placeholder="cantidad de días">
         </div>
       </div>
     </div>
@@ -262,8 +284,6 @@
       </div>
     </div>
 
-    
-
     <div class="row">
       <div class="col">
         <hr class="mt-2">
@@ -272,7 +292,7 @@
 
     <div class="row ">
       <div class="col text-center">
-        <button class="btn btn-diputado" (click)="editar(insumoEdit.id)">Guardar</button>
+        <button class="btn btn-diputado" (click)="editar()">Guardar</button>
       </div>
       <div class="col text-center">
         <button class="btn btn-diputado" (click)="cambioVentana(1)">Volver</button>
@@ -336,14 +356,16 @@
               (Sin asignar)
             </ng-container>
           </li>
+          <li><b>Tiempo de preparación: </b>{{insumosData.insumo.preparacion}} días</li>
         </ul>
       </div>
       <div class="col">
         <ul>
           <li><b>Mínimo por pedido: </b>{{insumosData.insumo.minimo}}</li>
-          <li><b>Máximo por pedido: </b>{{insumosData.insumo.maximo}}</li>
-          <li><b>Punto de pedido: </b>{{insumosData.insumo.alerta}}</li>
+          <li><b>Máximo en rango: </b>{{insumosData.insumo.maximo}}</li>
+          <li><b>Frecuencia de pedido: </b>cada {{insumosData.insumo.frecuencia}} días</li>
           <li><b>Stock: </b>{{insumosData.insumo.stock}}</li>
+          <li><b>Punto de pedido: </b>{{insumosData.insumo.alerta}}</li>
         </ul>
       </div>
     </div>
@@ -353,7 +375,6 @@
         <hr class="mt-2">
       </div>
     </div>
-
 
     <div class="accordion mt-1" id="accordionExample">
       <div class="card">
@@ -425,7 +446,6 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
           <div class="card-body">
 
-
             <div class="row mt-0">
               <div class="col">
                 <table class="table">
@@ -435,10 +455,11 @@
                       <th scope="col">anterior</th>
                       <th scope="col">actual</th>
                       <th scope="col">acción</th>
+                      <th scope="col">comentario</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let item of this.insumosData.insumo.movimientos">
+                    <tr *ngFor="let item of this.insumosData.insumo.movimientos; let i = index">
                       <th>{{utils.parseDate(item.fecha)}}</th>
                       <td><ng-container *ngIf="item.tipo != 0">{{item.original}}</ng-container></td>
                       <td>{{item.nuevo}}</td>
@@ -446,6 +467,9 @@
                         <ng-container *ngIf="item.tipo == 0">Stock inicial</ng-container>
                         <ng-container *ngIf="item.tipo == 1">Modificado por {{loginData.getNombreAdminAlmacen(item.user_id)}}</ng-container>
                         <ng-container *ngIf="item.tipo == 2">Restado por solicitud de la oficina {{loginData.getNombreOfiAlmacen(item.oficina_id)}}</ng-container>
+                      </td>
+                      <td>
+                        <button (click)="toComentarioStock(i)" *ngIf="item.comentario" class="btn btn-sm btn-diputado" data-toggle="modal" data-target="#comentarioStockModal">≡</button>
                       </td>
                     </tr>
                   </tbody>
@@ -475,6 +499,40 @@
 
 <!-- /////////////////////////////////////////////////// -->
 
+<div class="modal fade mt-5" id="comentarioStockModal" tabindex="-1" role="dialog" aria-labelledby="comentarioStockModal"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Comentario de modificación:</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col">
+            <p>{{this.comentarioStock}}</p>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <div class="row">
+          <div class="col text-right">
+            <button (click)="this.comentarioStock = ''" type="button" class="btn btn-diputado"
+              data-dismiss="modal">Volver</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- /////////////////////////////////////////////////// -->
+
 <div class="modal fade mt-5" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -486,11 +544,27 @@
         </button>
       </div>
       <div class="modal-body">
-      <div class="form-group">
-        <label for="nuevoStock">Nuevo Stock</label>
-        <input [(ngModel)]="insumoStock.stock" name="stockmod" type="number" class="form-control" id="nuevoStock"
-          placeholder="Stock">
-      </div>
+      
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label for="nuevoStock">Nuevo Stock</label>
+              <input [(ngModel)]="insumoStock.stock" name="stockmod" type="number" class="form-control" id="nuevoStock"
+                placeholder="Stock">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label for="exampleFormControlTextarea1">Comentario:</label>
+              <textarea [(ngModel)]="insumoStock.comentario" name="coment" class="form-control" id="exampleFormControlTextarea1"
+                rows="3"></textarea>
+            </div>
+          </div>
+        </div>
+
       </div>
       <div class="modal-footer">
         <div class="row">
@@ -498,7 +572,7 @@
             <button (click)="updateStock()" type="button" class="btn btn-success" data-dismiss="modal">Guardar</button>
           </div>
           <div class="col text-right">
-            <button type="button" class="btn btn-diputado" data-dismiss="modal">Volver</button>
+            <button (click)="this.insumoStock.comentario = ''" type="button" class="btn btn-diputado" data-dismiss="modal">Volver</button>
           </div>
         </div>
       </div>

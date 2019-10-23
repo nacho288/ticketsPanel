@@ -182,6 +182,8 @@
                   {{pedidos.pedido.evaluado_por}}</li>
                 <li *ngIf="pedidos.pedido.estado == 4 && !pedidos.pedido.evaluado_por">Cancelado por: oficina de origen</li>
                 <li *ngIf="pedidos.pedido.estado == 4 && pedidos.pedido.evaluado_por">Rechazado por: {{pedidos.pedido.evaluado_por}}</li>
+                <li *ngIf="pedidos.pedido.retirado_por">Reteriado por: {{pedidos.pedido.retirado_por}}
+                </li>
                 <li>Estado: {{utils.getEstado(pedidos.pedido.estado)}}</li>
                 <li>Fecha: {{utils.parseDate(pedidos.pedido.fecha)}}</li>
               </ul>
@@ -223,6 +225,20 @@
       </div>
     </div>
 
+    <div class="row">
+      <div class="col">
+        <hr class="mt-0 mb-2">
+      </div>
+    </div>
+
+    <div class="row justify-content-end mb-2">
+      <div class="col col-auto px-0 mr-4">
+        <h5>Tiempo de preparación: {{pedidos.pedido.preparacion}} días</h5>
+      </div>
+      <div *ngIf="login.type != 0" class="col col-auto mr-2">
+        <button (click)="casillaPreparacion(this.pedidos.pedido.preparacion)" class="btn btn-sm btn-diputado" data-toggle="modal" data-target="#preparacionModal">≡</button>
+      </div>
+    </div>
 
     <div *ngIf="pedidos.pedido.comentario_administrador" class="row mt-0">
 
@@ -328,25 +344,30 @@
         <div class="row mt-0">
           <div class="col px-3">
 
-            <ng-container  *ngFor="let producto of packEvaluar">
-
-              <div class="row justify-content-between">
-                <div class="col col-auto">
-                  <h5>{{producto.nombre}}</h5>
-                </div>
-                <div class="col col-auto text-right">
-                  <button (click)="producto.aprobado = true" *ngIf="!producto.aprobado" class="btn btn-sm btn-secondary">Aprobado</button>
-                  <button (click)="producto.aprobado = false" *ngIf="producto.aprobado" class="btn btn-sm btn-diputado">Aprobado</button>
-                </div>
-              </div>
-              
-              <div class="row">
-                <div class="col">
-                  <hr>
-                </div>
-              </div>
-
-            </ng-container>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Bien</th>
+                  <th scope="col">Cantidad</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let producto of packEvaluar">
+                  <td><h5>{{producto.nombre}}</h5></td>
+                  <td>
+                    <div class="form-group mr-lg-2">
+                      <input [(ngModel)]="producto.cantidad" name="canti" type="number" class="form-control" id="hasta" aria-describedby="hasta"
+                        placeholder="cantidad">
+                    </div>
+                  </td>
+                  <td>
+                    <button (click)="producto.aprobado = true" *ngIf="!producto.aprobado" class="btn btn-sm btn-danger">Cancelado</button>
+                    <button (click)="producto.aprobado = false" *ngIf="producto.aprobado" class="btn btn-sm btn-success">Aprobado</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
 
             <div class="row justify-content-between">
               <div class="col col-auto">
@@ -407,3 +428,44 @@
     </div>
   </div>
 </ng-container>
+
+
+<!-- /////////////////////////////////////////////////// -->
+
+<div class="modal fade mt-5" id="preparacionModal" tabindex="-1" role="dialog"
+  aria-labelledby="comentarioStockModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editar tiempo de preparación:</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col">
+            <div class="form-group mr-lg-2">
+              <label for="numero">Tiempo de preparacion: (días)</label>
+              <input [(ngModel)]="nuevaPreparacion" name="prepa" type="number" class="form-control" id="preparacion"
+                aria-describedby="preparacion" placeholder="Cantidad de días">
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <div class="row">
+          <div class="col text-left">
+            <button (click)="enviarPreparacion()" type="button" class="btn btn-success" data-dismiss="modal">Guardar</button>
+          </div>
+          <div class="col text-right">
+            <button  type="button" class="btn btn-diputado" data-dismiss="modal">Volver</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
