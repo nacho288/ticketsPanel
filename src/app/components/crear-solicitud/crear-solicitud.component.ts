@@ -34,6 +34,7 @@ export class CrearSolicitudComponent implements OnInit {
     public loginData: LoginDataService,
     private toastr: ToastrService) {
     this.conections.kickToHome(9);
+    this.solicitud.limpiar();
 
     if (this.loginData.oficina_id) {
       this.conections.getProductsPanel();

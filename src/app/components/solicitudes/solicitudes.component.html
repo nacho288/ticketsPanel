@@ -182,7 +182,7 @@
                   {{pedidos.pedido.evaluado_por}}</li>
                 <li *ngIf="pedidos.pedido.estado == 4 && !pedidos.pedido.evaluado_por">Cancelado por: oficina de origen</li>
                 <li *ngIf="pedidos.pedido.estado == 4 && pedidos.pedido.evaluado_por">Rechazado por: {{pedidos.pedido.evaluado_por}}</li>
-                <li *ngIf="pedidos.pedido.retirado_por">Reteriado por: {{pedidos.pedido.retirado_por}}
+                <li *ngIf="pedidos.pedido.retirado_por">Retirado por: {{pedidos.pedido.retirado_por}}
                 </li>
                 <li>Estado: {{utils.getEstado(pedidos.pedido.estado)}}</li>
                 <li>Fecha: {{utils.parseDate(pedidos.pedido.fecha)}}</li>

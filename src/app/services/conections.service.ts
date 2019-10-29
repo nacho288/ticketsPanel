@@ -19,9 +19,9 @@ import { OficinasDataService } from './oficinas-data.service';
 })
 export class ConectionsService {
 
-/*   serverUrl: string = "https://server-tickets.herokuapp.com/api"; */
+  serverUrl: string = "https://server-tickets-panel.herokuapp.com/api";
 
-  serverUrl: string = "http://127.0.0.1:8000/api";
+  /* serverUrl: string = "http://127.0.0.1:8000/api"; */
 
   list: any[];
 
