@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
+
 import { ConectionsService } from 'src/app/services/conections.service';
 import { AlmacenesDataService } from './../../services/almacenes-data.service';
 import { UsuariosDataService } from './../../services/usuarios-data.service';
@@ -14,8 +16,8 @@ export class AlmacenesComponent implements OnInit {
   nombreCrear: string = "";
   listaOficinas: any[] = [];
   listaAdmins: any[] = [];
-  oficinaAgregarId;
-  adminAgregarId;
+  oficinaAgregarId = null;
+  adminAgregarId = null;
   almacenId;
 
   editarPack = {
@@ -27,7 +29,8 @@ export class AlmacenesComponent implements OnInit {
     private conections: ConectionsService,
     public almacenes: AlmacenesDataService,
     public usuarios: UsuariosDataService,
-    public oficinas: OficinasDataService 
+    public oficinas: OficinasDataService,
+    private toastr: ToastrService 
   ) {
     this.conections.kickToHome(0);
     this.conections.kickToHome(1);
@@ -40,6 +43,15 @@ export class AlmacenesComponent implements OnInit {
   }
   
   crearAlmacen = () => {
+
+    if (!this.nombreCrear) {
+      this.toastr.error('no se ha insertado ningun nombre', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
     this.conections.sendAlmacen(this.nombreCrear);
   }
 
@@ -51,14 +63,32 @@ export class AlmacenesComponent implements OnInit {
   }
 
   cambiarNombre = () => {
-    this.conections.cambiarNombreAlmacen(this.editarPack.id, this.editarPack.nombre)
+    if (!this.editarPack.nombre) {
+      this.toastr.error('no se ha insertado ningun nombre', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
+    this.conections.cambiarNombreAlmacen(this.editarPack.id, this.editarPack.nombre);
   }
 
   agregarOficina =  () => {
+
+    if (!this.oficinaAgregarId) {
+      this.toastr.error('no se ha seleccionado ninguna oficina', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
     if (this.oficinaAgregarId && this.almacenId) {
-      console.log(this.oficinaAgregarId + " " + this.almacenId);
       this.conections.insertOficinaAlmacen(this.almacenId, this.oficinaAgregarId);
     }
+
+    this.oficinaAgregarId = null;
   }
 
   quitarOficina = (alId, ofId) => {
@@ -66,9 +96,20 @@ export class AlmacenesComponent implements OnInit {
   }
 
   agregarAdmin = () => {
+
+    if (!this.adminAgregarId) {
+      this.toastr.error('no se ha seleccionado ningún almacén', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
     if (this.adminAgregarId && this.almacenId) {
       this.conections.insertAdminAlmacen(this.almacenId, this.adminAgregarId);
     }
+
+    this.adminAgregarId = null;
   }
 
   quitarAdmin = (alId, adId) => {

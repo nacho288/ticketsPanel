@@ -16,6 +16,7 @@ export class LoginDataService {
   token: string;
   almacen_id: any;
   almacenSolicitud: any;
+  oficinaSolicitud: any;
   oficina_id: any;
   userAlmacenes: any = [];
   userOficinas: any = [];

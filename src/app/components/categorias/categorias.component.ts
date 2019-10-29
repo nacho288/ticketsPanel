@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
+
 import { ConectionsService } from 'src/app/services/conections.service';
 import { CategoriasDataService } from 'src/app/services/categorias-data.service';
 
@@ -18,6 +20,7 @@ export class CategoriasComponent implements OnInit {
   constructor(
     private conections: ConectionsService,
     public categoriasData: CategoriasDataService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -26,11 +29,29 @@ export class CategoriasComponent implements OnInit {
   }
 
   crearCategoria = () => {
+
+    if (!this.nombreCrearCat) {
+      this.toastr.error('no se ha insertado ningun nombre', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
     this.conections.sendCategoria(this.nombreCrearCat);
     this.nombreCrearCat = "";
   }
 
   editarCategoria = () => {
+
+    if (!this.nombreEditarCat) {
+      this.toastr.error('no se ha insertado ningun nombre', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
     this.conections.updateCategoria(this.nombreEditarCat, this.idEditarCat);
   }
 
@@ -44,6 +65,15 @@ export class CategoriasComponent implements OnInit {
   }
 
   crearSub = (id) => {
+
+    if (!this.nombreCrearSub) {
+      this.toastr.error('no se ha insertado ningun nombre', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
     this.conections.sendSubcategoria(this.nombreCrearSub, id);
     this.nombreCrearSub = "";
   }

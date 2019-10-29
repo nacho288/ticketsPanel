@@ -3,6 +3,7 @@ import { ConectionsService } from './../../services/conections.service';
 import { InsumosDataService } from './../../services/insumos-data.service';
 import { CategoriasDataService } from './../../services/categorias-data.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 import { SolicitudDataService } from './../../services/solicitud-data.service';
 import { LoginDataService } from 'src/app/services/login-data.service';
@@ -22,6 +23,8 @@ export class CrearSolicitudComponent implements OnInit {
   errorVacio = false;
   categoria:any;
   almacen_id: any = null;
+  oficina_id: any = null;
+  user_id = null;
 
   constructor(
     private conections: ConectionsService, 
@@ -29,16 +32,14 @@ export class CrearSolicitudComponent implements OnInit {
     public solicitud: SolicitudDataService, 
     public categoriasData: CategoriasDataService,
     public loginData: LoginDataService,
-    private router : Router) {
-    this.conections.kickToHome(1);
+    private toastr: ToastrService) {
     this.conections.kickToHome(9);
 
-    if (this.loginData.almacen_id) {
-      this.conections.getProducts();
+    if (this.loginData.oficina_id) {
+      this.conections.getProductsPanel();
       this.conections.getCategorias();
       this.solicitud.ventana = 1;
     } else {
-      console.log('te chache');
       this.solicitud.ventana = 3
     }
 
@@ -49,6 +50,23 @@ export class CrearSolicitudComponent implements OnInit {
   }
 
   agregar = () => {
+
+    if (!this.insumoId) {
+      this.toastr.error('no se ha seleccionado ningun bien', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
+    if (!this.cantidad) {
+      this.toastr.error('no se ha asignado ninguna cantidad', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
     if (this.insumoId && this.cantidad) {
       this.errorVacio = false;
       let repetido = this.solicitud.solicitud.insumos.findIndex(p => p.id == this.insumoId);
@@ -79,9 +97,25 @@ export class CrearSolicitudComponent implements OnInit {
 
   enviar = () => {
 
-    if (this.solicitud.solicitud.insumos.length != 0) {
+    if (!this.user_id) {
+      this.toastr.error('no se ha seleccionado ningun usuario', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
+    if (this.solicitud.solicitud.insumos.length == 0) {
+      this.toastr.error('no se ha agregado ningun item', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
+    if (this.solicitud.solicitud.insumos.length != 0 && this.oficina_id) {
       this.solicitud.solicitud.comentarioUsuario = this.comentario ? this.comentario : "";
-      this.conections.sendPedido();
+      this.conections.sendPedidoPanel(this.user_id);
       this.solicitud.limpiar();
     } else {
       this.errorVacio = true;
@@ -103,6 +137,27 @@ export class CrearSolicitudComponent implements OnInit {
     this.conections.getProducts();
     this.conections.getCategorias();
     this.solicitud.ventana = 1;
+  }
+
+  elegirOficina = () => {
+
+    if (!this.oficina_id) {
+      this.toastr.error('Debe elegir una oficina', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+    } else {
+
+      this.loginData.oficina_id = this.oficina_id;
+      this.loginData.oficinaSolicitud = this.loginData.almacenLogin.oficinas.find((ofi) => {
+        return ofi.id == this.loginData.oficina_id
+      });
+      this.conections.getProductsPanel();
+      this.conections.getCategorias();
+      this.solicitud.ventana = 1;
+
+    }
+    
   }
 
   aElegir = () => {

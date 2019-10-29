@@ -240,6 +240,7 @@
           <div *ngIf="listaOficinas.length > 0" class="form-group">
             <label for="oficina">Oficina</label>
             <select [(ngModel)]="oficinaAgregarId" name='ofi' class="form-control" id="oficina">
+              <option selected disabled [value]="null">Seleccionar oficina</option>
               <option *ngFor="let item of listaOficinas" value="{{item.id}}">{{item.nombre}}</option>
             </select>
           </div>
@@ -269,6 +270,7 @@
         <div *ngIf="listaAdmins.length > 0" class="form-group">
           <label for="adm">Administradores:</label>
           <select [(ngModel)]="adminAgregarId" name='adm' class="form-control" id="adm">
+            <option selected disabled [value]="null">Seleccionar almacén</option>
             <option *ngFor="let item of listaAdmins" value="{{item.id}}">{{item.name}}</option>
           </select>
         </div>

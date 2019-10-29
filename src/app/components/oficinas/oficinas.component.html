@@ -186,6 +186,7 @@
         <div *ngIf="listaUsuarios.length > 0" class="form-group">
           <label for="usuario">Usuario</label>
           <select [(ngModel)]="usuarioAgregarId" name='usr' class="form-control" id="usuario">
+            <option selected disabled [value]="null">Seleccionar usuario</option>
             <option *ngFor="let item of listaUsuarios" value="{{item.id}}">{{item.name}}</option>
           </select>
         </div>

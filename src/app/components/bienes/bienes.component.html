@@ -68,7 +68,7 @@
   </div>
 </div>
 
-<div *ngIf="!insumosData.loading && insumosData.ventana == 1 && insumosData.insumosAlerta.length" class="row justify-content-center mt-3">
+<div *ngIf="!insumosData.loading && insumosData.ventana == 1 && insumosData.insumosAlerta.length" class="row justify-content-center mt-3 animated fadeIn">
   <div class="col col-md-8 col-lg-6 bg-white rounded shadow-sm p-4">
     <div class="row justify-content-center">
       <div class="col">
@@ -143,11 +143,12 @@
         <div class="form-group">
           <label for="exampleFormControlSelect1">Categoria</label>
           <select [(ngModel)]="subCategoria" name="cat" class="form-control" id="exampleFormControlSelect1">
-            <option [selected]="true" [value]="null">
+            <option [selected]="true" disabled [value]="null">
               Sin asignar</option>
-            <ng-container *ngFor="let cat of categoriasData.categorias" >
-              <option disabled>-- {{cat.nombre}} -- </option>
-              <option *ngFor="let sub of cat.subcategorias" [selected]="sub.id == 1" [value]="sub.id">{{sub.nombre}}</option>
+            <ng-container *ngFor="let cat of categoriasData.categorias">
+              <optgroup label="{{cat.nombre}}">
+                <option *ngFor="let sub of cat.subcategorias" [value]="sub.id">{{sub.nombre}}</option>
+              </optgroup>
             </ng-container>
           </select>
         </div>
@@ -202,7 +203,7 @@
 <!-- /////////////////////////////// -->
 
 
-<div *ngIf="insumosData.ventana == 3 && !insumosData.loading" class="row mt-5 justify-content-center animated fadeIn">
+<div *ngIf="insumosData.ventana == 3 && !insumosData.loading && !categoriasData.loading" class="row mt-5 justify-content-center animated fadeIn">
   <div class="col col-md-6 col-lg-4 bg-white rounded shadow-sm p-4">
 
     <div class="row">
@@ -273,11 +274,10 @@
         <div class="form-group">
           <label for="exampleFormControlSelect1">Categoria</label>
           <select [(ngModel)]="insumoEdit.subcategoria_id" name="cat" class="form-control" id="exampleFormControlSelect1">
-              <option [selected]="insumoEdit.subcategoria_id == null" [value]="null">
-                Sin asignar</option>
             <ng-container *ngFor="let cat of categoriasData.categorias">
-              <option disabled>-{{cat.nombre}}</option>
-              <option *ngFor="let sub of cat.subcategorias" [selected]="sub.id == insumoEdit.subcategoria_id" [value]="sub.id">{{sub.nombre}}</option>
+              <optgroup label="{{cat.nombre}}">
+                <option *ngFor="let sub of cat.subcategorias" [selected]="sub.id == insumoEdit.subcategoria_id"  [value]="sub.id">{{sub.nombre}}</option>
+              </optgroup>
             </ng-container>
           </select>
         </div>
@@ -468,7 +468,7 @@
                         <ng-container *ngIf="item.tipo == 1">Modificado por {{loginData.getNombreAdminAlmacen(item.user_id)}}</ng-container>
                         <ng-container *ngIf="item.tipo == 2">Restado por solicitud de la oficina {{loginData.getNombreOfiAlmacen(item.oficina_id)}}</ng-container>
                       </td>
-                      <td>
+                      <td class="text-center">
                         <button (click)="toComentarioStock(i)" *ngIf="item.comentario" class="btn btn-sm btn-diputado" data-toggle="modal" data-target="#comentarioStockModal">≡</button>
                       </td>
                     </tr>

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { LoginDataService } from './login-data.service';
 import { InsumosDataService } from './insumos-data.service';
 import { HttpClient, HttpParams, HttpHeaders  } from '@angular/common/http';
+
 import { SolicitudDataService } from './solicitud-data.service';
 import { PedidosDataService } from './pedidos-data.service';
 import { Router } from "@angular/router";
@@ -9,6 +10,7 @@ import { UsuariosDataService } from './usuarios-data.service';
 import { CategoriasDataService } from './categorias-data.service';
 import { AlmacenesDataService } from './almacenes-data.service';
 import { OficinasDataService } from './oficinas-data.service';
+
 
 
 
@@ -683,6 +685,47 @@ export class ConectionsService {
 
   }
 
+  getProductsPanel = () => {
+    this.insumos.insumos = [];
+    this.insumos.loading = true;
+
+    this.insumos.insumosAlerta = [];
+    this.insumos.alerta = false;
+
+    let params = new HttpParams().set('almacene_id', this.loginData.almacen_id).set('oficina_id', this.loginData.oficina_id).set('crear', 'true');
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': 'Bearer ' + this.loginData.token,
+      }),
+      params: params
+    };
+
+    this.http.get(this.serverUrl + '/auth/productos', httpOptions).subscribe((res: any) => {
+      this.insumos.insumos = [];
+      this.insumos.insumosAlerta = [];
+      this.insumos.sinCategorias = [];
+
+      console.log(res);
+
+
+      if (!res.error) {
+        res.forEach(item => {
+          if (parseInt(item.stock) < parseInt(item.alerta)) {
+            this.insumos.alerta = true;
+            this.insumos.insumosAlerta.push(item);
+          }
+          if (item.subcategoria_id) {
+            this.insumos.sinCategorias.push(item);
+          }
+          this.insumos.insumos.push(item);
+        });
+      }
+      this.insumos.loading = false;
+    });
+
+  }
+
   getProduct = (id) => {
     this.insumos.insumo = [];
     this.insumos.loading = true;
@@ -996,6 +1039,46 @@ export class ConectionsService {
         });
 
   }
+  
+
+  sendPedidoPanel = (idEmpleado) => {
+
+    this.insumos.insumos = [];
+    this.solicitud.loading = true;
+    this.solicitud.ventana = 2;
+
+    let productos = [];
+
+    this.solicitud.solicitud.insumos.forEach(ins => {
+      productos.push({
+        producto_id: ins.id,
+        cantidad: ins.cantidad
+      })
+    });
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': 'Bearer ' + this.loginData.token
+      })
+    };
+
+    let pack = {
+      productos: productos,
+      empleado_id: idEmpleado,
+      almacene_id: this.loginData.almacen_id,
+      oficina_id: this.loginData.oficina_id,
+      comentario_usuario: this.solicitud.solicitud.comentarioUsuario
+    }
+
+    this.http.post(this.serverUrl + '/auth/pedidos', pack, httpOptions
+    )
+      .subscribe((res: any) => {
+        this.solicitud.aprobado = res.aprobado;
+        this.solicitud.loading = false;
+      });
+
+  }
+
 
   updatePedido = (estado, comentario = "") => {
 
@@ -1029,6 +1112,40 @@ export class ConectionsService {
     )
       .subscribe((res: any) => {
         
+        if (res.sucess === false) {
+          this.pedidos.ventana = 3;
+          this.pedidos.loading = false;
+        } else {
+          this.pedidos.ventana = 1;
+          this.getPedidos();
+        }
+        console.log(res);
+      });
+
+  }
+
+  updatePedidoPanel = (empleado_id, comentario = "") => {
+
+    this.pedidos.loading = true;
+
+    let pack = {
+      estado: 3,
+      empleado_id: empleado_id,
+      comentario_administrador: comentario,
+      'almacene_id': this.loginData.almacen_id,
+      'pack_aprobado': this.pedidos.packAprobado
+      }
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': 'Bearer ' + this.loginData.token
+      })
+    };
+
+    this.http.put(this.serverUrl + '/auth/pedidos/' + this.pedidos.pedido.pedido_id, pack, httpOptions
+    )
+      .subscribe((res: any) => {
+
         if (res.sucess === false) {
           this.pedidos.ventana = 3;
           this.pedidos.loading = false;

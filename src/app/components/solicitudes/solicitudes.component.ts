@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
+
 import { DataService } from './../../services/data.service';
 import { UtilsService } from './../../services/utils.service';
 import { ConectionsService } from './../../services/conections.service';
@@ -19,6 +21,7 @@ export class SolicitudesComponent implements OnInit {
   comentario;
   toEstado = 0;
   nuevaPreparacion = 0;
+  user_id = null;
 
   packEvaluar: any[] = [];
 
@@ -27,7 +30,8 @@ export class SolicitudesComponent implements OnInit {
     public utils: UtilsService,
     private conections: ConectionsService,
     public pedidos: PedidosDataService,
-    public login: LoginDataService
+    public login: LoginDataService,
+    private toastr: ToastrService
 ) { 
     this.conections.kickToHome(9);
   }
@@ -74,6 +78,21 @@ export class SolicitudesComponent implements OnInit {
     this.conections.updatePedido(this.toEstado, this.comentario);
   }
 
+  updatePanel = () => {
+
+    if (!this.user_id) {
+      this.toastr.error('no se ha seleccionado ningun usuario', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
+    if (this.user_id) {
+      this.conections.updatePedidoPanel(this.user_id, this.comentario);
+    }
+  }
+
   updateEvaluar = () => {
     this.pedidos.packAprobado = this.packEvaluar;
     this.conections.updatePedido(1, this.comentario);
@@ -99,10 +118,26 @@ export class SolicitudesComponent implements OnInit {
   };
   
   enviarPreparacion = () => {
+
+    if (!Number.isInteger(this.nuevaPreparacion)) {
+      this.toastr.error('no se introducido un tiempo de preparación válido', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
     this.conections.updatePreparacionPedido(this.nuevaPreparacion);
   }
-  
 
+  getUsersEntregar = (ofi_id) => {
+    this.login.oficinaSolicitud = this.login.almacenLogin.oficinas.find((ofi) => {
+      return ofi.id == ofi_id
+    });
+    console.log(this.login.oficinaSolicitud);
+    
+  }
+  
   ngOnInit() {
     this.conections.getPedidos();
     this.pedidos.ventana = 1

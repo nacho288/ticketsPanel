@@ -2,6 +2,9 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ConectionsService } from './../../services/conections.service';
 import { LoginDataService } from './../../services/login-data.service';
 
+import { ToastrService } from 'ngx-toastr';
+
+
 @Component({
   selector: 'app-login-screen',
   templateUrl: './login-screen.component.html',
@@ -14,7 +17,11 @@ export class LoginScreenComponent implements OnInit {
   almacen_id: any = null;
   oficina_id: any = null;
 
-  constructor( public conections: ConectionsService, public loginData :LoginDataService) { 
+  constructor(
+    public conections: ConectionsService, 
+    public loginData: LoginDataService,
+    private toastr: ToastrService
+    ){ 
     if (this.loginData.token) {
       console.log('recargando');
       this.conections.getUser();
@@ -30,6 +37,11 @@ export class LoginScreenComponent implements OnInit {
 
     if (this.email && this.password) {
       this.conections.login(this.email, this.password);
+    } else {
+      this.toastr.error('Debe completar ambos campos', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
     }
     
   }
@@ -41,7 +53,7 @@ export class LoginScreenComponent implements OnInit {
   }
 
   quickLogin2 = () => {
-    let hEmail = 'user1@gmail.com';
+    let hEmail = 'super@gmail.com';
     let hPassword = '123123123';
     this.conections.login(hEmail, hPassword);
   }
@@ -62,8 +74,13 @@ export class LoginScreenComponent implements OnInit {
       this.conections.toHome();
     }
 
+    if (this.loginData.type == 1 && !this.almacen_id) {
+      this.toastr.error('Debe elegir un almacén', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+    }
+
   }
   
-  
-
 }

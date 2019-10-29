@@ -6,6 +6,11 @@ import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+
+import { CommonModule } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+
 import { NavBarComponent } from './components/shared/nav-bar/nav-bar.component';
 import { HomeComponent } from './components/home/home.component';
 import { SolicitudesComponent } from './components/solicitudes/solicitudes.component';
@@ -42,6 +47,9 @@ import { UsuariosComponent } from './components/usuarios/usuarios.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    CommonModule,
+    BrowserAnimationsModule, 
+    ToastrModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

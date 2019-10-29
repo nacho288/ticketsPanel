@@ -12,7 +12,18 @@
         routerLink="crear">Nueva solicitud</a>
       <a *ngIf="loginData.type == 0" class="nav-item nav-link mr-3 h5" [routerLinkActive]="['active']"
         routerLink="solicitudes">Mis solicitudes</a>
-      <a *ngIf="loginData.type == 1" class="nav-item nav-link mr-3 h5" [routerLinkActive]="['active']" routerLink="solicitudes">Solicitudes entrantes</a>
+<!--       <a *ngIf="loginData.type == 1" class="nav-item nav-link mr-3 h5" [routerLinkActive]="['active']" routerLink="solicitudes">Solicitudes entrantes</a>
+ -->      
+      <li *ngIf="loginData.type == 1" class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle mr-3 h5" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          Solicitudes
+        </a>
+        <div class="dropdown-menu mt-4" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" routerLink="solicitudes">Lista de solicitudes</a>
+          <a class="dropdown-item" routerLink="crear">Nueva solicitud</a>
+        </div>
+      </li>
       <li *ngIf="loginData.type == 1" class="nav-item dropdown">
         <a class="nav-link dropdown-toggle mr-3 h5" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
@@ -45,7 +56,7 @@
             </ng-container>
           </button>
           <div class="dropdown-menu dropdown-menu-right mt-2" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item"  (click)="cambiar()" data-target="#exampleModal">Cambiar</a>
+            <button class="dropdown-item"  (click)="cambiar()" data-target="#exampleModal">Cambiar</button>
           </div>
         </div>
       </li>
@@ -56,8 +67,8 @@
             {{loginData.fullName}}
           </button>
           <div class="dropdown-menu dropdown-menu-right mt-2" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item"  (click)="conections.logOut()"
-              data-target="#exampleModal">Cerrar cuenta</a>
+            <button class="dropdown-item" (click)="conections.logOut()"
+              data-target="#exampleModal">Cerrar cuenta</button>
           </div>
         </div>
       </li>

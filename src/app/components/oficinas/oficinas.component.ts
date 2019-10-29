@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
+
 import { ConectionsService } from 'src/app/services/conections.service';
 import { UsuariosDataService } from 'src/app/services/usuarios-data.service';
 import { OficinasDataService } from './../../services/oficinas-data.service';
@@ -12,7 +14,7 @@ export class OficinasComponent implements OnInit {
 
   nombreCrear: string = "";
   listaUsuarios: any[] = [];
-  usuarioAgregarId;
+  usuarioAgregarId = null;
   oficinaId;
 
   editarPack = {
@@ -23,7 +25,8 @@ export class OficinasComponent implements OnInit {
   constructor(
     private conections: ConectionsService,
     public usuarios: UsuariosDataService,
-    public oficinas: OficinasDataService 
+    public oficinas: OficinasDataService,
+    private toastr: ToastrService  
   ) { 
     this.conections.kickToHome(1);
     this.conections.kickToHome(0);
@@ -35,6 +38,14 @@ export class OficinasComponent implements OnInit {
   }
 
   crearOficina = () => {
+    if (!this.nombreCrear) {
+      this.toastr.error('no se ha insertado ningun nombre', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
     this.conections.sendOficina(this.nombreCrear);
   }
 
@@ -46,13 +57,32 @@ export class OficinasComponent implements OnInit {
   }
 
   cambiarNombre = () => {
+    if (!this.editarPack.nombre) {
+      this.toastr.error('no se ha insertado ningun nombre', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
     this.conections.cambiarNombreOficina(this.editarPack.id, this.editarPack.nombre)
   }
 
   agregarUsuario = () => {
+
+    if (!this.usuarioAgregarId) {
+      this.toastr.error('no se ha seleccionado ningún usuario', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
     if (this.usuarioAgregarId && this.oficinaId) {
       this.conections.insertUsuarioOficina(this.oficinaId, this.usuarioAgregarId);
     }
+
+    this.usuarioAgregarId = null;
   }
 
   quitarUsuario = (ofId, usId) => {
