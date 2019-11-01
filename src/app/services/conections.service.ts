@@ -11,17 +11,14 @@ import { CategoriasDataService } from './categorias-data.service';
 import { AlmacenesDataService } from './almacenes-data.service';
 import { OficinasDataService } from './oficinas-data.service';
 
-
-
-
 @Injectable({
   providedIn: 'root'
 })
 export class ConectionsService {
 
-  serverUrl: string = "https://server-tickets-panel.herokuapp.com/api";
+  /* serverUrl: string = "https://server-tickets-panel.herokuapp.com/api"; */
 
-  /* serverUrl: string = "http://127.0.0.1:8000/api"; */
+  serverUrl: string = "http://127.0.0.1:8000/api";
 
   list: any[];
 
@@ -72,12 +69,12 @@ export class ConectionsService {
 
   }
   
-  login = (email, password) =>  {
+  login = (username, password) =>  {
 
     this.loginData.loading = true;
 
     let pack = {
-      'email': email,
+      'username': username,
       'password': password
     };
 
@@ -1036,6 +1033,7 @@ export class ConectionsService {
       .subscribe((res: any) => {
           this.solicitud.aprobado = res.aprobado;
           this.solicitud.loading = false;
+          this.solicitud.limpiar();
         });
 
   }
@@ -1124,14 +1122,13 @@ export class ConectionsService {
 
   }
 
-  updatePedidoPanel = (empleado_id, comentario = "") => {
+  updatePedidoPanel = (entregarPack) => {
 
     this.pedidos.loading = true;
 
     let pack = {
+      ...entregarPack,
       estado: 3,
-      empleado_id: empleado_id,
-      comentario_administrador: comentario,
       'almacene_id': this.loginData.almacen_id,
       'pack_aprobado': this.pedidos.packAprobado
       }

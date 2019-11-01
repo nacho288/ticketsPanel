@@ -18,32 +18,32 @@ export class UtilsService {
     {
       id: 0,
       nombre: "pendiente",
-      color: "text-secondary"
+      color: "text-dark"
     },
     {
       id: 1,
       nombre: "aprobado",
-      color: "text-primary"
+      color: "text-dark"
     },
     {
       id: 2,
       nombre: "en proceso",
-      color: "text-warning"
+      color: "text-dark"
     },
     {
       id: 3,
       nombre: "entregado",
-      color: "text-success"
+      color: "text-dark"
     },
     {
       id: 4,
       nombre: "cancelado",
-      color: "text-danger"
+      color: "text-dark"
     },
     {
       id: 5,
       nombre: "aprobado parcial",
-      color: "text-info"
+      color: "text-dark"
     }
   ];
 
@@ -51,17 +51,17 @@ export class UtilsService {
     {
       id: 0,
       nombre: "pendiente",
-      color: "text-secondary"
+      color: "text-dark"
     },
     {
       id: 1,
       nombre: "aprobado",
-      color: "text-primary"
+      color: "text-dark"
     },
     {
       id: 2,
       nombre: "rechazado",
-      color: "text-danger"
+      color: "text-dark"
     }
   ];
 

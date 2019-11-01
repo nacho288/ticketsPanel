@@ -11,7 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class LoginScreenComponent implements OnInit {
 
-  email: string;
+  username: string;
   password: string;
   loading: boolean = false;
   almacen_id: any = null;
@@ -35,8 +35,8 @@ export class LoginScreenComponent implements OnInit {
   
   enviarLogin = () => {
 
-    if (this.email && this.password) {
-      this.conections.login(this.email, this.password);
+    if (this.username && this.password) {
+      this.conections.login(this.username, this.password);
     } else {
       this.toastr.error('Debe completar ambos campos', 'Error', {
         timeOut: 3000,
@@ -47,13 +47,13 @@ export class LoginScreenComponent implements OnInit {
   }
 
   quickLogin = () => {
-    let hEmail = 'admin1@gmail.com';
+    let hEmail = '11111111';
     let hPassword = '123123123';
     this.conections.login(hEmail, hPassword);
   }
 
   quickLogin2 = () => {
-    let hEmail = 'super@gmail.com';
+    let hEmail = '36265159';
     let hPassword = '123123123';
     this.conections.login(hEmail, hPassword);
   }

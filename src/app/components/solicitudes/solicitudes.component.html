@@ -182,6 +182,8 @@
                   {{pedidos.pedido.evaluado_por}}</li>
                 <li *ngIf="pedidos.pedido.estado == 4 && !pedidos.pedido.evaluado_por">Cancelado por: oficina de origen</li>
                 <li *ngIf="pedidos.pedido.estado == 4 && pedidos.pedido.evaluado_por">Rechazado por: {{pedidos.pedido.evaluado_por}}</li>
+                <li *ngIf="pedidos.pedido.entregado_por">Entregado por: {{pedidos.pedido.entregado_por}}
+                </li>
                 <li *ngIf="pedidos.pedido.retirado_por">Retirado por: {{pedidos.pedido.retirado_por}}
                 </li>
                 <li>Estado: {{utils.getEstado(pedidos.pedido.estado)}}</li>
@@ -483,13 +485,38 @@
 
         <div class="row">
           <div class="col">
-            <div class="form-group mr-lg-2">
-              <label for="numero">Usuario que lo recibió:</label>
-              <select *ngIf="login.oficinaSolicitud" [(ngModel)]="user_id" name="usu" id="usu" class="form-control">
-                <option selected disabled [value]="null">Usuario que lo recibió</option>
-                <option *ngFor="let item of login.oficinaSolicitud.usuarios" [value]="item.id">{{item.name}}</option>
-              </select>
-            </div>
+        
+            <form>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Administrador que entrega la solicitud:</label>
+                <select [(ngModel)]="packEntregar.username" name="usu" id="usu" class="form-control">
+                  <option selected disabled [value]="null">Administrador</option>
+                  <option *ngFor="let item of login.almacenLogin.administradores" [value]="item.username">{{item.name}}</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Contraseña</label>
+                <input [(ngModel)]="packEntregar.password" name="password" type="password" class="form-control"
+                  id="exampleInputPassword1" placeholder="Contraseña">
+              </div>
+        
+              <div class="row">
+                <div class="col">
+                  <hr class="mt-1 mb-3">
+                </div>
+              </div>
+        
+              <div class="form-group">
+                <label for="numero">Usuario que lo recibió:</label>
+                <select *ngIf="login.oficinaSolicitud" [(ngModel)]="packEntregar.empleado_id" name="usu" id="usu"
+                  class="form-control">
+                  <option selected disabled [value]="null">Usuario que lo recibió</option>
+                  <option *ngFor="let item of login.oficinaSolicitud.usuarios" [value]="item.id">{{item.name}}</option>
+                </select>
+              </div>
+        
+            </form>
+        
           </div>
         </div>
 

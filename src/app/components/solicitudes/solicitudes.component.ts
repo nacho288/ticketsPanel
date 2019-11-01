@@ -22,6 +22,11 @@ export class SolicitudesComponent implements OnInit {
   toEstado = 0;
   nuevaPreparacion = 0;
   user_id = null;
+  packEntregar = {
+    empleado_id: null,
+    password: null,
+    username: null
+  }
 
   packEvaluar: any[] = [];
 
@@ -80,17 +85,32 @@ export class SolicitudesComponent implements OnInit {
 
   updatePanel = () => {
 
-    if (!this.user_id) {
-      this.toastr.error('no se ha seleccionado ningun usuario', 'Error', {
+    if (!this.packEntregar.empleado_id) {
+      this.toastr.error('no se ha seleccionado ningun usuario que recive', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-bottom-right'
       });
       return;
     }
 
-    if (this.user_id) {
-      this.conections.updatePedidoPanel(this.user_id, this.comentario);
+    if (!this.packEntregar.username) {
+      this.toastr.error('no se ha seleccionado ningun admistrador', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
     }
+
+    if (!this.packEntregar.password) {
+      this.toastr.error('no se ha introducido una contraseña válida', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
+    this.conections.updatePedidoPanel(this.packEntregar);
+    
   }
 
   updateEvaluar = () => {

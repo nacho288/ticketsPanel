@@ -17,6 +17,7 @@ export class UsuariosComponent implements OnInit {
     email: null,
     password: null,
     password_confirmation: null,
+    username: null,
     type: null
   }
 
@@ -44,8 +45,8 @@ export class UsuariosComponent implements OnInit {
       return;
     }
 
-    if (!this.nuevoUsuario.email) {
-      this.toastr.error('no se ha insertado ningún email', 'Error', {
+    if (!this.nuevoUsuario.username) {
+      this.toastr.error('no se ha insertado un nombre de usuario válido', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-bottom-right'
       });
@@ -83,6 +84,7 @@ export class UsuariosComponent implements OnInit {
       email: null,
       password: null,
       password_confirmation: null,
+      username: null,
       type: null
     }
     

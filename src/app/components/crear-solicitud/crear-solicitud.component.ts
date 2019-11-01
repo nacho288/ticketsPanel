@@ -114,11 +114,13 @@ export class CrearSolicitudComponent implements OnInit {
       return;
     }
 
-    if (this.solicitud.solicitud.insumos.length != 0 && this.oficina_id) {
+    if (this.solicitud.solicitud.insumos.length != 0 && this.loginData.oficina_id) {
       this.solicitud.solicitud.comentarioUsuario = this.comentario ? this.comentario : "";
       this.conections.sendPedidoPanel(this.user_id);
       this.solicitud.limpiar();
     } else {
+      console.log(this.solicitud.solicitud.insumos);
+      console.log(this.oficina_id);
       this.errorVacio = true;
     }
     
