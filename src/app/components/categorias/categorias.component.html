@@ -52,58 +52,127 @@
           </div>
         </div>
 
-        <div class="row">
-          <div class="col">
-            <hr>
-          </div>
-        </div>
+        <ng-container *ngIf="this.categoriasData.categorias.length == 0" >
 
-        <div *ngIf="this.categoriasData.categorias.length == 0" class="row">
-          <div class="col">
-            <h4 class="text-secondary text-center font-italic">...sin elementos...</h4>
+          <div class="row">
+            <div class="col">
+              <hr>
+            </div>
           </div>
+          
+          <div class="row">
+            <div class="col">
+              <h4 class="text-secondary text-center font-italic">...sin elementos...</h4>
+            </div>
+          </div>
+
+        </ng-container>
+        
+        <div class="row mt-3" *ngIf="this.categoriasData.categorias.length > 0">
+        
+          <div class="col">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th style="width: 70%" scope="col">Nombre</th>
+                  <th class="text-center" scope="col">Subcategorias</th>
+                  <th class="text-center" scope="col">Editar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of this.categoriasData.categorias; let i=index">
+                  <td>{{item.nombre}}</td>
+                  <td class="text-center"><button class="btn btn-sm btn-diputado " (click)="toSub(i)" data-toggle="modal"
+                      data-target="#subModal">≡</button></td>
+                  <td class="text-center"><button class="btn btn-sm btn-diputado" (click)="toEditarCat(item.nombre , item.id)" 
+                    data-toggle="modal" data-target="#catModal">≡</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        
         </div>
         
-        <div *ngIf="this.categoriasData.categorias.length > 0" class="row">
+  </div>
+
+</div>
+
+<!-- ////////////////////////////////////////// -->
+
+<div class="modal fade mt-3" id="subModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 *ngIf="this.categoriasData.categorias[this.catSubId]" class="modal-title" id="exampleModalLabel">
+          {{this.categoriasData.categorias[this.catSubId].nombre}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <ng-container *ngIf="this.categoriasData.categorias[this.catSubId]">
+
+          <div class="row">
+            <div class="col">
+              <h5>Subcategorias:</h5>
+            </div>
+          </div>
+
+          <ng-container *ngIf="this.categoriasData.categorias[this.catSubId].subcategorias.length == 0">
+            <div class="row mt-3">
+              <div class="col">
+                <hr class="mb-3 mt-0">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col text-center">
+                <h5 class="text-secondary font-weight-bold">(Sin subcategorias)</h5>
+              </div>
+            </div>
+          </ng-container>
+
+          <div *ngIf="this.categoriasData.categorias[this.catSubId].subcategorias.length > 0" class="row mt-2">
+            <div class="col">
+
+              <table class="table mb-0">
+                <tbody>
+                  <tr *ngFor="let subcategoria of this.categoriasData.categorias[this.catSubId].subcategorias">
+                    <td><h5>➤ {{subcategoria.nombre}}</h5></td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+
+        </ng-container>
+
+        <div class="row">
           <div class="col">
-            <ul class="list-group">
-
-              <ng-container *ngFor="let item of this.categoriasData.categorias; let i=index">
-
-                <li class="list-group-item">
-                  <div class="row">
-                    <div class="col col-auto">
-                      <a class="text-dark" data-toggle="collapse" (click)="limpiarSub()" [href]="'#collapse1' + i.toString()" role="button"
-                        aria-expanded="false" aria-controls="collapse1">
-                        <h4>{{item.nombre}}</h4>
-                      </a>
-                    </div>
-                    <div class="col text-right">
-                        <button (click)="toEditarCat(item.nombre , item.id)" data-toggle="modal" data-target="#catModal" class="btn btn-sm btn-diputado">Editar</button>
-                    </div>
-                  </div>
-                  <div class="collapse" [id]="'collapse1' + i.toString()">
-                    <hr>
-                    <p *ngIf="!item.subcategorias">(Sin subcategorias)</p>
-                    <ul>
-                      <li class="mb-2" *ngFor="let subcategoria of item.subcategorias">{{subcategoria.nombre}}</li>
-                      <li class="mb-2"><input [(ngModel)]="nombreCrearSub" name="crearSub" type="text" placeholder="Nueva subcategoria"><span
-                        (click)="crearSub(item.id)"  class="badge btn-diputado ml-1">añadir</span></li>
-                    </ul>
-                  </div>
-                </li>
-
-              </ng-container>
-              
-
-
-            </ul>
+            <hr class="mb-3 mt-0">
           </div>
         </div>
 
+        <div class="row align-items-center py-0">
+          <div class="col col-auto">
+            <div class="form-group my-0 py-0">
+              <input [(ngModel)]="nombreCrearSub" class="form-control my-0"  name="crearSub" type="text" placeholder="Nueva subcategoria">
+            </div>
+          </div>
+          <div class="col text-right">
+            <button data-dismiss="modal" type="button" (click)="crearSub(this.categoriasData.categorias[this.catSubId].id)"
+              class="btn btn-diputado my-0">Añadir</button>
+          </div>
+        </div>
 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-diputado" data-dismiss="modal">Volver</button>
+      </div>
+    </div>
   </div>
-
 </div>
 
 <!-- ////////////////////// -->

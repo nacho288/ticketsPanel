@@ -8,13 +8,22 @@
           
           <div class="row align-items-center mb-2">
             <div class="col col-auto mt-2">
-              <h2>Nueva solicitud de {{this.loginData.oficinaSolicitud.nombre}}:</h2>
-            </div>
-            <div class="col text-right">
-              <button class="btn btn-diputado" (click)="aElegir()">Cambiar</button>
+              <h2>Nueva solicitud</h2>
             </div>
           </div>
           
+          <div class="row">
+            <div class="col">
+              <hr class="mt-1 mb-3">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <h5><b>Oficina:</b> {{this.loginData.oficinaSolicitud.nombre}} <span style="cursor: pointer;" (click)="aElegir()" class="badge btn-diputado">Cambiar</span></h5>
+            </div>
+          </div>
+
           <div class="row">
             <div class="col">
               <hr class="mt-1 mb-3">
@@ -46,7 +55,7 @@
                   Insumos:
                 </div>
                 <div class="card-body">
-                  <div class="row justify-content-between ">
+                  <div class="row">
                     <div class="col">
                       <div class="form-group">
                         <select [(ngModel)]="categoria" name="cat" id="insumo" class="form-control" >
@@ -71,16 +80,18 @@
                         </select>
                       </div>
                     </div>
-                    <div class="col col-lg-3">
+                  </div>
+                  <div class="row">
+                    <div class="col">
                       <div class="form-group">
-                        <input [(ngModel)]="cantidad" name="canti" id="cantidad" class="form-control" type="number"
-                          placeholder="Cantidad" name="">
+                        <input [(ngModel)]="cantidad" name="canti" id="cantidad" class="form-control" type="number" placeholder="Cantidad"
+                          name="">
                       </div>
                     </div>
-                    <div class="col col-auto">
+                    <div class="col">
                       <div class="row justify-content-end">
                         <button (click)="agregar()" class="btn btn-diputado mr-3" type="button">
-                          ✚
+                          Agregar
                         </button>
                       </div>
                     </div>

@@ -20,6 +20,9 @@ export class AlmacenesComponent implements OnInit {
   adminAgregarId = null;
   almacenId;
 
+  AlmacenOficinasId: any = null;
+  AlmacenAdminsId: any = null;
+
   editarPack = {
     id: 0,
     nombre: ""
@@ -60,6 +63,16 @@ export class AlmacenesComponent implements OnInit {
       id: almacen.id,
       nombre: almacen.nombre
     }
+  }
+
+  toOficinas = (id) => {
+    this.AlmacenOficinasId = id;
+    this.filtrarOficinas(this.almacenes.almacenes[id]);
+  }
+
+  toAdmins = (id) => {
+    this.AlmacenAdminsId = id;
+    this.filtrarAdmins(this.almacenes.almacenes[id]);
   }
 
   cambiarNombre = () => {

@@ -113,32 +113,35 @@
         <div class="row mt-3">
         
           <div class="col">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">Id</th>
-                  <th scope="col">Nombre</th>
-                  <th scope="col">Nombre de usuario</th>
-                  <th scope="col">E-mail</th>
-                  <th scope="col">tipo</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let usuario of this.usuarios.usuarios">
-                  <th scope="row">{{usuario.id}}</th>
-                  <td>{{usuario.name}}</td>
-                  <td>{{usuario.username}}</td>
-                  <td>{{usuario.email}}</td>
-                  <td *ngIf="usuario.type == 0">Usuario de oficina</td>
-                  <td *ngIf="usuario.type == 1">Administrador de almacén</td>
-                  <td *ngIf="usuario.type == 9">Super-usuario</td>
-                </tr>
-              </tbody>
-            </table>
+            
+            <div class="col">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Nombre de usuario</th>
+                    <th scope="col">E-mail</th>
+                    <th scope="col">Tipo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let usuario of this.usuarios.usuarios">
+                    <th scope="row">{{usuario.id}}</th>
+                    <td>{{usuario.name}}</td>
+                    <td>{{usuario.username}}</td>
+                    <td>{{usuario.email}}</td>
+                    <td *ngIf="usuario.type == 0">Usuario de oficina</td>
+                    <td *ngIf="usuario.type == 1">Administrador de almacén</td>
+                    <td *ngIf="usuario.type == 9">Super-usuario</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
           </div>
         
         </div>
         
-
   </div>
 </div>

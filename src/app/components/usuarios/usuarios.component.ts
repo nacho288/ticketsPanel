@@ -89,6 +89,16 @@ export class UsuariosComponent implements OnInit {
     }
     
   }
+
+  page = 1;
+  pageSize = 4;
+  collectionSize = this.usuarios.usuarios.length;
+
+  get usuariosLista(){
+    return this.usuarios.usuarios
+      .map((usuario, i) => ({ id: i + 1, ...usuario }))
+      .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
+  }
   
 
 }

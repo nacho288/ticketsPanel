@@ -129,7 +129,7 @@ export class CrearSolicitudComponent implements OnInit {
   volver = () => {
     this.solicitud.reset();
     this.comentario = "";
-    this.conections.getProducts();
+    this.conections.getProductsPanel();
   }
 
   elegirAlmacen = () => {
@@ -137,7 +137,7 @@ export class CrearSolicitudComponent implements OnInit {
     this.loginData.almacenSolicitud = this.loginData.oficinaLogin.almacenes.find((al) => {
       return al.id == this.loginData.almacen_id
     }).nombre; 
-    this.conections.getProducts();
+    this.conections.getProductsPanel();
     this.conections.getCategorias();
     this.solicitud.ventana = 1;
   }

@@ -22,6 +22,8 @@ export class OficinasComponent implements OnInit {
     nombre: ""
   }
 
+  oficinaUsuariosId: any;
+
   constructor(
     private conections: ConectionsService,
     public usuarios: UsuariosDataService,
@@ -56,6 +58,12 @@ export class OficinasComponent implements OnInit {
     }
   }
 
+  toUsuarios = (oficinaId) => {
+    this.oficinaUsuariosId = oficinaId;
+    this.filtrarUsuarios(this.oficinas.oficinas[this.oficinaUsuariosId]);
+    console.log(this.oficinas.oficinas[this.oficinaUsuariosId].usuarios);
+  }
+
   cambiarNombre = () => {
     if (!this.editarPack.nombre) {
       this.toastr.error('no se ha insertado ningun nombre', 'Error', {
@@ -82,6 +90,7 @@ export class OficinasComponent implements OnInit {
       this.conections.insertUsuarioOficina(this.oficinaId, this.usuarioAgregarId);
     }
 
+    this.oficinaUsuariosId = null;
     this.usuarioAgregarId = null;
   }
 
