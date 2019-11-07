@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ConectionsService } from './../../services/conections.service';
 import { InsumosDataService } from './../../services/insumos-data.service';
 import { CategoriasDataService } from './../../services/categorias-data.service';
-import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
 import { SolicitudDataService } from './../../services/solicitud-data.service';

@@ -66,7 +66,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of this.oficinas.oficinas; let i=index">
+              <tr *ngFor="let item of this.oficinas.oficinas; let i=index ">
                 <td>{{item.nombre}}</td>
                 <td class="text-center"><button class="btn btn-sm btn-diputado " 
                   (click)="toUsuarios(i)" data-toggle="modal" data-target="#usuariosModal">≡</button></td>
@@ -79,6 +79,12 @@
      
     </div>
 
+<!--     <div class="row justify-content-center">
+      <div class="col col-auto">
+        <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event"></pagination-controls>
+      </div>
+    </div>
+ -->
     <ng-container *ngIf="this.oficinas.oficinas.length == 0">
 
           <div class="row">

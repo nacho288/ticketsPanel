@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { LoginDataService } from './login-data.service';
 import { InsumosDataService } from './insumos-data.service';
 import { HttpClient, HttpParams, HttpHeaders  } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
+
 
 import { SolicitudDataService } from './solicitud-data.service';
 import { PedidosDataService } from './pedidos-data.service';
@@ -16,24 +18,25 @@ import { OficinasDataService } from './oficinas-data.service';
 })
 export class ConectionsService {
 
-  /* serverUrl: string = "https://server-tickets-panel.herokuapp.com/api"; */
+  serverUrl: string = "https://server-tickets-panel.herokuapp.com/api";
 
-  serverUrl: string = "http://127.0.0.1:8000/api";
-
+ /*  serverUrl: string = "http://127.0.0.1:8000/api";
+ */
   list: any[];
 
   constructor(
-      private http: HttpClient, 
-      private router: Router, 
-      private loginData: LoginDataService, 
-      private insumos: InsumosDataService,
-      private categorias: CategoriasDataService, 
-      private solicitud: SolicitudDataService,
-      private pedidos: PedidosDataService,
-      private usuarios: UsuariosDataService,
-      private almacenes: AlmacenesDataService,
-      private oficinas: OficinasDataService
-      ) { 
+    private http: HttpClient, 
+    private router: Router,
+    private toastr: ToastrService, 
+    private loginData: LoginDataService, 
+    private insumos: InsumosDataService,
+    private categorias: CategoriasDataService, 
+    private solicitud: SolicitudDataService,
+    private pedidos: PedidosDataService,
+    private usuarios: UsuariosDataService,
+    private almacenes: AlmacenesDataService,
+    private oficinas: OficinasDataService
+    ) { 
   }
 
   toHome = () => {
@@ -45,6 +48,14 @@ export class ConectionsService {
       this.router.navigate(['/']);
     }
   }
+
+  exito = () => {
+    this.toastr.success('Acción realizada satisfactoriamente', 'Completado', {
+      timeOut: 3000,
+      positionClass: 'toast-bottom-right'
+    });
+  }
+  
 
   registrarUsuario = (usuario) => {
 
@@ -61,6 +72,7 @@ export class ConectionsService {
         if (res.error) {
           console.log(res);
         } else {
+        this.exito();
         this.getUsuarios('all');
         }
         this.usuarios.loading = false;
@@ -262,7 +274,10 @@ export class ConectionsService {
 
     this.http.post(this.serverUrl + '/auth/almacenes', {nombre: nombre},
       httpOptions)
-      .subscribe((res: any[]) => {
+      .subscribe((res: any) => {
+        if (!res.error) {
+          this.exito();
+        }
         console.log(res);
         this.getAlmacenes();
       }
@@ -283,7 +298,10 @@ export class ConectionsService {
     let pack = { action: 1, oficina_id: oficina_id}
 
     this.http.put(this.serverUrl + '/auth/almacenes/' + almacen_id, pack, httpOptions)
-      .subscribe((res: any[]) => {
+      .subscribe((res: any) => {
+        if (!res.error) {
+          this.exito();
+        }
         console.log(res);
         this.getAlmacenes();
       }
@@ -304,7 +322,10 @@ export class ConectionsService {
     let pack = { action: 2, oficina_id: oficina_id }
 
     this.http.put(this.serverUrl + '/auth/almacenes/' + almacen_id, pack, httpOptions)
-      .subscribe((res: any[]) => {
+      .subscribe((res: any) => {
+        if (!res.error) {
+          this.exito();
+        }
         console.log(res);
         this.getAlmacenes();
       }
@@ -325,7 +346,10 @@ export class ConectionsService {
     let pack = { action: 3, administrador_id: admin_id }
 
     this.http.put(this.serverUrl + '/auth/almacenes/' + almacen_id, pack, httpOptions)
-      .subscribe((res: any[]) => {
+      .subscribe((res: any) => {
+        if (!res.error) {
+          this.exito();
+        }
         console.log(res);
         this.getAlmacenes();
       }
@@ -346,7 +370,10 @@ export class ConectionsService {
     let pack = { action: 4, administrador_id: admin_id }
 
     this.http.put(this.serverUrl + '/auth/almacenes/' + almacen_id, pack, httpOptions)
-      .subscribe((res: any[]) => {
+      .subscribe((res: any) => {
+        if (!res.error) {
+          this.exito();
+        }
         console.log(res);
         this.getAlmacenes();
       }
@@ -367,7 +394,10 @@ export class ConectionsService {
     let pack = { action: 0, nombre: nombre }
 
     this.http.put(this.serverUrl + '/auth/almacenes/' + almacen_id, pack, httpOptions)
-      .subscribe((res: any[]) => {
+      .subscribe((res: any) => {
+        if (!res.error) {
+          this.exito();
+        }
         console.log(res);
         this.getAlmacenes();
       }
@@ -421,7 +451,10 @@ export class ConectionsService {
 
     this.http.post(this.serverUrl + '/auth/oficinas', { nombre: nombre },
       httpOptions)
-      .subscribe((res: any[]) => {
+      .subscribe((res: any) => {
+        if (!res.error) {
+          this.exito();
+        }
         console.log(res);
         this.getOficinas();
       }
@@ -443,8 +476,13 @@ export class ConectionsService {
     let pack = { action: 0, nombre: nombre }
 
     this.http.put(this.serverUrl + '/auth/oficinas/' + oficina_id, pack, httpOptions)
-      .subscribe((res: any[]) => {
+      .subscribe((res: any) => {
         console.log(res);
+
+        if (!res.error) {
+          this.exito();
+        }
+
         this.getOficinas();
       }
       );
@@ -464,7 +502,10 @@ export class ConectionsService {
     let pack = { action: 1, user_id: user_id }
 
     this.http.put(this.serverUrl + '/auth/oficinas/' + oficina_id, pack, httpOptions)
-      .subscribe((res: any[]) => {
+      .subscribe((res: any) => {
+        if (!res.error) {
+          this.exito();
+        }
         console.log(res);
         this.getOficinas();
       }
@@ -485,7 +526,10 @@ export class ConectionsService {
     let pack = { action: 2, user_id: user_id }
 
     this.http.put(this.serverUrl + '/auth/oficinas/' + oficina_id, pack, httpOptions)
-      .subscribe((res: any[]) => {
+      .subscribe((res: any) => {
+        if (!res.error) {
+          this.exito();
+        }
         console.log(res);
         this.getOficinas();
       }
@@ -579,7 +623,10 @@ export class ConectionsService {
 
     this.http.post(this.serverUrl + '/auth/categorias',
       categoria, httpOptions)
-      .subscribe((res: any[]) => {
+      .subscribe((res: any) => {
+        if (!res.error) {
+          this.exito();
+        }
         console.log(res);
         this.getCategorias();
       }
@@ -605,7 +652,10 @@ export class ConectionsService {
 
     this.http.post(this.serverUrl + '/auth/subcategorias',
       subcategoria, httpOptions)
-      .subscribe((res: any[]) => {
+      .subscribe((res: any) => {
+        if (!res.error) {
+          this.exito();
+        }
         console.log(res);
         this.getCategorias();
       }
@@ -631,7 +681,10 @@ export class ConectionsService {
 
     this.http.put(this.serverUrl + '/auth/categorias/' + categoria.categoria_id,
       categoria, httpOptions)
-      .subscribe((res: any[]) => {
+      .subscribe((res: any) => {
+        if (!res.error) {
+          this.exito();
+        }
           console.log(res);
           this.getCategorias();
       }
@@ -786,7 +839,10 @@ export class ConectionsService {
 
     this.http.post(this.serverUrl + '/auth/productos',
       pack, httpOptions)
-      .subscribe((res: any[]) => {
+      .subscribe((res: any) => {
+        if (!res.error) {
+          this.exito();
+        }
         console.log(res);
         this.getProducts();
       });
@@ -816,8 +872,8 @@ export class ConectionsService {
     this.http.put(this.serverUrl + '/auth/productos/' + producto.id,
       pack, httpOptions)
       .subscribe((res: any) => {
-        if (res.error) {
-         
+        if (!res.error) {
+          this.exito();
         }
         this.getProducts();
       }
@@ -848,7 +904,11 @@ export class ConectionsService {
 
     this.http.post(this.serverUrl + '/auth/tratos',
       pack, httpOptions)
-      .subscribe((res: any[]) => {
+      .subscribe((res: any) => {
+
+        if (!res.error) {
+          this.exito();
+        }
 
         res.forEach(item => {
 
@@ -884,9 +944,12 @@ export class ConectionsService {
     };
 
     this.http.delete(this.serverUrl + '/auth/tratos/' + id, httpOptions)
-      .subscribe((res: any[]) => {
-        res.forEach(item => {
+      .subscribe((res: any) => {
+        if (!res.error) {
+          this.exito();
+        }
 
+        res.forEach(item => {
           this.insumos.insumos = [];
           this.insumos.insumosAlerta = [];
 
@@ -926,8 +989,8 @@ export class ConectionsService {
     this.http.put(this.serverUrl + '/auth/productos/' + id,
       pack, httpOptions)
       .subscribe((res: any) => {
-        if (res.error) {
-
+        if (!res.error) {
+          this.exito();
         }
         this.getProducts();
       }
@@ -1114,6 +1177,7 @@ export class ConectionsService {
           this.pedidos.ventana = 3;
           this.pedidos.loading = false;
         } else {
+          this.exito();
           this.pedidos.ventana = 1;
           this.getPedidos();
         }
@@ -1147,6 +1211,7 @@ export class ConectionsService {
           this.pedidos.ventana = 3;
           this.pedidos.loading = false;
         } else {
+          this.exito();
           this.pedidos.ventana = 1;
           this.getPedidos();
         }
@@ -1178,6 +1243,7 @@ export class ConectionsService {
           this.pedidos.ventana = 3;
           this.pedidos.loading = false;
         } else {
+          this.exito();
           this.pedidos.ventana = 1;
           this.getPedidos();
         }

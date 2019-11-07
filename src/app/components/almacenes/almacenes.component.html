@@ -253,7 +253,7 @@
           <div *ngIf="listaAdmins.length > 0" class="col col-auto">
             <div class="form-group">
               <select [(ngModel)]="adminAgregarId" name='adm' class="form-control" id="adm">
-                <option selected disabled [value]="null">Seleccionar almacén</option>
+                <option selected disabled [value]="null">Seleccionar administrador</option>
                 <option *ngFor="let item of listaAdmins" value="{{item.id}}">{{item.name}}</option>
               </select>
             </div>
