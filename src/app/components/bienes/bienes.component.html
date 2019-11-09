@@ -14,40 +14,59 @@
       </div>
     </div>
 
-    <div *ngIf="this.insumosData.insumos.length > 0" class="row mt-3">
+    <ng-container *ngIf="this.insumosData.insumos.length > 0">
 
-      <div class="col">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Código</th>
-              <th scope="col">Nombre</th>
-              <th scope="col">Categoria</th>
-              <th scope="col">stock</th>
-              <th class="text-center" scope="col">Mod. stock</th>
-              <th class="text-center" scope="col">detalles</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of this.insumosData.insumos">
-              <th scope="row">{{item.codigo}}</th>
-              <td>{{item.nombre}}</td>
-              <ng-container *ngIf="item.subcategoria">
-                <td>{{item.subcategoria.categoria.nombre}} / {{item.subcategoria.nombre}}</td>
-              </ng-container>
-              <td *ngIf="!item.subcategoria">(Sin asignar)</td>
-              <td>{{item.stock}}</td>
-              <td  class="text-center"><button (click)="toStock(item.id)" class="btn btn-sm btn-diputado " data-toggle="modal"
-                data-target="#exampleModal">≡</button></td>
-              <td class="text-center">
-                <button (click)="toDetalles(item.id)" class="btn btn-sm btn-diputado ">≡</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="row mt-3 mb-0 ">
+      
+        <div class="col">
+          <table class="table pb-0">
+            <thead>
+              <tr>
+                <th scope="col">Código</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Categoria</th>
+                <th scope="col">stock</th>
+                <th class="text-center" scope="col">Mod. stock</th>
+                <th class="text-center" scope="col">detalles</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of this.insumosData.insumos  | paginate: { itemsPerPage: 7, currentPage: p }">
+                <th scope="row">{{item.codigo}}</th>
+                <td>{{item.nombre}}</td>
+                <ng-container *ngIf="item.subcategoria">
+                  <td>{{item.subcategoria.categoria.nombre}} / {{item.subcategoria.nombre}}</td>
+                </ng-container>
+                <td *ngIf="!item.subcategoria">(Sin asignar)</td>
+                <td>{{item.stock}}</td>
+                <td class="text-center"><button (click)="toStock(item.id)" class="btn btn-sm btn-diputado "
+                    data-toggle="modal" data-target="#exampleModal">≡</button></td>
+                <td class="text-center">
+                  <button (click)="toDetalles(item.id)" class="btn btn-sm btn-diputado ">≡</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      
       </div>
 
-    </div>
+      <div class="row mt-0 pt-0">
+        <div class="col pt-0">
+          <hr class="mt-0">
+        </div>
+      </div>
+      
+      <div class="row justify-content-center">
+        <div class="col col-auto">
+          <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event"></pagination-controls>
+        </div>
+      </div>
+
+    </ng-container>
+    
+
+    
 
     <ng-container *ngIf="this.insumosData.insumos.length <= 0">
 
@@ -68,7 +87,7 @@
   </div>
 </div>
 
-<div *ngIf="!insumosData.loading && insumosData.ventana == 1 && insumosData.insumosAlerta.length" class="row justify-content-center mt-3 animated fadeIn">
+<div *ngIf="!insumosData.loading && insumosData.ventana == 1 && insumosData.insumosAlerta.length" class="row justify-content-center mt-3 mb-3 animated fadeIn">
   <div class="col col-md-8 col-lg-6 bg-white rounded shadow-sm p-4">
     <div class="row justify-content-center">
       <div class="col">

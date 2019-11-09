@@ -30,6 +30,8 @@ export class SolicitudesComponent implements OnInit {
 
   packEvaluar: any[] = [];
 
+  p: number = 1;
+
   constructor(
     private data: DataService, 
     public utils: UtilsService,

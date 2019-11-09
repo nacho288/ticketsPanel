@@ -127,7 +127,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of pedidos.pedidosFiltrados; let i = index">
+            <tr *ngFor="let item of pedidos.pedidosFiltrados  | paginate: { itemsPerPage: 8, currentPage: p }">
               <th scope="row">{{item.pedido_id}}</th>
               <td *ngIf="login.type == 0">{{item.almacen}}</td>
               <td>{{utils.parseDate(item.fecha)}}</td>
@@ -144,6 +144,23 @@
         </table>
       </div>
     </div>
+
+    <ng-container *ngIf="pedidos.pedidosFiltrados.length  > 8">
+    
+      <div class="row mt-0 pt-0">
+        <div class="col pt-0">
+          <hr class="mt-0">
+        </div>
+      </div>
+    
+      <div class="row justify-content-center">
+        <div class="col col-auto">
+          <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event">
+          </pagination-controls>
+        </div>
+      </div>
+    
+    </ng-container>
 
   </div>
 </div>

@@ -4,7 +4,7 @@
 
 <div *ngIf="!usuarios.loading && !oficinas.loading && oficinas.ventana == 1"
   class="row justify-content-center mt-5 animated fadeIn">
-  <div class="col col-lg-8 col-xl-5 bg-white rounded shadow-sm p-4">
+  <div class="col col-lg-9 col-xl-6 bg-white rounded shadow-sm p-4">
 
     <div class="row mb-0">
       <div class="col col-auto">
@@ -66,10 +66,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of this.oficinas.oficinas; let i=index ">
+              <tr *ngFor="let item of this.oficinas.oficinas  | paginate: { itemsPerPage: 8, currentPage: p }">
                 <td>{{item.nombre}}</td>
                 <td class="text-center"><button class="btn btn-sm btn-diputado " 
-                  (click)="toUsuarios(i)" data-toggle="modal" data-target="#usuariosModal">≡</button></td>
+                  (click)="filtrarUsuarios(item)" data-toggle="modal" data-target="#usuariosModal">≡</button></td>
                 <td class="text-center"><button class="btn btn-sm btn-diputado" 
                   (click)="toEditar(item)" data-toggle="modal" data-target="#editarModal">≡</button></td>
               </tr>
@@ -79,12 +79,23 @@
      
     </div>
 
-<!--     <div class="row justify-content-center">
-      <div class="col col-auto">
-        <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event"></pagination-controls>
+    <ng-container  *ngIf="this.oficinas.oficinas.length > 8">
+    
+      <div class="row mt-0 pt-0">
+        <div class="col pt-0">
+          <hr class="mt-0">
+        </div>
       </div>
-    </div>
- -->
+    
+      <div class="row justify-content-center">
+        <div class="col col-auto">
+          <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event">
+          </pagination-controls>
+        </div>
+      </div>
+    
+    </ng-container>
+
     <ng-container *ngIf="this.oficinas.oficinas.length == 0">
 
           <div class="row">

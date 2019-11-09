@@ -28,6 +28,8 @@ export class AlmacenesComponent implements OnInit {
     nombre: ""
   }
 
+  p: number = 1;
+
   constructor(
     private conections: ConectionsService,
     public almacenes: AlmacenesDataService,
@@ -66,13 +68,13 @@ export class AlmacenesComponent implements OnInit {
   }
 
   toOficinas = (id) => {
-    this.AlmacenOficinasId = id;
-    this.filtrarOficinas(this.almacenes.almacenes[id]);
+    this.AlmacenOficinasId = this.almacenes.almacenes.findIndex(alm => alm.id = id);
+    this.filtrarOficinas(this.almacenes.almacenes[this.AlmacenOficinasId]);
   }
 
   toAdmins = (id) => {
-    this.AlmacenAdminsId = id;
-    this.filtrarAdmins(this.almacenes.almacenes[id]);
+    this.AlmacenAdminsId = this.almacenes.almacenes.findIndex(alm => alm.id = id);;
+    this.filtrarAdmins(this.almacenes.almacenes[this.AlmacenAdminsId]);
   }
 
   cambiarNombre = () => {

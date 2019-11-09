@@ -18,10 +18,10 @@ import { OficinasDataService } from './oficinas-data.service';
 })
 export class ConectionsService {
 
-  serverUrl: string = "https://server-tickets-panel.herokuapp.com/api";
-
- /*  serverUrl: string = "http://127.0.0.1:8000/api";
+/*   serverUrl: string = "https://server-tickets-panel.herokuapp.com/api";
  */
+  serverUrl: string = "http://127.0.0.1:8000/api";
+
   list: any[];
 
   constructor(
@@ -51,6 +51,13 @@ export class ConectionsService {
 
   exito = () => {
     this.toastr.success('Acción realizada satisfactoriamente', 'Completado', {
+      timeOut: 3000,
+      positionClass: 'toast-bottom-right'
+    });
+  }
+
+  fracaso = () => {
+    this.toastr.error('La acción no pudo completarse', 'Error', {
       timeOut: 3000,
       positionClass: 'toast-bottom-right'
     });
@@ -1207,14 +1214,14 @@ export class ConectionsService {
     )
       .subscribe((res: any) => {
 
-        if (res.sucess === false) {
-          this.pedidos.ventana = 3;
-          this.pedidos.loading = false;
-        } else {
+        if (!res.error) {
           this.exito();
-          this.pedidos.ventana = 1;
-          this.getPedidos();
+        } else {
+          this.fracaso();
         }
+         
+        this.pedidos.ventana = 1;
+        this.getPedidos();
         console.log(res);
       });
 

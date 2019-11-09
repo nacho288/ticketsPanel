@@ -61,9 +61,9 @@ export class OficinasComponent implements OnInit {
   }
 
   toUsuarios = (oficinaId) => {
-    this.oficinaUsuariosId = oficinaId;
-    this.filtrarUsuarios(this.oficinas.oficinas[this.oficinaUsuariosId]);
-    console.log(this.oficinas.oficinas[this.oficinaUsuariosId].usuarios);
+    console.log(this.oficinas.oficinas.find(item => item.id == oficinaId));
+    
+    this.filtrarUsuarios(this.oficinas.oficinas.find(item => item.id == oficinaId));
   }
 
   cambiarNombre = () => {
@@ -101,6 +101,7 @@ export class OficinasComponent implements OnInit {
   }
 
   filtrarUsuarios = (oficina) => {
+    this.oficinaUsuariosId = this.oficinas.oficinas.findIndex(ofi => ofi.id == oficina.id);
     this.oficinaId = oficina.id;
     this.listaUsuarios = this.usuarios.usuarios.filter(usuario => {
       if (oficina.usuarios.find(usr => usr.id == usuario.id) || usuario.type != 0) {

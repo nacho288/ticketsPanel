@@ -30,6 +30,8 @@ export class BienesComponent implements OnInit {
   preparacion;
   subCategoria: any = null;
 
+  p: number = 1;
+
   comentarioStock = "";
 
   insumoEdit ={

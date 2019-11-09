@@ -47,7 +47,7 @@ export class LoginScreenComponent implements OnInit {
   }
 
   quickLogin = () => {
-    let hEmail = '11111111';
+    let hEmail = 'economato';
     let hPassword = '123123123';
     this.conections.login(hEmail, hPassword);
   }

@@ -18,6 +18,9 @@ export class CategoriasComponent implements OnInit {
   idEditarSub;
   catSubId;
 
+  p: number = 1;
+  p2: number = 1;
+
   constructor(
     private conections: ConectionsService,
     public categoriasData: CategoriasDataService,
@@ -62,7 +65,8 @@ export class CategoriasComponent implements OnInit {
   }
 
   toSub = (id) => {
-    this.catSubId = id;
+    let inde = this.categoriasData.categorias.findIndex(item => item.id == id);
+    this.catSubId = inde;
   }
 
   limpiarSub = () => {
