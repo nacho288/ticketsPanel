@@ -20,7 +20,7 @@ export class ConectionsService {
 
   serverUrl: string = "https://server-tickets-panel.herokuapp.com/api";
 
-/*   serverUrl: string = "http://127.0.0.1:8000/api"; */
+  /* serverUrl: string = "http://127.0.0.1:8000/api"; */
 
   list: any[];
 
@@ -172,6 +172,7 @@ export class ConectionsService {
 
   logOut = () => {
 
+    this.toHome();
     this.loginData.loading = true;
     this.loginData.ventana = 1;
 

@@ -22,11 +22,11 @@
 
         <div class="collapse multi-collapse" id="multiCollapseExample1">
 
-              <div class="row">
-                <div class="col">
-                  <hr class="mt-1 mb-4">
-                </div>
-              </div>
+          <div class="row">
+            <div class="col">
+              <hr class="mt-1 mb-4">
+            </div>
+          </div>
           
           <div class="card">
             <div class="card-header h5 ">
@@ -67,6 +67,7 @@
                           <label for="hasta">Estado:</label>
                           <select [(ngModel)]="estadoBusqueda" name="estadoBu" class="form-control" id="estado"
                             aria-describedby="estado" placeholder="estado">
+                            <option selected disabled [value]="null">estado</option>
                             <option value="">todos</option>
                             <option *ngFor="let estado of utils.estados" value="{{estado.id}}">{{estado.nombre}}</option>
                           </select>

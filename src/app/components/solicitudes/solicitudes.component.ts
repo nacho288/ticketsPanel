@@ -17,7 +17,7 @@ export class SolicitudesComponent implements OnInit {
   idBusqueda: number;
   fechaDesde; 
   fechaHasta;
-  estadoBusqueda: number
+  estadoBusqueda: number = null;
   comentario;
   toEstado = 0;
   nuevaPreparacion = 0;
@@ -112,6 +112,12 @@ export class SolicitudesComponent implements OnInit {
     }
 
     this.conections.updatePedidoPanel(this.packEntregar);
+
+    this.packEntregar = {
+      empleado_id: null,
+      password: null,
+      username: null
+    }
     
   }
 

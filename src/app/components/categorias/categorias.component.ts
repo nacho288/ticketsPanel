@@ -20,6 +20,7 @@ export class CategoriasComponent implements OnInit {
 
   p: number = 1;
   p2: number = 1;
+  buscar: string = "";
 
   constructor(
     private conections: ConectionsService,

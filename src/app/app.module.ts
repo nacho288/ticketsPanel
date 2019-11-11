@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 import { NavBarComponent } from './components/shared/nav-bar/nav-bar.component';
 import { HomeComponent } from './components/home/home.component';
@@ -24,7 +25,9 @@ import { CategoriasComponent } from './components/categorias/categorias.componen
 import { AlmacenesComponent } from './components/almacenes/almacenes.component';
 import { OficinasComponent } from './components/oficinas/oficinas.component';
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
-
+import { SearchPipe } from './pipes/search.pipe';
+import { SearchOficinaPipe } from './pipes/search-oficina.pipe';
+import { SearchCategoriaPipe } from './pipes/search-categoria.pipe';
 
 @NgModule({
   declarations: [
@@ -40,6 +43,9 @@ import { UsuariosComponent } from './components/usuarios/usuarios.component';
     AlmacenesComponent,
     OficinasComponent,
     UsuariosComponent,
+    SearchPipe,
+    SearchOficinaPipe,
+    SearchCategoriaPipe
   ],
   imports: [
     BrowserModule,
@@ -50,6 +56,7 @@ import { UsuariosComponent } from './components/usuarios/usuarios.component';
     CommonModule,
     BrowserAnimationsModule, 
     ToastrModule.forRoot(),
+    NgSelectModule,
     NgxPaginationModule
   ],
   providers: [],

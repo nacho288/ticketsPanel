@@ -1,9 +1,12 @@
+<app-loading *ngIf="loginData.loading"></app-loading>
 
+
+<!-- //////////////////// -->
 
 <div class="row my-4"> 
 </div>
 
-<div class="row mt-4 justify-content-center animated fadeIn">
+<div *ngIf="!loginData.loading" class="row mt-4 justify-content-center animated fadeIn">
   <div class="col col-lg-4 bg-white shadow-sm rounded">
     
     <div class="row">
@@ -55,7 +58,9 @@
               role="button">Administrar usuarios</a>
           </div>
         </div>
+    </div>
 
   </div>
+
 </div>
 

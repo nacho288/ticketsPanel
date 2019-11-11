@@ -3,7 +3,7 @@
 <!-- //////////////////////////////// -->
 
 <div *ngIf="!insumosData.loading && insumosData.ventana == 1" class="row justify-content-center mt-5 animated fadeIn">
-  <div class="col col-md-8 col-lg-6 bg-white rounded shadow-sm p-4">
+  <div class="col col-md-10 col-lg-7 bg-white rounded shadow-sm p-4">
 
     <div class="row">
       <div class="col col-auto">
@@ -14,7 +14,38 @@
       </div>
     </div>
 
+    <ng-container *ngIf="!insumosData.loading && insumosData.ventana == 1 && insumosData.insumosAlerta.length">
+    
+      <div class="row">
+        <div class="col">
+          <hr>
+        </div>
+      </div>
+    
+      <div class="row justify-content-center align-items-center">
+        <div class="col">
+          <h5 class="font-italic">Uno o mas bienes tienen su stock por debajo del punto de pedido</h5>
+        </div>
+        <div class="col col-auto py-0">
+          <button class="btn btn-sm btn-diputado" data-toggle="modal" data-target="#alertaModal">Ver</button>
+        </div>
+      </div>
+    
+    </ng-container>
+
     <ng-container *ngIf="this.insumosData.insumos.length > 0">
+
+      <div class="row">
+        <div class="col">
+          <hr class="">
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col">
+          <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="buscar" id="listSearch">
+        </div>
+      </div>
 
       <div class="row mt-3 mb-0 ">
       
@@ -25,13 +56,13 @@
                 <th scope="col">Código</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Categoria</th>
-                <th scope="col">stock</th>
+                <th scope="col">Stock</th>
                 <th class="text-center" scope="col">Mod. stock</th>
-                <th class="text-center" scope="col">detalles</th>
+                <th class="text-center" scope="col">Detalles</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of this.insumosData.insumos  | paginate: { itemsPerPage: 7, currentPage: p }">
+              <tr *ngFor="let item of this.insumosData.insumos | search: buscar | paginate: { itemsPerPage: 7, currentPage: p }">
                 <th scope="row">{{item.codigo}}</th>
                 <td>{{item.nombre}}</td>
                 <ng-container *ngIf="item.subcategoria">
@@ -84,19 +115,6 @@
 
     </ng-container>
 
-  </div>
-</div>
-
-<div *ngIf="!insumosData.loading && insumosData.ventana == 1 && insumosData.insumosAlerta.length" class="row justify-content-center mt-3 mb-3 animated fadeIn">
-  <div class="col col-md-8 col-lg-6 bg-white rounded shadow-sm p-4">
-    <div class="row justify-content-center">
-      <div class="col">
-        <h5 class="text-center font-italic">Uno o mas bienes tienen su stock por debajo del punto de pedido</h5>
-      </div>
-      <div class="col col-auto text-center">
-        <button class="btn btn-diputado mt-1" data-toggle="modal" data-target="#alertaModal">Ver</button>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -409,7 +427,13 @@
         <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
           <div class="card-body">
 
-                <div class="row mt-3">
+                <div *ngIf="this.insumosData.insumo.tratos.length > 0" class="row">
+                  <div class="col">
+                    <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="buscarTrato" id="listSearch">
+                  </div>
+                </div>
+
+                <div *ngIf="this.insumosData.insumo.tratos.length > 0" class="row mt-3">
                   <div class="col">
                     <table class="table">
                       <thead>
@@ -421,7 +445,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr *ngFor="let item of this.insumosData.insumo.tratos">
+                        <tr *ngFor="let item of this.insumosData.insumo.tratos | search: buscarTrato | paginate: { itemsPerPage: 8, currentPage: pTratos, id: 'first' }">
                           <th scope="row">{{loginData.getNombreOfiAlmacen(item.oficina_id)}}</th>
                           <td>{{item.minimo}}</td>
                           <td>{{item.maximo}}</td>
@@ -429,24 +453,44 @@
                             <button (click)="borrarTrato(item.id)" class="btn btn-danger" type="button">✘</button>
                           </td>
                         </tr>
-                        <tr>
-                          <td>
-                            <select [(ngModel)]="tratoEnviar.oficina_id" name="insu" id="insumo" class="form-control">
-                              <option selected disabled [value]="null">Oficina</option>
-                              <option *ngFor="let oficina of loginData.almacen.oficinas" value="{{oficina.id}}">{{oficina.nombre}}
-                              </option>
-                            </select>
-                          </td>
-                          <td><input [(ngModel)]="tratoEnviar.minimo" name="min" type="number" class="form-control"
-                              id="exampleInputPassword1" placeholder="Minimo"></td>
-                          <td><input [(ngModel)]="tratoEnviar.maximo" name="max" type="number" class="form-control"
-                              id="exampleInputPassword1" placeholder="Maximo"></td>
-                          <td>
-                            <button (click)="enviarTrato()" class="btn btn-success" type="button">✚</button>
-                          </td>
-                        </tr>
                       </tbody>
                     </table>
+                  </div>
+                </div>
+
+                <ng-container *ngIf="this.insumosData.insumo.tratos.length > 8">
+                
+                  <div class="row mt-0 pt-0">
+                    <div class="col pt-0">
+                      <hr class="mt-0">
+                    </div>
+                  </div>
+                
+                  <div class="row justify-content-center">
+                    <div class="col col-auto">
+                      <pagination-controls previousLabel="Anterior" id="first" nextLabel="Siguiente" (pageChange)="pTratos = $event">
+                      </pagination-controls>
+                    </div>
+                  </div>
+                
+                </ng-container>
+
+                <div *ngIf="this.insumosData.insumo.tratos.length == 0" class="row">
+                  <div class="col">
+                    <h4 class="text-secondary text-center font-italic">...sin elementos...</h4>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col">
+                    <hr class="">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col text-right">
+                    <button class="btn btn-diputado" data-toggle="modal"
+                      data-target="#tratoModal">Nuevo trato</button>
                   </div>
                 </div>
 
@@ -465,7 +509,13 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
           <div class="card-body">
 
-            <div class="row mt-0">
+            <div *ngIf="this.insumosData.insumo.movimientos .length == 0" class="row">
+              <div class="col">
+                <h4 class="text-secondary text-center font-italic">... Historial vacio ...</h4>
+              </div>
+            </div>
+
+            <div *ngIf="this.insumosData.insumo.movimientos .length > 0" class="row mt-0">
               <div class="col">
                 <table class="table">
                   <thead>
@@ -478,7 +528,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let item of this.insumosData.insumo.movimientos; let i = index">
+                    <tr *ngFor="let item of this.insumosData.insumo.movimientos | paginate: { itemsPerPage: 8, currentPage: pStock, id: 'second' }">
                       <th>{{utils.parseDate(item.fecha)}}</th>
                       <td><ng-container *ngIf="item.tipo != 0">{{item.original}}</ng-container></td>
                       <td>{{item.nuevo}}</td>
@@ -488,13 +538,30 @@
                         <ng-container *ngIf="item.tipo == 2">Restado por solicitud de la oficina {{loginData.getNombreOfiAlmacen(item.oficina_id)}}</ng-container>
                       </td>
                       <td class="text-center">
-                        <button (click)="toComentarioStock(i)" *ngIf="item.comentario" class="btn btn-sm btn-diputado" data-toggle="modal" data-target="#comentarioStockModal">≡</button>
+                        <button (click)="toComentarioStock(item.id)" *ngIf="item.comentario" class="btn btn-sm btn-diputado" data-toggle="modal" data-target="#comentarioStockModal">≡</button>
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
             </div>
+
+            <ng-container *ngIf="this.insumosData.insumo.movimientos.length > 8">
+            
+              <div class="row mt-0 pt-0">
+                <div class="col pt-0">
+                  <hr class="mt-0">
+                </div>
+              </div>
+            
+              <div class="row justify-content-center">
+                <div class="col col-auto">
+                  <pagination-controls previousLabel="Anterior" id="second" nextLabel="Siguiente" (pageChange)="pStock = $event">
+                  </pagination-controls>
+                </div>
+              </div>
+            
+            </ng-container>
 
           </div>
         </div>
@@ -592,6 +659,59 @@
           </div>
           <div class="col text-right">
             <button (click)="this.insumoStock.comentario = ''" type="button" class="btn btn-diputado" data-dismiss="modal">Volver</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- /////////////////////////////////////////////////// -->
+
+<div *ngIf="loginData.almacen" class="modal fade mt-5" id="tratoModal" tabindex="-1" role="dialog"
+  aria-labelledby="comentarioStockModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Agregar nuevo trato:</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col">
+            <label>Oficina:</label>
+            <ng-select [items]="loginData.almacen.oficinas" bindLabel="nombre" bindValue="id" notFoundText='Sin resultados'
+              placeholder="Elegir oficina" [(ngModel)]="tratoEnviar.oficina_id">
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="row mt-3">
+          <div class="col">
+            <label>Minimo:</label>
+            <input [(ngModel)]="tratoEnviar.minimo" name="min" type="number" class="form-control" id="exampleInputPassword1"
+              placeholder="Minimo">
+          </div>
+          <div class="col">
+            <label>Maximo:</label>
+            <input [(ngModel)]="tratoEnviar.maximo" name="max" type="number" class="form-control" id="exampleInputPassword1"
+              placeholder="Maximo">
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <div class="row text-right">
+          <div class="col">
+            <button (click)="enviarTrato()" data-dismiss="modal" class="btn btn-diputado" type="button">Enviar</button>
+          </div>
+          <div class="col col-auto text-right">
+            <button type="button" class="btn btn-diputado"
+              data-dismiss="modal">Volver</button>
           </div>
         </div>
       </div>

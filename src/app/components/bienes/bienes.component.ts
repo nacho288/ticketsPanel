@@ -31,6 +31,10 @@ export class BienesComponent implements OnInit {
   subCategoria: any = null;
 
   p: number = 1;
+  pTratos: number = 1;
+  pStock: number = 1;
+  buscar: string = "";
+  buscarTrato: string = "";
 
   comentarioStock = "";
 
@@ -344,7 +348,8 @@ export class BienesComponent implements OnInit {
     this.conections.updateProductStock(this.insumoStock.stock, this.insumoStock.comentario, this.insumoStock.id);
   }
 
-  toComentarioStock = (i) => {
+  toComentarioStock = (id) => {
+    let i = this.insumosData.insumo.movimientos.findIndex( item => id == item.id)
     this.comentarioStock = this.insumosData.insumo.movimientos[i].comentario;
   }
   

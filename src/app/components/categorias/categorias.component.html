@@ -67,6 +67,24 @@
           </div>
 
         </ng-container>
+
+
+        <ng-container *ngIf="this.categoriasData.categorias.length > 0">
+        
+          <div class="row">
+            <div class="col">
+              <hr class="">
+            </div>
+          </div>
+        
+          <div class="row">
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="buscar" id="listSearch">
+            </div>
+          </div>
+
+        </ng-container>
+
         
         <div class="row mt-3" *ngIf="this.categoriasData.categorias.length > 0">
         
@@ -80,7 +98,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let item of this.categoriasData.categorias  | paginate: { itemsPerPage: 8, currentPage: p }">
+                <tr *ngFor="let item of this.categoriasData.categorias | searchCategoria: buscar | paginate: { itemsPerPage: 8, currentPage: p }">
                   <td>{{item.nombre}}</td>
                   <td class="text-center"><button class="btn btn-sm btn-diputado " (click)="toSub(item.id)" data-toggle="modal"
                       data-target="#subModal">≡</button></td>

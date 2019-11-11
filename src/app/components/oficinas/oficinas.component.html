@@ -54,6 +54,22 @@
       </div>
     </div>
 
+    <ng-container *ngIf="this.oficinas.oficinas.length > 0">
+
+          <div class="row">
+            <div class="col">
+              <hr class="">
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="buscar" id="listSearch">
+            </div>
+          </div>
+
+    </ng-container>
+
     <div class="row mt-3" *ngIf="this.oficinas.oficinas.length > 0">
     
         <div class="col">
@@ -66,7 +82,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of this.oficinas.oficinas  | paginate: { itemsPerPage: 8, currentPage: p }">
+              <tr *ngFor="let item of this.oficinas.oficinas | searchOficina: buscar | paginate: { itemsPerPage: 8, currentPage: p }">
                 <td>{{item.nombre}}</td>
                 <td class="text-center"><button class="btn btn-sm btn-diputado " 
                   (click)="filtrarUsuarios(item)" data-toggle="modal" data-target="#usuariosModal">≡</button></td>

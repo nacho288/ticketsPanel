@@ -125,8 +125,6 @@
                     <th scope="col">Código</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Cantidad</th>
-<!--                     <th scope="col">Min.</th>
-                    <th scope="col">Max.</th> -->
                     <th scope="col"></th>
                   </tr>
                 </thead>
@@ -135,10 +133,6 @@
                     <th scope="row">{{item.codigo}}</th>
                     <td>{{item.nombre}}</td>
                     <td> {{item.cantidad}}</td>
-<!--                     <td class="text-danger" *ngIf="item.cantidad < item.minimo"> {{item.minimo}}</td>
-                    <td class="" *ngIf="item.cantidad >= item.minimo"> {{item.minimo}}</td>
-                    <td class="text-danger" *ngIf="item.cantidad > item.maximo"> {{item.maximo}}</td>
-                    <td class="" *ngIf="item.cantidad <= item.maximo"> {{item.maximo}}</td> -->
                     <td>
                       <button (click)="quitar(item.id)" class="btn btn-sm btn-danger ml-2">X</button>
                     </td>
@@ -314,10 +308,9 @@
         
                   <div class="form-group">
                     <label for="exampleFormControlSelect2">Oficina:</label>
-                    <select [(ngModel)]="oficina_id" class="form-control" id="exampleFormControlSelect2">
-                      <option selected disabled [value]="null">Oficina</option>
-                      <option *ngFor="let ofi of loginData.almacenLogin.oficinas" [value]='ofi.id'>{{ofi.nombre}}</option>
-                    </select>
+                    <ng-select [items]="loginData.almacenLogin.oficinas" bindLabel="nombre" bindValue="id" notFoundText='Sin resultados' placeholder="Elegir oficina"
+                      [(ngModel)]="oficina_id">
+                    </ng-select>
                   </div>
         
                 </div>

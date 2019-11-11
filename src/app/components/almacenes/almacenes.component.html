@@ -105,10 +105,10 @@
 
 <div class="modal fade mt-3" id="oficinasModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Asignar oficinas</h5>
+        <h5 class="modal-title text-center" id="exampleModalLabel">Asignar oficinas</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -120,6 +120,9 @@
           <div class="row">
             <div class="col">
               <h5>Oficinas asignadas</h5>
+            </div>
+            <div *ngIf="this.almacenes.almacenes[this.AlmacenOficinasId].oficinas.length > 0" class="col col-auto text-right">
+              <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="buscar" id="listSearch">
             </div>
           </div>
           
@@ -141,7 +144,7 @@
           
               <table class="table mb-0">
                 <tbody>
-                  <tr *ngFor="let oficina of this.almacenes.almacenes[this.AlmacenOficinasId].oficinas | paginate: { itemsPerPage: 8, currentPage: p }">
+                  <tr *ngFor="let oficina of this.almacenes.almacenes[this.AlmacenOficinasId].oficinas | searchOficina: buscar | paginate: { itemsPerPage: 8, currentPage: p }">
                     <td>{{oficina.nombre}}</td>
                     <td class="text-center">
                       <button data-dismiss="modal" (click)="quitarOficina(this.almacenes.almacenes[this.AlmacenOficinasId].id, oficina.id)"
@@ -179,20 +182,24 @@
           </div>
         </div>
           
-        <div class="row">
-          <div *ngIf="listaOficinas.length > 0" class="col col-auto">
+        <div *ngIf="listaOficinas.length > 0" class="row">
+          <div  class="col">
             <div class="form-group">
-              <select [(ngModel)]="oficinaAgregarId" name='ofi' class="form-control" id="oficina">
-                <option selected disabled [value]="null">Asignar oficina</option>
-                <option *ngFor="let item of listaOficinas" value="{{item.id}}">{{item.nombre}}</option>
-              </select>
+              <ng-select [items]="listaOficinas" bindLabel="nombre" bindValue="id" notFoundText='Sin resultados'
+                placeholder="Asignar oficina" [(ngModel)]="oficinaAgregarId">
+              </ng-select>
             </div>
           </div>
-          <div class="col text-right">
-            <h5 *ngIf="listaOficinas.length == 0" class="text-center text-secondary font-italic">No hay mas oficinas para asignar
-            </h5>
+          <div class="col col-auto text-right">
             <button data-dismiss="modal" type="button" *ngIf="listaOficinas.length > 0" (click)="agregarOficina()"
               class="btn btn-diputado">Asignar</button>
+          </div>
+        </div>
+
+        <div *ngIf="listaOficinas.length == 0"  class="row">
+          <div class="col">
+            <h5 class="text-center text-secondary font-italic">No hay mas oficinas para asignar
+            </h5>
           </div>
         </div>
 

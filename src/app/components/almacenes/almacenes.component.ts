@@ -29,6 +29,7 @@ export class AlmacenesComponent implements OnInit {
   }
 
   p: number = 1;
+  buscar: string = "";
 
   constructor(
     private conections: ConectionsService,
