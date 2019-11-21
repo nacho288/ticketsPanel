@@ -34,11 +34,10 @@
             <div class="col col-auto text-left">
               <p class="my-0">Usuario del pedido:</p>
             </div>
-            <div class="col col-auto text-left">
-              <select [(ngModel)]="user_id" name="usu" id="usu" class="form-control">
-                <option selected disabled [value]="null">Usuario del pedido</option>
-                <option *ngFor="let item of loginData.oficinaSolicitud.usuarios" [value]="item.id">{{item.name}}</option>
-              </select>
+            <div class="col text-left">
+              <ng-select [items]="loginData.oficinaSolicitud.usuarios" bindLabel="name" bindValue="id"
+                notFoundText='Sin resultados' placeholder="Elegir usuario" [(ngModel)]="user_id">
+              </ng-select>
             </div>
           </div>
 
@@ -60,7 +59,7 @@
                       <div class="form-group">
                         <select [(ngModel)]="categoria" name="cat" id="insumo" class="form-control" >
                           <option selected disabled value="undefined">Categorias</option>
-                          <option value="0">Todas</option>
+                          <option [ngValue]="null">Todas</option>
                           <ng-container *ngFor="let cat of categoriasData.categorias">
                             <optgroup label="{{cat.nombre}}">
                               <option *ngFor="let sub of cat.subcategorias" [value]="sub.id">{{sub.nombre}}</option>
@@ -71,13 +70,9 @@
                     </div>
                     <div class="col">
                       <div class="form-group">
-                        <select [(ngModel)]="insumoId" name="insu" id="insumo" class="form-control">
-                          <option selected disabled value="undefined"><b>Insumo</b></option>
-                          <ng-container *ngFor="let articulo of insumosData.insumos">
-                            <option *ngIf="articulo.subcategoria_id == categoria || categoria == 0" [disabled]="articulo.stock == 0"  value="{{articulo.id}}">{{articulo.nombre}}
-                            </option>
-                          </ng-container>
-                        </select>
+                        <ng-select [items]="insumosData.insumos | insumoCategoria: categoria" bindLabel="nombre" bindValue="id" notFoundText='Sin resultados'
+                          placeholder="Elegir insumo" [(ngModel)]="insumoId">
+                        </ng-select>
                       </div>
                     </div>
                   </div>

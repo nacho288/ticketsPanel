@@ -17,32 +17,32 @@ export class UtilsService {
   estados = [
     {
       id: 0,
-      nombre: "pendiente",
+      nombre: "Pendiente",
       color: "text-dark"
     },
     {
       id: 1,
-      nombre: "aprobado",
+      nombre: "Aprobada",
       color: "text-dark"
     },
     {
       id: 2,
-      nombre: "en proceso",
+      nombre: "En proceso",
       color: "text-dark"
     },
     {
       id: 3,
-      nombre: "entregado",
+      nombre: "Entregada",
       color: "text-dark"
     },
     {
       id: 4,
-      nombre: "cancelado",
+      nombre: "Cancelada",
       color: "text-dark"
     },
     {
       id: 5,
-      nombre: "aprobado parcial",
+      nombre: "Aprobada parcialmente",
       color: "text-dark"
     }
   ];

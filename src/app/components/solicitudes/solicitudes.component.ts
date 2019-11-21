@@ -28,6 +28,8 @@ export class SolicitudesComponent implements OnInit {
     username: null
   }
 
+  buscar: string;
+
   packEvaluar: any[] = [];
 
   p: number = 1;
@@ -49,6 +51,7 @@ export class SolicitudesComponent implements OnInit {
     this.fechaDesde = undefined;
     this.fechaHasta = undefined;
     this.estadoBusqueda = undefined;
+    this.buscar = "";
   };
 
   filtrar = () =>{
@@ -57,7 +60,7 @@ export class SolicitudesComponent implements OnInit {
     resultado = this.fechaDesde ? resultado.filter(r => this.formatearFecha(r.fecha).getTime() >= this.formatearFecha(this.fechaDesde).getTime()) : resultado;
     resultado = this.fechaHasta ? resultado.filter(r => this.formatearFecha(r.fecha).getTime() <= this.formatearFecha(this.fechaHasta).getTime()) : resultado;
     
-    resultado = this.estadoBusqueda ? resultado.filter(r => r.estado == this.estadoBusqueda) : resultado;
+    resultado = this.estadoBusqueda !== null ? resultado.filter(r => r.estado == this.estadoBusqueda) : resultado;
     this.pedidos.pedidosFiltrados = resultado;
   }
   
@@ -164,6 +167,16 @@ export class SolicitudesComponent implements OnInit {
     });
     console.log(this.login.oficinaSolicitud);
     
+  }
+
+  cantidadEstado = (estado) => {
+    return this.pedidos.pedidos.filter(p => p.estado == estado).length;
+  }
+
+  filtrarEstado = (estado) => {
+    this.limpiar();
+    this.estadoBusqueda = estado;
+    this.filtrar();
   }
   
   ngOnInit() {

@@ -1032,6 +1032,7 @@ export class ConectionsService {
       }
 
       this.pedidos.pedidosFiltrados = this.pedidos.pedidos;
+      console.log(this.pedidos.pedidos);
       this.pedidos.loading = false;
 
     });

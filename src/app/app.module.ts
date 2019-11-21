@@ -28,6 +28,8 @@ import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { SearchPipe } from './pipes/search.pipe';
 import { SearchOficinaPipe } from './pipes/search-oficina.pipe';
 import { SearchCategoriaPipe } from './pipes/search-categoria.pipe';
+import { SearchPedidoPipe } from './pipes/search-pedido.pipe';
+import { InsumoCategoriaPipe } from './pipes/insumo-categoria.pipe';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import { SearchCategoriaPipe } from './pipes/search-categoria.pipe';
     UsuariosComponent,
     SearchPipe,
     SearchOficinaPipe,
-    SearchCategoriaPipe
+    SearchCategoriaPipe,
+    SearchPedidoPipe,
+    InsumoCategoriaPipe
   ],
   imports: [
     BrowserModule,
