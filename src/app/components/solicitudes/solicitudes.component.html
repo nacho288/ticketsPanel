@@ -361,8 +361,12 @@
     <div class="row mt-2">
 
       <div class="col col-auto text-left">
-        <button (click)="toEstado = 4" *ngIf="pedidos.pedido.estado == 0" type="button" class="btn btn-danger mr-4"
+        <button (click)="toEstado = 4" *ngIf="pedidos.pedido.estado == 0 && login.type != 0" type="button" class="btn btn-danger mr-4"
           data-toggle="modal" data-target="#exampleModal">
+          Cancelar pedido
+        </button>
+        <button (click)="toEstado = 4" *ngIf="pedidos.pedido.estado == 0 && login.type == 0 && login.id == pedidos.pedido.user_id" type="button"
+          class="btn btn-danger mr-4" data-toggle="modal" data-target="#exampleModal">
           Cancelar pedido
         </button>
         <button (click)="toEvaluar()" *ngIf="pedidos.pedido.estado == 0 && login.type != 0" type="button" class="btn btn-diputado mr-4"
@@ -484,25 +488,42 @@
 
       <div class="row">
         <div class="col">
-          <h1 class="display-4 text-center">Aviso</h1>
+          <h3 class="text-center">Stock insuficiente para continuar</h3>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col">
+          
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Bien</th>
+                <th scope="col">En solicitud</th>
+                <th scope="col">En stock</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let bien of pedidos.listaStock">
+                <td [ngClass]="bien.enPedido > bien.enStock ? 'text-danger' : ''">
+                  {{bien.nombre}}
+                </td>
+                <td [ngClass]="bien.enPedido > bien.enStock ? 'text-danger' : ''">
+                  {{bien.enPedido}}
+                </td>
+                <td [ngClass]="bien.enPedido > bien.enStock ? 'text-danger' : ''">
+                  {{bien.enStock}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
         </div>
       </div>
 
       <div class="row">
         <div class="col">
-          <hr class="mt-1 mb-3">
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col">
-          <p  class="lead text-center text-danger">No hay stock suficiente para proseguir con esta solicitud</p>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col">
-          <hr class="mt-1 mb-4">
+          <hr class="mb-4 mt-0">
         </div>
       </div>
 
@@ -556,7 +577,7 @@
   </div>
 </div>
 
-<div class="modal fade mt-5" id="entregarModal" tabindex="-1" role="dialog" aria-labelledby="comentarioStockModal"
+<div *ngIf="login.type == 1" class="modal fade mt-5" id="entregarModal" tabindex="-1" role="dialog" aria-labelledby="comentarioStockModal"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">

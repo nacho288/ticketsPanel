@@ -18,9 +18,9 @@ import { OficinasDataService } from './oficinas-data.service';
 })
 export class ConectionsService {
 
-  serverUrl: string = "https://server-tickets-panel.herokuapp.com/api";
+  /* serverUrl: string = "https://server-tickets-panel.herokuapp.com/api"; */
 
-  /* serverUrl: string = "http://127.0.0.1:8000/api"; */
+  serverUrl: string = "http://127.0.0.1:8000/api";
 
   list: any[];
 
@@ -972,6 +972,58 @@ export class ConectionsService {
 
   }
 
+  sendExcepcional = (excepcional) => {
+
+    this.insumos.loading = true;
+    excepcional.producto_id = this.insumos.insumo.id;
+
+    let pack = {
+      ...excepcional,
+      'user_id': this.loginData.id,
+      'almacene_id': this.loginData.almacen_id
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': 'Bearer ' + this.loginData.token
+      })
+    };
+
+    this.http.post(this.serverUrl + '/auth/excepcionales',
+      pack, httpOptions)
+      .subscribe((res: any) => {
+
+        if (!res.error) {
+          this.exito();
+        }
+
+        this.getProduct(this.insumos.insumo.id);
+      }
+      );
+
+  };
+
+  deleteExcepcional = (id) => {
+
+    this.insumos.loading = true;
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': 'Bearer ' + this.loginData.token
+      }),
+      params: new HttpParams().set('almacene_id', this.loginData.almacen_id)
+    };
+
+    this.http.delete(this.serverUrl + '/auth/excepcionales/' + id, httpOptions)
+    .subscribe((res: any) => {
+      if (!res.error) {
+        this.exito();
+      }
+      this.getProduct(this.insumos.insumo.id);
+    });
+
+  }
+
 
   updateProductStock = (stock, comentario, id) => {
 
@@ -1184,6 +1236,7 @@ export class ConectionsService {
         
         if (res.sucess === false) {
           this.pedidos.ventana = 3;
+          this.pedidos.listaStock = res.lista;
           this.pedidos.loading = false;
         } else {
           this.exito();

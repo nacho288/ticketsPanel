@@ -33,6 +33,7 @@ export class BienesComponent implements OnInit {
   p: number = 1;
   pTratos: number = 1;
   pStock: number = 1;
+  pExcepcionales: number = 1;
   buscar: string = "";
   buscarTrato: string = "";
 
@@ -55,6 +56,13 @@ export class BienesComponent implements OnInit {
     oficina_id: null,
     minimo: 0,
     maximo: 0,
+  };
+
+  excepcionalEnviar = {
+    oficina_id: null,
+    inicio: null,
+    final: null,
+    cantidad: null
   };
 
   insumoStock: {
@@ -331,8 +339,50 @@ export class BienesComponent implements OnInit {
     this.conections.getOficinas();
   }
 
+  enviarExcepcional = () => {
+
+    if (!this.excepcionalEnviar.oficina_id) {
+      this.toastr.error('no se ha seleccionado ninguna oficina', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
+    if (!this.excepcionalEnviar.inicio) {
+      this.toastr.error('no se ha insertado una fecha de inicio', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
+    if (!this.excepcionalEnviar.final) {
+      this.toastr.error('no se ha insertado una fecha de finalizado', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
+    if (!Number.isInteger(this.excepcionalEnviar.cantidad)) {
+      this.toastr.error('no se ha insertado una cantidad valida', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
+    this.conections.sendExcepcional(this.excepcionalEnviar);
+    this.conections.getOficinas();
+  }
+
   borrarTrato = (id) => {
     this.conections.deleteTrato(id);
+  }
+
+  borrarExcepcional = (id) => {
+    this.conections.deleteExcepcional(id);
   }
 
   updateStock = () => {

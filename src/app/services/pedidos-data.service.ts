@@ -17,5 +17,7 @@ export class PedidosDataService {
 
   loading: boolean = true;
 
+  listaStock: any[] = [];
+
   constructor() { }
 }

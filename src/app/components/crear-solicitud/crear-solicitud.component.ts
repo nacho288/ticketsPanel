@@ -35,12 +35,26 @@ export class CrearSolicitudComponent implements OnInit {
     this.conections.kickToHome(9);
     this.solicitud.limpiar();
 
-    if (this.loginData.oficina_id) {
-      this.conections.getProductsPanel();
-      this.conections.getCategorias();
-      this.solicitud.ventana = 1;
-    } else {
-      this.solicitud.ventana = 3
+    if (this.loginData.type == 1) {
+
+      if (this.loginData.oficina_id) {
+        this.conections.getProductsPanel();
+        this.conections.getCategorias();
+        this.solicitud.ventana = 1;
+      } else {
+        this.solicitud.ventana = 3
+      }
+      
+    }
+
+    if (this.loginData.type == 0) {
+      if (this.loginData.almacen_id) {
+        this.conections.getProducts();
+        this.conections.getCategorias();
+        this.solicitud.ventana = 1;
+      } else {
+        this.solicitud.ventana = 3
+      }
     }
 
     }
@@ -59,8 +73,8 @@ export class CrearSolicitudComponent implements OnInit {
       return;
     }
 
-    if (!this.cantidad) {
-      this.toastr.error('no se ha asignado ninguna cantidad', 'Error', {
+    if (!Number.isInteger(this.cantidad) || this.cantidad <= 0) {
+      this.toastr.error('no se ha asignado una cantidad valida', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-bottom-right'
       });
@@ -97,7 +111,7 @@ export class CrearSolicitudComponent implements OnInit {
 
   enviar = () => {
 
-    if (!this.user_id) {
+    if (!this.user_id && this.loginData.type == 1) {
       this.toastr.error('no se ha seleccionado ningun usuario', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-bottom-right'
@@ -115,8 +129,15 @@ export class CrearSolicitudComponent implements OnInit {
 
     if (this.solicitud.solicitud.insumos.length != 0 && this.loginData.oficina_id) {
       this.solicitud.solicitud.comentarioUsuario = this.comentario ? this.comentario : "";
-      this.conections.sendPedidoPanel(this.user_id);
+
+      if (this.loginData.type == 1) {
+        this.conections.sendPedidoPanel(this.user_id);
+      } else {
+        this.conections.sendPedido();
+      }
+
       this.solicitud.limpiar();
+      
     } else {
       console.log(this.solicitud.solicitud.insumos);
       console.log(this.oficina_id);

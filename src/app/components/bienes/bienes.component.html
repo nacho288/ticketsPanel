@@ -498,6 +498,92 @@
         </div>
       </div>
       <div class="card">
+        <div class="card-header" id="headingOne">
+          <h2 class="mb-0">
+            <button class="btn btn-link text-dark sectionText" type="button" data-toggle="collapse" data-target="#collapseThree"
+              aria-expanded="true" aria-controls="collapseThree">
+              Tratos excepcionales
+            </button>
+          </h2>
+        </div>
+      
+        <div id="collapseThree" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+          <div class="card-body">
+      
+            <!-- <div *ngIf="this.insumosData.insumo.excepcionales.length > 0" class="row">
+              <div class="col">
+                <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="buscarTrato" id="listSearch">
+              </div>
+            </div> -->
+      
+            <div *ngIf="this.insumosData.insumo.excepcionales.length > 0" class="row mt-3">
+              <div class="col">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Oficina</th>
+                      <th scope="col">inicio</th>
+                      <th scope="col">final</th>
+                      <th scope="col">cantidad</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="let item of this.insumosData.insumo.excepcionales | search: buscarTrato | paginate: { itemsPerPage: 8, currentPage: pExcepcionales, id: 'first' }">
+                      <th scope="row">{{loginData.getNombreOfiAlmacen(item.oficina_id)}}</th>
+                      <td>{{item.inicio}}</td>
+                      <td>{{item.final}}</td>
+                      <td>{{item.cantidad}}</td>
+                      <td>
+                        <button (click)="borrarExcepcional(item.id)" class="btn btn-danger" type="button">✘</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+      
+            <ng-container *ngIf="this.insumosData.insumo.excepcionales.length > 8">
+      
+              <div class="row mt-0 pt-0">
+                <div class="col pt-0">
+                  <hr class="mt-0">
+                </div>
+              </div>
+      
+              <div class="row justify-content-center">
+                <div class="col col-auto">
+                  <pagination-controls previousLabel="Anterior" id="first" nextLabel="Siguiente"
+                    (pageChange)="pExcepcionales = $event">
+                  </pagination-controls>
+                </div>
+              </div>
+      
+            </ng-container>
+      
+            <div *ngIf="this.insumosData.insumo.excepcionales.length == 0" class="row">
+              <div class="col">
+                <h4 class="text-secondary text-center font-italic">...sin elementos...</h4>
+              </div>
+            </div>
+      
+            <div class="row">
+              <div class="col">
+                <hr class="">
+              </div>
+            </div>
+      
+            <div class="row">
+              <div class="col text-right">
+                <button class="btn btn-diputado" data-toggle="modal" data-target="#excepcionalModal">Nuevo excepcional</button>
+              </div>
+            </div>
+      
+          </div>
+        </div>
+      </div>
+      <div class="card">
         <div class="card-header" id="headingTwo">
           <h2 class="mb-0">
             <button class="btn btn-link text-dark sectionText collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo"
@@ -712,6 +798,63 @@
           <div class="col col-auto text-right">
             <button type="button" class="btn btn-diputado"
               data-dismiss="modal">Volver</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- /////////////////////////////////////////////////// -->
+
+<div *ngIf="loginData.almacen" class="modal fade mt-5" id="excepcionalModal" tabindex="-1" role="dialog"
+  aria-labelledby="comentarioStockModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Agregar nuevo trato excepcional:</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col">
+            <label>Oficina:</label>
+            <ng-select [items]="loginData.almacen.oficinas" bindLabel="nombre" bindValue="id"
+              notFoundText='Sin resultados' placeholder="Elegir oficina" [(ngModel)]="excepcionalEnviar.oficina_id">
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="row mt-3">
+          <div class="col">
+            <label>Incio:</label>
+            <input [(ngModel)]="excepcionalEnviar.inicio" name="ini" type="date" class="form-control"
+              id="exampleInputPassword1" placeholder="Minimo">
+          </div>
+          <div class="col">
+            <label>Final:</label>
+            <input [(ngModel)]="excepcionalEnviar.final" name="fin" type="date" class="form-control"
+              id="exampleInputPassword1" placeholder="Maximo">
+          </div>
+          <div class="col">
+            <label>Cantidad:</label>
+            <input [(ngModel)]="excepcionalEnviar.cantidad" name="can" type="number" class="form-control" id="exampleInputPassword1"
+              placeholder="Maximo">
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <div class="row text-right">
+          <div class="col">
+            <button (click)="enviarExcepcional()" data-dismiss="modal" class="btn btn-diputado" type="button">Enviar</button>
+          </div>
+          <div class="col col-auto text-right">
+            <button type="button" class="btn btn-diputado" data-dismiss="modal">Volver</button>
           </div>
         </div>
       </div>
