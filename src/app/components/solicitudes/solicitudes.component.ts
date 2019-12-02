@@ -30,6 +30,8 @@ export class SolicitudesComponent implements OnInit {
 
   buscar: string;
 
+  mostrarEntregadas: boolean = false;
+
   packEvaluar: any[] = [];
 
   p: number = 1;
@@ -55,6 +57,9 @@ export class SolicitudesComponent implements OnInit {
   };
 
   filtrar = () =>{
+    
+    this.mostrarEntregadas = (this.estadoBusqueda == 3) ? true : false
+    
     let resultado = this.pedidos.pedidos
     resultado = this.idBusqueda ? resultado.filter(r => r.pedido_id == this.idBusqueda) : resultado;
     resultado = this.fechaDesde ? resultado.filter(r => this.formatearFecha(r.fecha).getTime() >= this.formatearFecha(this.fechaDesde).getTime()) : resultado;
@@ -150,7 +155,7 @@ export class SolicitudesComponent implements OnInit {
   
   enviarPreparacion = () => {
 
-    if (!Number.isInteger(this.nuevaPreparacion)) {
+    if (!Number.isInteger(this.nuevaPreparacion) || this.nuevaPreparacion < 0) {
       this.toastr.error('no se introducido un tiempo de preparación válido', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-bottom-right'
@@ -174,8 +179,16 @@ export class SolicitudesComponent implements OnInit {
   }
 
   filtrarEstado = (estado) => {
+    this.mostrarEntregadas = false;
     this.limpiar();
     this.estadoBusqueda = estado;
+    this.filtrar();
+  }
+
+  filtrarEntre = () => {
+    this.mostrarEntregadas = true;
+    this.limpiar();
+    this.estadoBusqueda = 3;
     this.filtrar();
   }
   

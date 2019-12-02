@@ -30,6 +30,8 @@ import { SearchOficinaPipe } from './pipes/search-oficina.pipe';
 import { SearchCategoriaPipe } from './pipes/search-categoria.pipe';
 import { SearchPedidoPipe } from './pipes/search-pedido.pipe';
 import { InsumoCategoriaPipe } from './pipes/insumo-categoria.pipe';
+import { SearchTratoPipe } from './pipes/search-trato.pipe';
+import { FiltrarEntregadasPipe } from './pipes/filtrar-entregadas.pipe';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,9 @@ import { InsumoCategoriaPipe } from './pipes/insumo-categoria.pipe';
     SearchOficinaPipe,
     SearchCategoriaPipe,
     SearchPedidoPipe,
-    InsumoCategoriaPipe
+    InsumoCategoriaPipe,
+    SearchTratoPipe,
+    FiltrarEntregadasPipe
   ],
   imports: [
     BrowserModule,

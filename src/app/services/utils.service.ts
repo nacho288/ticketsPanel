@@ -18,7 +18,7 @@ export class UtilsService {
     {
       id: 0,
       nombre: "Pendiente",
-      color: "text-dark"
+      color: "text-primary"
     },
     {
       id: 1,

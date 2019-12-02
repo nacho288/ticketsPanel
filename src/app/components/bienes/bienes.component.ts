@@ -36,6 +36,7 @@ export class BienesComponent implements OnInit {
   pExcepcionales: number = 1;
   buscar: string = "";
   buscarTrato: string = "";
+  buscarExcepcional: string = "";
 
   comentarioStock = "";
 
@@ -126,7 +127,7 @@ export class BienesComponent implements OnInit {
       return;
     }
 
-    if (!Number.isInteger(this.maximo)) {
+    if (!Number.isInteger(this.maximo) || this.maximo < 0) {
       this.toastr.error('no se ha insertado un máximo en rango válido', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-bottom-right'
@@ -134,7 +135,7 @@ export class BienesComponent implements OnInit {
       return;
     }
 
-    if (!Number.isInteger(this.frecuencia)) {
+    if (!Number.isInteger(this.frecuencia) || this.frecuencia <= 0) {
       this.toastr.error('no se ha insertado una frecuencia de pedido válida', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-bottom-right'
@@ -142,7 +143,7 @@ export class BienesComponent implements OnInit {
       return;
     }
 
-    if (!Number.isInteger(this.preparacion)) {
+    if (!Number.isInteger(this.preparacion) || this.preparacion < 0) {
       this.toastr.error('no se ha insertado un tiempo de preparación válido', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-bottom-right'
@@ -158,7 +159,7 @@ export class BienesComponent implements OnInit {
       return;
     }
 
-    if (!Number.isInteger(this.minimo)) {
+    if (!Number.isInteger(this.minimo) || this.minimo < 0) {
       this.toastr.error('no se ha insertado un mínimo por pedido válido', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-bottom-right'
@@ -166,7 +167,7 @@ export class BienesComponent implements OnInit {
       return;
     }
 
-    if (!Number.isInteger(this.stock)) {
+    if (!Number.isInteger(this.stock) || this.stock < 0) {
       this.toastr.error('no se ha insertado una cantidad de stock válida', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-bottom-right'
@@ -174,7 +175,7 @@ export class BienesComponent implements OnInit {
       return;
     }
 
-    if (!Number.isInteger(this.alerta)) {
+    if (!Number.isInteger(this.alerta) || this.alerta < 0) {
       this.toastr.error('no se ha insertado una cantidad mínima por stock valida', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-bottom-right'
@@ -252,7 +253,7 @@ export class BienesComponent implements OnInit {
       return;
     }
 
-    if (!Number.isInteger(this.insumoEdit.maximo)) {
+    if (!Number.isInteger(this.insumoEdit.maximo) || this.maximo < 0) {
       this.toastr.error('no se ha insertado un máximo en rango válido', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-bottom-right'
@@ -260,7 +261,7 @@ export class BienesComponent implements OnInit {
       return;
     }
 
-    if (!Number.isInteger(this.insumoEdit.frecuencia)) {
+    if (!Number.isInteger(this.insumoEdit.frecuencia) || this.frecuencia <= 0) {
       this.toastr.error('no se ha insertado una frecuencia de pedido válida', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-bottom-right'
@@ -268,7 +269,7 @@ export class BienesComponent implements OnInit {
       return;
     }
 
-    if (!Number.isInteger(this.insumoEdit.preparacion)) {
+    if (!Number.isInteger(this.insumoEdit.preparacion) || this.preparacion < 0) {
       this.toastr.error('no se ha insertado un tiempo de preparación válido', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-bottom-right'
@@ -284,7 +285,7 @@ export class BienesComponent implements OnInit {
       return;
     }
 
-    if (!Number.isInteger(this.insumoEdit.minimo)) {
+    if (!Number.isInteger(this.insumoEdit.minimo) || this.minimo < 0) {
       this.toastr.error('no se ha insertado un mínimo por pedido válido', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-bottom-right'
@@ -292,7 +293,7 @@ export class BienesComponent implements OnInit {
       return;
     }
 
-    if (!Number.isInteger(this.insumoEdit.alerta)) {
+    if (!Number.isInteger(this.insumoEdit.alerta) || this.alerta < 0) {
       this.toastr.error('no se ha insertado una cantidad mínima por stock valida', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-bottom-right'
@@ -319,7 +320,7 @@ export class BienesComponent implements OnInit {
       return;
     }
 
-    if (!Number.isInteger(this.tratoEnviar.maximo)) {
+    if (!Number.isInteger(this.tratoEnviar.maximo) || this.tratoEnviar.maximo < 0) {
       this.toastr.error('no se ha insertado un número máximo válido', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-bottom-right'
@@ -327,8 +328,8 @@ export class BienesComponent implements OnInit {
       return;
     }
 
-    if (!Number.isInteger(this.tratoEnviar.minimo)) {
-      this.toastr.error('no se ha insertado un número minimo válido', 'Error', {
+    if (!Number.isInteger(this.tratoEnviar.minimo) || this.tratoEnviar.minimo < 0) {
+      this.toastr.error('no se ha insertado un número mínimo válido', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-bottom-right'
       });
@@ -365,7 +366,7 @@ export class BienesComponent implements OnInit {
       return;
     }
 
-    if (!Number.isInteger(this.excepcionalEnviar.cantidad)) {
+    if (!Number.isInteger(this.excepcionalEnviar.cantidad) || this.excepcionalEnviar.cantidad < 0) {
       this.toastr.error('no se ha insertado una cantidad valida', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-bottom-right'
@@ -387,7 +388,7 @@ export class BienesComponent implements OnInit {
 
   updateStock = () => {
 
-    if (!Number.isInteger(this.insumoStock.stock)) {
+    if (!Number.isInteger(this.insumoStock.stock) || this.insumoStock.stock < 0) {
       this.toastr.error('no se ha insertado una cantidad de stock válida', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-bottom-right'

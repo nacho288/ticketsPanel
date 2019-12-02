@@ -95,15 +95,20 @@
                   <th style="width: 70%" scope="col">Nombre</th>
                   <th class="text-center" scope="col">Subcategorias</th>
                   <th class="text-center" scope="col">Editar</th>
+                  <th class="text-center" scope="col">Eliminar</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let item of this.categoriasData.categorias | searchCategoria: buscar | paginate: { itemsPerPage: 8, currentPage: p }">
+                <tr *ngFor="let item of this.categoriasData.categorias | searchCategoria: buscar | paginate: { itemsPerPage: 8, currentPage: p, id: 'first' }">
                   <td>{{item.nombre}}</td>
-                  <td class="text-center"><button class="btn btn-sm btn-diputado " (click)="toSub(item.id)" data-toggle="modal"
-                      data-target="#subModal">≡</button></td>
+                  <td class="text-center"><button class="btn btn-sm btn-diputado " (click)="toSub(item.id)">≡</button></td>
                   <td class="text-center"><button class="btn btn-sm btn-diputado" (click)="toEditarCat(item.nombre , item.id)" 
                     data-toggle="modal" data-target="#catModal">≡</button></td>
+                  <td class="text-center">
+                    <button *ngIf="item.subcategorias.length == 0" (click)="eliminarCategoria(item.id)" class="btn btn-danger btn-sm" type="button">X</button>
+                    <button *ngIf="item.subcategorias.length > 0" (click)="errorCategoaria()" class="btn btn-secondary btn-sm"
+                      type="button">X</button>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -121,7 +126,7 @@
           
           <div class="row justify-content-center">
             <div class="col col-auto">
-              <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event"></pagination-controls>
+              <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event" id="first"></pagination-controls>
             </div>
           </div>
         
@@ -132,29 +137,183 @@
 </div>
 
 <!-- ////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////// -->
 
-<div class="modal fade mt-3" id="subModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel"
+
+<div *ngIf="!categoriasData.loading && categoriasData.ventana == 2"
+  class="row justify-content-center mt-5 animated fadeIn">
+
+  <div class="col col-md-8 col-lg-6 bg-white rounded shadow-sm p-4">
+    <div class="row">
+      <div class="col col-auto">
+        <h2>Subcategorias: {{this.categoriasData.categorias[this.catSubId].nombre}}</h2>
+      </div>
+      <div class="col text-right">
+        <button class="btn btn-diputado" data-toggle="collapse" href="#collapseAnadirSub" role="button"
+          aria-expanded="false" aria-controls="collapseAnadirSub">Agregar</button>
+      </div>
+    </div>
+
+    <div class="collapse" id="collapseAnadirSub">
+      <div class="row">
+        <div class="col">
+          <hr>
+        </div>
+      </div>
+
+      <div class="row px-3">
+        <div class="col border rounded pt-3">
+
+          <div class="row">
+            <div class="col col-auto">
+              <h4>Añadir Subcategoria:</h4>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <hr class="my-0">
+            </div>
+          </div>
+
+          <div class="row justify-content-lg-between align-items-center mt-3">
+            <div class="col">
+              <div class="form-group">
+                <label for="inputCategoria">Nombre</label>
+                <input [(ngModel)]="nombreCrearSub" name="crearSeub" type="text" class="form-control" id="inputSb"
+                  placeholder="Nombre">
+              </div>
+            </div>
+            <div class="col text-right">
+              <button (click)="crearSub(this.categoriasData.categorias[this.catSubId].id)" class="btn btn-diputado">Enviar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-container *ngIf="this.categoriasData.categorias[this.catSubId].subcategorias.length == 0">
+
+      <div class="row">
+        <div class="col">
+          <hr>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <h4 class="text-secondary text-center font-italic">...sin elementos...</h4>
+        </div>
+      </div>
+
+    </ng-container>
+
+
+    <ng-container *ngIf="this.categoriasData.categorias.length > 0">
+
+      <div class="row">
+        <div class="col">
+          <hr class="">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="buscarSub" id="listSearch">
+        </div>
+      </div>
+
+    </ng-container>
+
+
+    <div class="row mt-3" *ngIf="this.categoriasData.categorias[this.catSubId].subcategorias.length > 0">
+
+      <div class="col">
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width: 70%" scope="col">Nombre</th>
+              <th class="text-center" scope="col">Bienes</th>
+              <th class="text-center" scope="col">Editar</th>
+              <th class="text-center" scope="col">Eliminar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of this.categoriasData.categorias[this.catSubId].subcategorias | searchCategoria: buscarSub | paginate: { itemsPerPage: 7, currentPage: p2, id: 'second' }">
+              <td>{{item.nombre}}</td>
+              <td class="text-center"><button class="btn btn-sm btn-diputado " (click)="toBienes(item)"
+                  data-toggle="modal" data-target="#bienesModal">≡</button></td>
+              <td class="text-center"><button class="btn btn-sm btn-diputado"
+                  (click)="toEditarSub(item.nombre , item.id)" data-toggle="modal" data-target="#editSubModal">≡</button>
+              </td>
+              <td class="text-center">
+                <button *ngIf="item.productos.length == 0" (click)="eliminarSubcategoria(item.id)"
+                  class="btn btn-danger btn-sm" type="button">X</button>
+                <button *ngIf="item.productos.length > 0" (click)="errorSub()"
+                  class="btn btn-secondary btn-sm" type="button">X</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <ng-container *ngIf="this.categoriasData.categorias[this.catSubId].subcategorias.length > 7">
+
+      <div class="row mt-0 pt-0">
+        <div class="col pt-0">
+          <hr class="mt-0">
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col col-auto">
+          <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p2 = $event" id="second">
+          </pagination-controls>
+        </div>
+      </div>
+
+    </ng-container>
+
+        <div class="row mt-0">
+          <div class="col">
+            <hr class="mt-0">
+          </div>
+        </div>
+        
+        <div class="row ">
+          <div class="col text-center">
+            <button class="btn btn-diputado" (click)="volver()">Volver</button>
+          </div>
+        </div>
+
+  </div>
+
+</div>
+
+<!-- ////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////// -->
+
+<div class="modal fade mt-3" id="bienesModal" tabindex="-1" role="dialog" aria-labelledby="bienesModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 *ngIf="this.categoriasData.categorias[this.catSubId]" class="modal-title" id="exampleModalLabel">
-          {{this.categoriasData.categorias[this.catSubId].nombre}}</h5>
+        <h5 *ngIf="this.productosSub" class="modal-title" id="bienesModalLabel">
+          Bienes de {{this.productosSub.nombre}}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
 
-        <ng-container *ngIf="this.categoriasData.categorias[this.catSubId]">
+        <ng-container *ngIf="this.productosSub">
 
-          <div class="row">
-            <div class="col">
-              <h5>Subcategorias:</h5>
-            </div>
-          </div>
-
-          <ng-container *ngIf="this.categoriasData.categorias[this.catSubId].subcategorias.length == 0">
+          <ng-container *ngIf="this.productosSub.productos.length == 0">
             <div class="row mt-3">
               <div class="col">
                 <hr class="mb-3 mt-0">
@@ -162,17 +321,17 @@
             </div>
             <div class="row mb-3">
               <div class="col text-center">
-                <h5 class="text-secondary font-weight-bold">(Sin subcategorias)</h5>
+                <h5 class="text-secondary font-weight-bold">(Sin bienes)</h5>
               </div>
             </div>
           </ng-container>
 
-          <div *ngIf="this.categoriasData.categorias[this.catSubId].subcategorias.length > 0" class="row mt-2">
+          <div *ngIf="this.productosSub.productos.length > 0" class="row mt-2">
             <div class="col">
 
               <table class="table mb-0">
                 <tbody>
-                  <tr *ngFor="let subcategoria of this.categoriasData.categorias[this.catSubId].subcategorias | paginate: { itemsPerPage: 7, currentPage: p2 }">
+                  <tr *ngFor="let subcategoria of productosSub.productos | paginate: { itemsPerPage: 8, currentPage: p3, id: 'third' }">
                     <td><h5>➤ {{subcategoria.nombre}}</h5></td>
                   </tr>
                 </tbody>
@@ -181,7 +340,7 @@
             </div>
           </div>
 
-          <ng-container *ngIf="this.categoriasData.categorias[this.catSubId].subcategorias.length > 7">
+          <ng-container *ngIf="productosSub.productos.length > 8">
           
             <div class="row mt-0 pt-0">
               <div class="col pt-0">
@@ -191,7 +350,7 @@
           
             <div class="row justify-content-center">
               <div class="col col-auto">
-                <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p2 = $event">
+                <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p3 = $event" id='third'>
                 </pagination-controls>
               </div>
             </div>
@@ -199,24 +358,6 @@
           </ng-container>
 
         </ng-container>
-
-        <div class="row">
-          <div class="col">
-            <hr class="mb-3 mt-0">
-          </div>
-        </div>
-
-        <div class="row align-items-center py-0">
-          <div class="col col-auto">
-            <div class="form-group my-0 py-0">
-              <input [(ngModel)]="nombreCrearSub" class="form-control my-0"  name="crearSub" type="text" placeholder="Nueva subcategoria">
-            </div>
-          </div>
-          <div class="col text-right">
-            <button data-dismiss="modal" type="button" (click)="crearSub(this.categoriasData.categorias[this.catSubId].id)"
-              class="btn btn-diputado my-0">Añadir</button>
-          </div>
-        </div>
 
       </div>
       <div class="modal-footer">
@@ -247,6 +388,33 @@
       </div>
       <div class="modal-footer">
         <button type="button" (click)="editarCategoria()" class="btn btn-diputado" data-dismiss="modal">guardar</button>
+        <button type="button" class="btn btn-diputado" data-dismiss="modal">cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ////////////////////// -->
+
+<div class="modal fade" id="editSubModal" tabindex="-1" role="dialog" aria-labelledby="editSubModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editSubModalLabel">Editar Subategoria</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="inputCategoria">Nombre</label>
+          <input [(ngModel)]="nombreEditarSub" name="editarSub" type="text" class="form-control" id="inputEditSub"
+            placeholder="Nombre">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" (click)="editarSub()" class="btn btn-diputado" data-dismiss="modal">guardar</button>
         <button type="button" class="btn btn-diputado" data-dismiss="modal">cerrar</button>
       </div>
     </div>

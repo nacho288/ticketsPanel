@@ -18,9 +18,9 @@ import { OficinasDataService } from './oficinas-data.service';
 })
 export class ConectionsService {
 
-  /* serverUrl: string = "https://server-tickets-panel.herokuapp.com/api"; */
+  serverUrl: string = "https://server-tickets-panel.herokuapp.com/api";
 
-  serverUrl: string = "http://127.0.0.1:8000/api";
+ /*  serverUrl: string = "http://127.0.0.1:8000/api"; */
 
   list: any[];
 
@@ -642,6 +642,29 @@ export class ConectionsService {
 
   };
 
+  deleteCategoria = (id) => {
+
+    this.categorias.loading = true;
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': 'Bearer ' + this.loginData.token
+      }),
+      params: new HttpParams().set('almacene_id', this.loginData.almacen_id)
+    };
+
+    this.http.delete(this.serverUrl + '/auth/categorias/' + id, httpOptions)
+      .subscribe((res: any) => {
+        if (!res.error) {
+          this.exito();
+        } else {
+          this.fracaso();
+        }
+        this.getCategorias();
+      });
+
+  }
+
   sendSubcategoria = (nombre, categoria_id) => {
 
     this.categorias.loading = true;
@@ -671,6 +694,29 @@ export class ConectionsService {
 
   };
 
+  deleteSubcategoria = (id) => {
+
+    this.categorias.loading = true;
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': 'Bearer ' + this.loginData.token
+      }),
+      params: new HttpParams().set('almacene_id', this.loginData.almacen_id)
+    };
+
+    this.http.delete(this.serverUrl + '/auth/subcategorias/' + id, httpOptions)
+      .subscribe((res: any) => {
+        if (!res.error) {
+          this.exito();
+        } else {
+          this.fracaso();
+        }
+        this.getCategorias();
+      });
+
+  }
+
   updateCategoria = (nombre, categoria_id) => {
 
     this.categorias.loading = true;
@@ -695,6 +741,34 @@ export class ConectionsService {
         }
           console.log(res);
           this.getCategorias();
+      }
+      );
+
+  };
+
+  updateSub = (nombre, id) => {
+
+    this.categorias.loading = true;
+
+    let categoria = {
+      nombre: nombre,
+      almacene_id: this.loginData.almacen_id
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': 'Bearer ' + this.loginData.token
+      })
+    };
+
+    this.http.put(this.serverUrl + '/auth/subcategorias/' + id,
+      categoria, httpOptions)
+      .subscribe((res: any) => {
+        if (!res.error) {
+          this.exito();
+        }
+        console.log(res);
+        this.getCategorias();
       }
       );
 

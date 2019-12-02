@@ -51,6 +51,17 @@
   color: white;
 }
 
+.btn-outline-primary{
+
+    border-color: #0e2d70;
+    color: #0e2d70;
+}
+.btn-outline-primary:hover{
+    background-color: #0e2d70;
+    border-color: #0e2d70;
+    color: #ffffff;
+}
+
 .sectionText {
   font-size: 22px;
 }

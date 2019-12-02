@@ -109,17 +109,17 @@
     <div class="row my-0 mx-2 justify-content-between">
       
       <div class="col px-1">
-        <button (click)="filtrarEstado(0)" type="button" class="btn btn-outline-dark btn-block">
+        <button (click)="filtrarEstado(0)" type="button" class="btn btn-outline-primary btn-block">
           Pendientes: {{cantidadEstado(0)}}
         </button>
       </div>
       <div class="col px-1">
-        <button (click)="filtrarEstado(1)" type="button" class="btn btn-outline-dark btn-block">
+        <button (click)="filtrarEstado(1)" type="button" class="btn btn-outline-primary btn-block">
           Aprobadas: {{cantidadEstado(1)}}
         </button>
       </div>
       <div class="col px-1">
-        <button (click)="filtrarEstado(5)" type="button" class="btn btn-outline-dark btn-block">
+        <button (click)="filtrarEstado(5)" type="button" class="btn btn-outline-primary btn-block">
           Aprobadas pracialmente: {{cantidadEstado(5)}}
         </button>
       </div>
@@ -129,17 +129,17 @@
     <div class="row mt-3 mb-0 mx-2 justify-content-between">
     
       <div class="col px-1">
-        <button (click)="filtrarEstado(2)" type="button" class="btn btn-outline-dark btn-block">
+        <button (click)="filtrarEstado(2)" type="button" class="btn btn-outline-primary btn-block">
           En proceso: {{cantidadEstado(2)}}
         </button>
       </div>
       <div class="col px-1">
-        <button (click)="filtrarEstado(3)" type="button" class="btn btn-outline-dark btn-block">
+        <button (click)="filtrarEntre()" [ngClass]="mostrarEntregadas ? 'btn-outline-success' : 'btn-outline-secondary'"  type="button" class="btn btn-block">
           Entregadas: {{cantidadEstado(3)}}
         </button>
       </div>
       <div class="col px-1">
-        <button (click)="filtrarEstado(4)" type="button" class="btn btn-outline-dark btn-block">
+        <button (click)="filtrarEstado(4)" type="button" class="btn btn-outline-primary btn-block">
           Canceladas: {{cantidadEstado(4)}}
         </button>
       </div>
@@ -152,7 +152,7 @@
       </div>
     </div>
 
-    <ng-container *ngIf="pedidos.pedidosFiltrados.length > 0">
+
     
       <div class="row mb-3">
         <div class="col ">
@@ -163,7 +163,7 @@
         </div>
       </div>
     
-    </ng-container>
+
 
 
     <div *ngIf="pedidos.pedidosFiltrados.length == 0" class="row justify-content-center mt-0">
@@ -194,11 +194,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of pedidos.pedidosFiltrados | searchPedido: buscar | paginate: { itemsPerPage: 7, currentPage: p }">
+            <tr *ngFor="let item of pedidos.pedidosFiltrados | filtrarEntregadas: mostrarEntregadas | searchPedido: buscar | paginate: { itemsPerPage: 7, currentPage: p }">
               <th scope="row">{{item.pedido_id}}</th>
               <td *ngIf="login.type == 0">{{item.almacen}}</td>
               <td>{{utils.parseDate(item.fecha)}}</td>
-              <td [class]="utils.getColor(item.estado)">{{utils.getEstado(item.estado)}}</td>
+              <td [class]="login.type == 1 ? utils.getColor(item.estado) : 'text-dark'">{{utils.getEstado(item.estado)}}</td>
               <td *ngIf="login.type != 0">{{item.user}}</td>
               <td *ngIf="login.type != 0">{{item.oficina}}</td>
               <td *ngIf="login.type == 0">
@@ -484,7 +484,7 @@
 
 <ng-container *ngIf="pedidos.ventana == 3">
   <div class="row mt-5 justify-content-center animated fadeIn">
-    <div class="col col-lg-7 p-4 rounded bg-light mt-3">
+    <div class="col col-lg-5 p-4 rounded bg-light mt-3">
 
       <div class="row">
         <div class="col">

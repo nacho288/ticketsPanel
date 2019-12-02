@@ -62,7 +62,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of this.insumosData.insumos | search: buscar | paginate: { itemsPerPage: 7, currentPage: p }">
+              <tr *ngFor="let item of this.insumosData.insumos | search: buscar | paginate: { itemsPerPage: 7, currentPage: p, id: 'primero'  }">
                 <th scope="row">{{item.codigo}}</th>
                 <td>{{item.nombre}}</td>
                 <ng-container *ngIf="item.subcategoria">
@@ -90,7 +90,7 @@
       
       <div class="row justify-content-center">
         <div class="col col-auto">
-          <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event"></pagination-controls>
+          <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event" id="primero"></pagination-controls>
         </div>
       </div>
 
@@ -445,7 +445,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr *ngFor="let item of this.insumosData.insumo.tratos | search: buscarTrato | paginate: { itemsPerPage: 8, currentPage: pTratos, id: 'first' }">
+                        <tr *ngFor="let item of this.insumosData.insumo.tratos | searchTrato: buscarTrato | paginate: { itemsPerPage: 7, currentPage: pTratos, id: 'segundo' }">
                           <th scope="row">{{loginData.getNombreOfiAlmacen(item.oficina_id)}}</th>
                           <td>{{item.minimo}}</td>
                           <td>{{item.maximo}}</td>
@@ -458,7 +458,7 @@
                   </div>
                 </div>
 
-                <ng-container *ngIf="this.insumosData.insumo.tratos.length > 8">
+                <ng-container *ngIf="this.insumosData.insumo.tratos.length > 7">
                 
                   <div class="row mt-0 pt-0">
                     <div class="col pt-0">
@@ -468,7 +468,7 @@
                 
                   <div class="row justify-content-center">
                     <div class="col col-auto">
-                      <pagination-controls previousLabel="Anterior" id="first" nextLabel="Siguiente" (pageChange)="pTratos = $event">
+                      <pagination-controls previousLabel="Anterior" id="segundo" nextLabel="Siguiente" (pageChange)="pTratos = $event">
                       </pagination-controls>
                     </div>
                   </div>
@@ -510,11 +510,11 @@
         <div id="collapseThree" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
           <div class="card-body">
       
-            <!-- <div *ngIf="this.insumosData.insumo.excepcionales.length > 0" class="row">
+            <div *ngIf="this.insumosData.insumo.excepcionales.length > 0" class="row">
               <div class="col">
-                <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="buscarTrato" id="listSearch">
+                <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="buscarExcepcional" id="listSearch">
               </div>
-            </div> -->
+            </div>
       
             <div *ngIf="this.insumosData.insumo.excepcionales.length > 0" class="row mt-3">
               <div class="col">
@@ -530,7 +530,7 @@
                   </thead>
                   <tbody>
                     <tr
-                      *ngFor="let item of this.insumosData.insumo.excepcionales | search: buscarTrato | paginate: { itemsPerPage: 8, currentPage: pExcepcionales, id: 'first' }">
+                      *ngFor="let item of this.insumosData.insumo.excepcionales | searchTrato: buscarExcepcional | paginate: { itemsPerPage: 7, currentPage: pExcepcionales, id: 'tercero' }">
                       <th scope="row">{{loginData.getNombreOfiAlmacen(item.oficina_id)}}</th>
                       <td>{{item.inicio}}</td>
                       <td>{{item.final}}</td>
@@ -544,7 +544,7 @@
               </div>
             </div>
       
-            <ng-container *ngIf="this.insumosData.insumo.excepcionales.length > 8">
+            <ng-container *ngIf="this.insumosData.insumo.excepcionales.length > 7">
       
               <div class="row mt-0 pt-0">
                 <div class="col pt-0">
@@ -554,7 +554,7 @@
       
               <div class="row justify-content-center">
                 <div class="col col-auto">
-                  <pagination-controls previousLabel="Anterior" id="first" nextLabel="Siguiente"
+                  <pagination-controls previousLabel="Anterior" id="tercero" nextLabel="Siguiente"
                     (pageChange)="pExcepcionales = $event">
                   </pagination-controls>
                 </div>
@@ -614,7 +614,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let item of this.insumosData.insumo.movimientos | paginate: { itemsPerPage: 8, currentPage: pStock, id: 'second' }">
+                    <tr *ngFor="let item of this.insumosData.insumo.movimientos | paginate: { itemsPerPage: 7, currentPage: pStock, id: 'cuarto' }">
                       <th>{{utils.parseDate(item.fecha)}}</th>
                       <td><ng-container *ngIf="item.tipo != 0">{{item.original}}</ng-container></td>
                       <td>{{item.nuevo}}</td>
@@ -632,7 +632,7 @@
               </div>
             </div>
 
-            <ng-container *ngIf="this.insumosData.insumo.movimientos.length > 8">
+            <ng-container *ngIf="this.insumosData.insumo.movimientos.length > 7">
             
               <div class="row mt-0 pt-0">
                 <div class="col pt-0">
@@ -642,7 +642,7 @@
             
               <div class="row justify-content-center">
                 <div class="col col-auto">
-                  <pagination-controls previousLabel="Anterior" id="second" nextLabel="Siguiente" (pageChange)="pStock = $event">
+                  <pagination-controls previousLabel="Anterior" id="cuarto" nextLabel="Siguiente" (pageChange)="pStock = $event">
                   </pagination-controls>
                 </div>
               </div>
