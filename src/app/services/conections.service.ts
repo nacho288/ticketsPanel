@@ -12,6 +12,7 @@ import { UsuariosDataService } from './usuarios-data.service';
 import { CategoriasDataService } from './categorias-data.service';
 import { AlmacenesDataService } from './almacenes-data.service';
 import { OficinasDataService } from './oficinas-data.service';
+import { UtilsService } from './utils.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class ConectionsService {
 
   serverUrl: string = "https://server-tickets-panel.herokuapp.com/api";
 
- /*  serverUrl: string = "http://127.0.0.1:8000/api"; */
+/*   serverUrl: string = "http://127.0.0.1:8000/api"; */
 
   list: any[];
 
@@ -35,7 +36,8 @@ export class ConectionsService {
     private pedidos: PedidosDataService,
     private usuarios: UsuariosDataService,
     private almacenes: AlmacenesDataService,
-    private oficinas: OficinasDataService
+    private oficinas: OficinasDataService,
+    private utils: UtilsService
     ) { 
   }
 
@@ -1387,6 +1389,30 @@ export class ConectionsService {
       });
 
   }
+
+
+    formatearCodigos = () => {
+
+      this.utils.scriptLoading = true;
+    
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Authorization': 'Bearer ' + this.loginData.token,
+        })
+      };
+    
+      this.http.get(this.serverUrl + '/auth/formatear/', httpOptions).subscribe((res: any) => {
+        
+        this.utils.scriptLoading = false;
+
+        if (!res.error) {
+          this.exito();
+        } else {
+          this.fracaso();
+        }
+      });
+      
+    }
 
   }
 

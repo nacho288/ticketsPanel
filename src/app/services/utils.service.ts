@@ -70,6 +70,8 @@ export class UtilsService {
   getEstadoProducto = (id) => this.estadosProducto.find(e => e.id == id).nombre;
   getColorProducto = (id) => this.estadosProducto.find(e => e.id == id).color;
   
+  scriptLoading = false;
+
   constructor() { }
 }
 

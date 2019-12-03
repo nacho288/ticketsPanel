@@ -1,0 +1,72 @@
+<app-loading *ngIf="utils.scriptLoading"></app-loading>
+
+<div class="row my-4">
+</div>
+
+<div *ngIf="!utils.scriptLoading" class="row mt-4 justify-content-center animated fadeIn">
+  <div class="col col-lg-4 bg-white shadow-sm rounded">
+
+    <div class="row">
+      <div class="col">
+        <h1 class="display-4 text-center mt-4">Utilidades</h1>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <p class="lead text-center my-0">Scripts y herramientas para la base de datos</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <hr class="mx-2">
+      </div>
+    </div>
+
+    <div class="row justify-content-center mb-4">
+      <div class="col col-auto">
+        <div class="row justify-content-center">
+          <button class="btn btn-diputado btn-lg btn-block text-uppercase mb-3" data-toggle="modal" data-target="#exampleModal">
+            Formatear codigos
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Aviso</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+        <p>
+          Se modificarán los códigos de todos los bienes cargados en la base de datos para que coincidan con el formato
+          establecido. <br><br>Este proceso puede ser largo y se recomienda hacer un respaldo antes de correrlo.
+        </p>
+         
+      </div>
+      <div class="modal-footer">
+        <div class="row">
+          <div class="col text-left">
+            <button type="button" (click)="formatearCodigos()" class="btn btn-diputado" data-dismiss="modal">Confirmar</button>
+          </div>
+          <div class="col text-right">
+            <button type="button" class="btn btn-diputado" data-dismiss="modal">Volver</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -48,6 +48,7 @@ export class SolicitudesComponent implements OnInit {
   }
 
   limpiar = () => {
+    this.mostrarEntregadas = false;
     this.pedidos.pedidosFiltrados = this.pedidos.pedidos;
     this.idBusqueda = undefined;
     this.fechaDesde = undefined;
