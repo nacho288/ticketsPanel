@@ -38,6 +38,8 @@ export class BienesComponent implements OnInit {
   buscarTrato: string = "";
   buscarExcepcional: string = "";
 
+  oficinaResumen_id = null;
+
   comentarioStock = "";
 
   insumoEdit ={
@@ -404,5 +406,19 @@ export class BienesComponent implements OnInit {
     this.comentarioStock = this.insumosData.insumo.movimientos[i].comentario;
   }
   
+  getResumen = () => {
+    if (this.oficinaResumen_id) {
+      this.conections.getResumenProducto({
+        oficina_id: this.oficinaResumen_id,
+        producto_id: this.insumosData.insumo.id
+      })
+    }
+  }
+
+  cerrarResumen = () => {
+    this.insumosData.resumen = null;
+    this.insumosData.resumenLoading = false;
+    this.oficinaResumen_id = null;
+  }
   
 }

@@ -660,6 +660,18 @@
       </div>
     </div>
 
+    <div class="row">
+      <div class="col">
+        <button data-toggle="modal" data-target="#resumenModal" type="button" class="btn btn-diputado">Ver relación con oficina</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <hr class="mt-3">
+      </div>
+    </div>
+
     <div class="row ">
       <div class="col text-center">
         <button class="btn btn-diputado" (click)="cambioVentana(1)">Volver</button>
@@ -857,6 +869,141 @@
             <button type="button" class="btn btn-diputado" data-dismiss="modal">Volver</button>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- /////////////////////////////////////////////////// -->
+
+
+<div class="modal fade" id="resumenModal" tabindex="-1" role="dialog" aria-labelledby="resumenModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Resumen con oficina</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+      <div *ngIf="insumosData.resumen == null && !insumosData.resumenLoading" class="row">
+        <div class="col">
+          <label>Oficina:</label>
+          <ng-select *ngIf="loginData.almacen" [items]="loginData.almacen.oficinas" bindLabel="nombre" bindValue="id" notFoundText='Sin resultados'
+            placeholder="Elegir oficina" [(ngModel)]="oficinaResumen_id">
+          </ng-select>
+        </div>
+      </div>
+
+      <div *ngIf="insumosData.resumenLoading" class="row">
+        <div class="col">
+          <h4 class="text-secondary text-center font-italic">... Cargando ...</h4>
+        </div>
+      </div>
+
+      <div *ngIf="insumosData.resumen" class="row mb-2">
+        <div class="col">
+          <h4 class="text-center">{{insumosData.resumen.oficina.nombre}}</h4>
+        </div>
+      </div>
+
+      <div *ngIf="insumosData.resumen" class="row">
+        <div class="col">
+          
+            <table class="table">
+              <tbody>
+                <tr>
+                  <th>Trato especial:</th>
+                  <td>{{insumosData.resumen.trato ? 'Si' : 'No'}}</td>
+                </tr>
+                <tr>
+                  <th>Tratos excepcionales activos:</th>
+                  <td>{{insumosData.resumen.excepcionales ? insumosData.resumen.excepcionales.length : 'Ninguno'}}</td>
+                </tr>
+                <tr *ngIf="insumosData.resumen.excepcionales.length">
+                  <th>Cantidad por tratos excepcionales activos:</th>
+                  <td>{{insumosData.resumen.excepcionalesTotal}}</td>
+                </tr>
+                <tr>
+                  <th>Mínimo ({{insumosData.resumen.trato ? 'con trato especial' : 'base'}}):</th>
+                  <td>{{insumosData.resumen.trato ? insumosData.resumen.trato.minimo : insumosData.resumen.cantidades.minimo}}</td>
+                </tr>
+                <tr>
+                  <th>Máximo ({{insumosData.resumen.trato ? 'con trato especial' : 'base'}}):</th>
+                  <td>{{insumosData.resumen.trato ? insumosData.resumen.trato.maximo : insumosData.resumen.cantidades.maximo}}</td>
+                </tr>
+                <tr *ngIf="insumosData.resumen.excepcionales.length">
+                  <th>Máximo total con excepcionales:</th>
+                  <td>{{insumosData.resumen.total}}</td>
+                </tr>
+                <tr>
+                  <th>Cantidad en pedidos dentro del rango de frecuencia:</th>
+                  <td>{{insumosData.resumen.sumatoriaPedidos}}</td>
+                </tr>
+              </tbody>
+            </table>
+
+        </div>
+      </div>
+
+      <div *ngIf="insumosData.resumen && insumosData.resumen.pedidos.length" class="row">
+        
+        <div class="col">
+          
+              <div class="mt-1" id="accordionResumen">
+                <div class="card">
+                  <div class="card-header" id="headingPedido">
+                    <h2 class="mb-0">
+                      <button class="btn btn-link text-dark sectionText" type="button" data-toggle="collapse"
+                        data-target="#collapsePedidos" aria-expanded="true" aria-controls="collapsePedidos">
+                        Pedidos activos
+                      </button>
+                    </h2>
+                  </div>
+                  <div id="collapsePedidos" class="collapse" aria-labelledby="headingPedido" data-parent="#accordionResumen">
+                    <div class="card-body">
+
+                      <div class="row">
+                        <div class="col">
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th scope="col">Número</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Cantidad</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr
+                                *ngFor="let item of insumosData.resumen.pedidos">
+                                <th>{{item.id}}</th>
+                                <td>{{utils.getEstadoProducto(item.pivot.estado)}}</td>
+                                <td>{{item.pivot.cantidad}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+        </div>
+
+      </div>
+
+
+      </div>
+      <div class="modal-footer">
+        <button  *ngIf="insumosData.resumen == null && !insumosData.loading" 
+         (click)="getResumen()" type="button" class="btn btn-diputado">Consultar</button>
+        <button (click)="cerrarResumen()" type="button" class="btn btn-diputado" data-dismiss="modal">Volver</button>
       </div>
     </div>
   </div>

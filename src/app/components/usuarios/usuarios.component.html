@@ -2,7 +2,7 @@
 
 
 <div *ngIf="!usuarios.loading && usuarios.ventana == 1" class="row justify-content-center mt-5 animated fadeIn">
-  <div class="col col-md-8 col-lg-6 bg-white rounded shadow-sm p-4">
+  <div class="col col-md-11 col-lg-9 bg-white rounded shadow-sm p-4">
 
         <div class="row">
           <div class="col col-auto">
@@ -102,19 +102,24 @@
             </div>
           </div>
 
+        </div>
+
         <div class="row">
           <div class="col">
             <hr>
           </div>
         </div>
 
+        <div class="row">
+          <div class="col">
+            <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="buscar" id="listSearch">
+          </div>
         </div>
 
         <div class="row mt-3">
         
           <div class="col">
             
-            <div class="col">
               <table class="table">
                 <thead>
                   <tr>
@@ -123,10 +128,11 @@
                     <th scope="col">Nombre de usuario</th>
                     <th scope="col">E-mail</th>
                     <th scope="col">Tipo</th>
+                    <th class="text-center" scope="col">Cambiar Cont.</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let usuario of this.usuarios.usuarios">
+                  <tr *ngFor="let usuario of this.usuarios.usuarios | searchUsuario: buscar | paginate: { itemsPerPage: 20, currentPage: p, id: 'primero'}">
                     <th scope="row">{{usuario.id}}</th>
                     <td>{{usuario.name}}</td>
                     <td>{{usuario.username}}</td>
@@ -134,14 +140,73 @@
                     <td *ngIf="usuario.type == 0">Usuario de oficina</td>
                     <td *ngIf="usuario.type == 1">Administrador de almacén</td>
                     <td *ngIf="usuario.type == 9">Super-usuario</td>
+                    <td class="text-center">
+                      <button *ngIf="loginData.id != usuario.id" class="btn btn-sm btn-diputado"
+                        (click)="resetPack.resetId = usuario.id" data-toggle="modal" data-target="#resetModal">≡</button>
+                    </td>
                   </tr>
                 </tbody>
               </table>
-            </div>
-            
+           
           </div>
         
         </div>
+
+        <ng-container *ngIf="this.usuarios.usuarios.length > 20">
+
+          <div class="row mt-0 pt-0">
+            <div class="col pt-0">
+              <hr class="mt-0">
+            </div>
+          </div>
+
+          <div class="row justify-content-center">
+            <div class="col col-auto">
+              <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event" id="primero">
+              </pagination-controls>
+            </div>
+          </div>
+
+        </ng-container>
         
+  </div>
+</div>
+
+
+<div class="modal fade" id="resetModal" tabindex="-1" role="dialog" aria-labelledby="resetModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cambiar contraseña</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label for="password">Contraseña nueva</label>
+              <input [(ngModel)]="resetPack.resetPass" name="resetPassword" type="password" class="form-control" id="resetPassword"
+                placeholder="Contraseña">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label for="rePassword">Confirmar contraseña nueva</label>
+              <input [(ngModel)]="resetPack.resetPass2" name="resetRePassword" type="password" class="form-control"
+                id="resetRePassword" placeholder="Confirmar contraseña">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="sendReset()" type="button" class="btn btn-diputado" data-dismiss="modal">Guardar</button>
+        <button (click)="limpiarReset()" type="button" class="btn btn-diputado" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
   </div>
 </div>

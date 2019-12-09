@@ -82,7 +82,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of this.oficinas.oficinas | searchOficina: buscar | paginate: { itemsPerPage: 8, currentPage: p }">
+              <tr *ngFor="let item of this.oficinas.oficinas | searchOficina: buscar | paginate: { itemsPerPage: 8, currentPage: p, id: 'primero'}">
                 <td>{{item.nombre}}</td>
                 <td class="text-center"><button class="btn btn-sm btn-diputado " 
                   (click)="filtrarUsuarios(item)" data-toggle="modal" data-target="#usuariosModal">≡</button></td>
@@ -105,7 +105,7 @@
     
       <div class="row justify-content-center">
         <div class="col col-auto">
-          <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event">
+          <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event" id="primero">
           </pagination-controls>
         </div>
       </div>
@@ -165,7 +165,7 @@
 
 <div class="modal fade mt-3" id="usuariosModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel"
   aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 *ngIf="this.oficinas.oficinas[this.oficinaUsuariosId]" class="modal-title" id="exampleModalLabel">{{this.oficinas.oficinas[this.oficinaUsuariosId].nombre}}</h5>
@@ -177,11 +177,14 @@
 
         <ng-container *ngIf="this.oficinas.oficinas[this.oficinaUsuariosId]">
 
-          <div class="row">
-              <div class="col">
-                <h5>Usuarios asignados:</h5>
-              </div>
+          <div class="row align-items-center mb-3">
+            <div class="col col-auto">
+              <h5>Usuarios asignados:</h5>
             </div>
+            <div *ngIf="this.oficinas.oficinas[this.oficinaUsuariosId].usuarios.length > 0" class="col text-right">
+              <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="buscar2" id="listSearch">
+            </div>
+          </div>
             
             <ng-container *ngIf="this.oficinas.oficinas[this.oficinaUsuariosId].usuarios.length == 0">
               <div class="row mt-3">
@@ -195,13 +198,13 @@
                 </div>
               </div>
             </ng-container>
-            
+
             <div *ngIf="this.oficinas.oficinas[this.oficinaUsuariosId].usuarios.length > 0" class="row mt-2">
               <div class="col">
             
                 <table class="table mb-0">
                   <tbody>
-                    <tr *ngFor="let usuario of this.oficinas.oficinas[this.oficinaUsuariosId].usuarios">
+                    <tr *ngFor="let usuario of this.oficinas.oficinas[this.oficinaUsuariosId].usuarios | searchUsuarioNombre: buscar2 | paginate: { itemsPerPage: 8, currentPage: p2, id: 'segundo'}">
                       <td>{{usuario.name}}</td>
                       <td class="text-right">
                         <button (click)="quitarUsuario(this.oficinas.oficinas[this.oficinaUsuariosId].id, usuario.id)" data-dismiss="modal" class="btn btn-danger btn-sm">X</button>
@@ -213,6 +216,23 @@
               </div>
             </div>
 
+            <ng-container *ngIf="this.oficinas.oficinas[this.oficinaUsuariosId].usuarios.length > 8">
+            
+              <div class="row mt-0 pt-0">
+                <div class="col pt-0">
+                  <hr class="mt-0">
+                </div>
+              </div>
+            
+              <div class="row justify-content-center">
+                <div class="col col-auto">
+                  <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p2 = $event" id="segundo">
+                  </pagination-controls>
+                </div>
+              </div>
+            
+            </ng-container>
+            
         </ng-container>
         
         <div class="row">
@@ -222,24 +242,24 @@
         </div>
         
         <div class="row">
-          <div *ngIf="listaUsuarios.length > 0"  class="col col-auto">
+          <div *ngIf="listaUsuarios.length > 0"  class="col">
             <div class="form-group">
-              <select [(ngModel)]="usuarioAgregarId" name='usr' class="form-control" id="usuario">
-                <option selected disabled [value]="null">Asignar nuevo usuario</option>
-                <option *ngFor="let item of listaUsuarios" value="{{item.id}}">{{item.name}}</option>
-              </select>
+              <ng-select [items]="listaUsuarios" bindLabel="name" bindValue="id" notFoundText='Sin resultados'
+                placeholder="Asignar nuevo usuario" [(ngModel)]="usuarioAgregarId">
+              </ng-select>
             </div>
           </div>
-          <div class="col text-right">
+          <div class="col col-auto">
             <h5 *ngIf="listaUsuarios.length == 0" class="text-center text-secondary font-italic">No hay mas usuarios para asignar</h5>
-            <button data-dismiss="modal" type="button" *ngIf="listaUsuarios.length > 0" (click)="agregarUsuario()" class="btn btn-diputado"
-              >Asignar</button>
+            <button data-dismiss="modal" type="button" *ngIf="listaUsuarios.length > 0" (click)="agregarUsuario(); buscar2 = ''" class="btn btn-diputado">
+              Asignar
+            </button>
           </div>
         </div>
-        
+       
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-diputado" data-dismiss="modal">Volver</button>
+        <button type="button" (click)="buscar2 = ''" class="btn btn-diputado" data-dismiss="modal">Volver</button>
       </div>
     </div>
   </div>

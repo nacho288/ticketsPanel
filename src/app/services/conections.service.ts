@@ -21,7 +21,7 @@ export class ConectionsService {
 
   serverUrl: string = "https://server-tickets-panel.herokuapp.com/api";
 
-/*   serverUrl: string = "http://127.0.0.1:8000/api"; */
+  /* serverUrl: string = "http://127.0.0.1:8000/api"; */
 
   list: any[];
 
@@ -85,6 +85,35 @@ export class ConectionsService {
         this.getUsuarios('all');
         }
         this.usuarios.loading = false;
+      }
+      );
+
+  }
+
+  resetPassword = (pack) => {
+
+    this.usuarios.loading = true;
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': 'Bearer ' + this.loginData.token
+      })
+    };
+
+    let packEnviar = {
+      userMod_id: pack.resetId,
+      password: pack.resetPass,
+      password_confirmation: pack.resetPass2
+    }
+
+    this.http.post(this.serverUrl + '/auth/reset', packEnviar, httpOptions)
+      .subscribe((res: any) => {
+        if (res.error) {
+          this.fracaso();
+        } else {
+          this.exito();
+        }
+        this.getUsuarios('all');
       }
       );
 
@@ -873,14 +902,38 @@ export class ConectionsService {
 
     this.http.get(this.serverUrl + '/auth/productos/' + id, httpOptions).subscribe((res: any) => {
       if (!res.error) {
-        console.log('wwww');
         console.log(res);
-        
         this.insumos.insumo = res;
       }
       this.insumos.loading = false;
     });
   }
+
+  getResumenProducto = (pack) => {
+
+    console.log(pack);
+    
+
+    this.insumos.resumen = null;
+    this.insumos.resumenLoading = true;
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': 'Bearer ' + this.loginData.token
+      }),
+      params: new HttpParams().set('oficina_id', pack.oficina_id)
+        .set('producto_id', pack.producto_id)
+    };
+
+    this.http.get(this.serverUrl + '/auth/resumen/', httpOptions).subscribe((res: any) => {
+      console.log(res);
+      if (!res.error) {
+        this.insumos.resumen = res;
+      }
+      this.insumos.resumenLoading = false;
+    });
+  }
+
 
   deleteProduct = (id) => {
 

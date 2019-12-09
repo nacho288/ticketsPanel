@@ -253,7 +253,7 @@
                 <tbody>
                   <tr *ngFor="let administrador of this.almacenes.almacenes[this.AlmacenAdminsId].administradores">
                     <td>{{administrador.name}}</td>
-                    <td class="text-center">
+                    <td class="text-right">
                       <button data-dismiss="modal"
                         (click)="quitarAdmin(this.almacenes.almacenes[this.AlmacenAdminsId].id, administrador.id)"
                         class="btn btn-danger btn-sm">X</button>
@@ -274,16 +274,15 @@
         </div>
 
         <div class="row">
-          <div *ngIf="listaAdmins.length > 0" class="col col-auto">
+          <div *ngIf="listaAdmins.length > 0" class="col">
             <div class="form-group">
-              <select [(ngModel)]="adminAgregarId" name='adm' class="form-control" id="adm">
-                <option selected disabled [value]="null">Seleccionar administrador</option>
-                <option *ngFor="let item of listaAdmins" value="{{item.id}}">{{item.name}}</option>
-              </select>
+              <ng-select [items]="listaAdmins" bindLabel="name" bindValue="id" notFoundText='Sin resultados'
+                placeholder="Seleccionar administrador" [(ngModel)]="adminAgregarId">
+              </ng-select>
             </div>
           </div>
-          <div class="col text-right">
-            <h5 *ngIf="listaAdmins.length == 0" class="text-center text-secondary font-italic">No hay mas administradores para
+          <div class="col col-auto text-right">
+            <h5 *ngIf="listaAdmins.length == 0" class="text-center text-secondary font-italic">... No hay mas administradores para
               asignar
             </h5>
             <button data-dismiss="modal" type="button" *ngIf="listaAdmins.length > 0" (click)="agregarAdmin()"

@@ -13,7 +13,9 @@ import { OficinasDataService } from './../../services/oficinas-data.service';
 export class OficinasComponent implements OnInit {
 
   p: number = 1;
+  p2: number = 1;
   buscar: string = "";
+  buscar2: string = "";
 
   nombreCrear: string = "";
   listaUsuarios: any[] = [];

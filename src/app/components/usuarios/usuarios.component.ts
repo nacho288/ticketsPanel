@@ -21,6 +21,16 @@ export class UsuariosComponent implements OnInit {
     type: null
   }
 
+  buscar: string = '';
+
+  resetPack = {
+    resetId: null,
+    resetPass: null,
+    resetPass2: null,
+  }
+
+  p: number = 1;
+
   constructor(
     private conections: ConectionsService,
     public usuarios: UsuariosDataService,
@@ -90,15 +100,33 @@ export class UsuariosComponent implements OnInit {
     
   }
 
-  page = 1;
-  pageSize = 4;
-  collectionSize = this.usuarios.usuarios.length;
-
-  get usuariosLista(){
-    return this.usuarios.usuarios
-      .map((usuario, i) => ({ id: i + 1, ...usuario }))
-      .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
+  limpiarReset = () => {
+    this.resetPack = {
+      resetId: null,
+      resetPass: null,
+      resetPass2: null,
+    }
   }
-  
+
+  sendReset = () => {
+
+    if (!this.resetPack.resetPass) {
+      this.toastr.error('no se ha insertado ninguna contraseña', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
+    if (this.resetPack.resetPass != this.resetPack.resetPass2) {
+      this.toastr.error('la confirmación de contraseña no es correcta', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+    this.conections.resetPassword(this.resetPack);
+    this.limpiarReset();
+  }
 
 }

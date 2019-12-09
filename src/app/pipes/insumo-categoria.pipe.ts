@@ -7,15 +7,21 @@ export class InsumoCategoriaPipe implements PipeTransform {
 
   transform(value: any, args?: any): any {
 
-    console.log(args);
-    
 
     if (!value) return null;
-    if (args == null) return value;
 
-    return value.filter(function (item) {
+    let filtrado = value.map(item => {
+      item.disabled = item.stock == 0 ? true : false;
+      return item;
+    });
+
+    if (args == null) return filtrado;
+
+    let filtrado2 = filtrado.filter(function (item) {
       return item.subcategoria_id == args;
     });
+       
+    return filtrado2;
   }
 
 }

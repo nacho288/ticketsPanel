@@ -20,5 +20,8 @@ export class InsumosDataService {
 
   insumosAlerta: any[] = [];
 
+  resumen: any = null;
+  resumenLoading: boolean = false;
+
   constructor() { }
 }
