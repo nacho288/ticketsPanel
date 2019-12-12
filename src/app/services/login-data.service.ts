@@ -26,8 +26,6 @@ export class LoginDataService {
   almacen: any;
   oficina: any;
 
-
-
  /*  logged: Boolean = true;
   type: number = 0;
   id: number = 1;
@@ -44,10 +42,8 @@ export class LoginDataService {
   oficinaLogin: any;
  */
   
-
   getNombreAdminAlmacen = (id) => this.almacen.administradores.find((a) => a.id == id).name;
   getNombreOfiAlmacen = (id) => this.almacen.oficinas.find((o) => o.id == id).nombre;
-
 
   constructor() { }
 }

@@ -911,27 +911,23 @@ export class ConectionsService {
 
   getResumenProducto = (pack) => {
 
-    console.log(pack);
-    
-
     this.insumos.resumen = null;
     this.insumos.resumenLoading = true;
 
     const httpOptions = {
       headers: new HttpHeaders({
         'Authorization': 'Bearer ' + this.loginData.token
-      }),
-      params: new HttpParams().set('oficina_id', pack.oficina_id)
-        .set('producto_id', pack.producto_id)
+      })
     };
 
-    this.http.get(this.serverUrl + '/auth/resumen/', httpOptions).subscribe((res: any) => {
-      console.log(res);
-      if (!res.error) {
-        this.insumos.resumen = res;
-      }
-      this.insumos.resumenLoading = false;
-    });
+    this.http.post(this.serverUrl + '/auth/resumen',
+      pack, httpOptions)
+      .subscribe((res: any) => {
+        console.log(res);
+        if (!res.error) {this.insumos.resumen = res;}
+        this.insumos.resumenLoading = false;
+      });
+
   }
 
 
