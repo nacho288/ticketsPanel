@@ -33,7 +33,6 @@ export class CrearSolicitudComponent implements OnInit {
     public loginData: LoginDataService,
     private toastr: ToastrService) {
     this.conections.kickToHome(9);
-    this.conections.kickToHome(0);
     this.solicitud.limpiar();
 
     if (this.loginData.type == 1) {
