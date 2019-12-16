@@ -27,7 +27,7 @@ export class SearchUsuarioPipe implements PipeTransform {
       if (item.type == 9) {
         cadena = 'Super-usuario';
       }
-        cadena += ' ' + item.name;
+      cadena += ' ' + item.name + ' ' + item.username;
         return cadena.toLowerCase().includes(args);
     });
   }

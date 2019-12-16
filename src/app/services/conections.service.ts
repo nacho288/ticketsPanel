@@ -4,7 +4,6 @@ import { InsumosDataService } from './insumos-data.service';
 import { HttpClient, HttpParams, HttpHeaders  } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 
-
 import { SolicitudDataService } from './solicitud-data.service';
 import { PedidosDataService } from './pedidos-data.service';
 import { Router } from "@angular/router";
@@ -51,6 +50,36 @@ export class ConectionsService {
     }
   }
 
+  clearLogin = () => {
+    
+    this.loginData.ventana = 1;
+
+    this.loginData.logged = false;
+    this.loginData.type = 0;
+    this.loginData.error = 2;
+
+    this.loginData.fullName = "";
+    this.loginData.token = "";
+    this.loginData.type = 0;
+    this.loginData.id = null;
+    this.loginData.error = 2;
+    this.loginData.loading = false;
+    this.loginData.fullName = "";
+    this.loginData.token = null;
+    this.loginData.almacen_id = null;
+    this.loginData.almacenSolicitud = null;
+    this.loginData.oficina_id = null;
+    this.loginData.userAlmacenes = [];
+    this.loginData.userOficinas = [];
+    this.loginData.almacenLogin = [];
+    this.loginData.oficinaLogin = [];
+    this.loginData.almacen = null;
+    this.loginData.almacen = null;
+
+    this.loginData.loading = false;
+
+  }
+
   exito = () => {
     this.toastr.success('Acción realizada satisfactoriamente', 'Completado', {
       timeOut: 3000,
@@ -80,17 +109,23 @@ export class ConectionsService {
       .subscribe((res: any) => {
         if (res.error) {
           console.log(res);
+          this.fracaso();
         } else {
         this.exito();
-        this.getUsuarios('all');
+
         }
-        this.usuarios.loading = false;
-      }
+        this.getUsuarios('all');
+      },
+        (error: any) => {
+          console.log('oops', error)
+          this.fracaso();
+          this.getUsuarios('all');
+        }
       );
 
   }
 
-  resetPassword = (pack) => {
+  resetPasswordSuper = (pack) => {
 
     this.usuarios.loading = true;
 
@@ -101,6 +136,7 @@ export class ConectionsService {
     };
 
     let packEnviar = {
+      super: true,
       userMod_id: pack.resetId,
       password: pack.resetPass,
       password_confirmation: pack.resetPass2
@@ -114,9 +150,50 @@ export class ConectionsService {
           this.exito();
         }
         this.getUsuarios('all');
-      }
+      },
+        (error: any) => {
+          console.log('oops', error)
+          this.fracaso();
+          this.getUsuarios('all');
+        }
       );
+  }
 
+  resetPassword = (pack) => {
+
+    this.usuarios.resetUserLoading = true;
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': 'Bearer ' + this.loginData.token
+      })
+    };
+
+    let packEnviar = {
+      original: pack.password,
+      password: pack.resetPass,
+      password_confirmation: pack.resetPass_confirmation
+    }
+
+    this.http.post(this.serverUrl + '/auth/reset', packEnviar, httpOptions)
+      .subscribe((res: any) => {
+        if (res.error) {
+          this.fracaso();
+          console.log(res);
+        } else {
+          this.exito();
+          this.toHome();
+          this.clearLogin();
+        }
+
+        this.usuarios.resetUserLoading = false;
+      },
+        (error: any) => {
+          console.log('oops', error)
+          this.usuarios.resetUserLoading = false;
+          this.fracaso();
+        }
+      );
   }
   
   login = (username, password) =>  {
@@ -214,11 +291,6 @@ export class ConectionsService {
     };
 
     this.http.get(this.serverUrl + '/auth/logout', httpOptions).subscribe((res: any) => {
-
-      this.loginData.loading = false;
-
-
-
       if (res.logout) {
         this.loginData.logged = false;
         this.loginData.type = 0;
@@ -1464,8 +1536,3 @@ export class ConectionsService {
     }
 
   }
-
-  
-
-
-

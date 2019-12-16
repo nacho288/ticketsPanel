@@ -35,6 +35,7 @@ import { FiltrarEntregadasPipe } from './pipes/filtrar-entregadas.pipe';
 import { UtilidadesComponent } from './components/utilidades/utilidades.component';
 import { SearchUsuarioPipe } from './pipes/search-usuario.pipe';
 import { SearchUsuarioNombrePipe } from './pipes/search-usuario-nombre.pipe';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { SearchUsuarioNombrePipe } from './pipes/search-usuario-nombre.pipe';
     UtilidadesComponent,
     SearchUsuarioPipe,
     SearchUsuarioNombrePipe,
+    ResetPasswordComponent,
     
   ],
   imports: [

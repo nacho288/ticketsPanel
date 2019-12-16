@@ -125,7 +125,7 @@ export class UsuariosComponent implements OnInit {
       });
       return;
     }
-    this.conections.resetPassword(this.resetPack);
+    this.conections.resetPasswordSuper(this.resetPack);
     this.limpiarReset();
   }
 

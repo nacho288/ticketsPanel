@@ -9,6 +9,8 @@ export class UsuariosDataService {
   loading = false
   ventana = 1;
 
+  resetUserLoading = false;
+
   getNombre = (id) => this.usuarios.find((u) => u.id == id).nombre;
 
   constructor() { }

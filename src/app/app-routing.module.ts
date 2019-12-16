@@ -10,6 +10,7 @@ import { AlmacenesComponent } from './components/almacenes/almacenes.component';
 import { OficinasComponent } from './components/oficinas/oficinas.component';
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { UtilidadesComponent } from './components/utilidades/utilidades.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -21,7 +22,8 @@ const routes: Routes = [
   { path: 'almacenes', component: AlmacenesComponent },
   { path: 'oficinas', component: OficinasComponent },
   { path: 'usuarios', component: UsuariosComponent },
-  { path: 'utilidades', component: UtilidadesComponent }
+  { path: 'utilidades', component: UtilidadesComponent },
+  { path: 'reset', component: ResetPasswordComponent }
 ];
 
 @NgModule({
