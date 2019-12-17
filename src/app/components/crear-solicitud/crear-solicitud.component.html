@@ -35,10 +35,10 @@
             
             <div class="row align-items-center">
               <div class="col col-auto text-left">
-                <p class="my-0">Usuario del pedido:</p>
+                <p class="my-0"><b>Usuario del pedido:</b></p>
               </div>
               <div class="col text-left">
-                <ng-select [items]="loginData.oficinaSolicitud.usuarios" bindLabel="name" bindValue="id"
+                <ng-select class="fontChico" [items]="loginData.oficinaSolicitud.usuarios" bindLabel="name" bindValue="id"
                   notFoundText='Sin resultados' placeholder="Elegir usuario" [(ngModel)]="user_id">
                 </ng-select>
               </div>
@@ -62,7 +62,7 @@
                   <div class="row">
                     <div class="col">
                       <div class="form-group">
-                        <select [(ngModel)]="categoria" name="cat" id="insumo" class="form-control" >
+                        <select [(ngModel)]="categoria" name="cat" id="insumo" class="form-control fontChico" >
                           <option selected disabled value="undefined">Categorias</option>
                           <option [ngValue]="null">Todas</option>
                           <ng-container *ngFor="let cat of categoriasData.categorias">
@@ -73,10 +73,12 @@
                         </select>
                       </div>
                     </div>
+                  </div>
+                  <div class="row">
                     <div class="col">
                       <div class="form-group">
-                        <ng-select [items]="insumosData.insumos | insumoCategoria: categoria" bindLabel="nombre" bindValue="id" notFoundText='Sin resultados'
-                          placeholder="Elegir insumo" [(ngModel)]="insumoId">
+                        <ng-select class="fontChico" [items]="insumosData.insumos | insumoCategoria: categoria" bindLabel="nombre" bindValue="id"
+                          notFoundText='Sin resultados' placeholder="Elegir insumo" [(ngModel)]="insumoId">
                         </ng-select>
                       </div>
                     </div>
@@ -84,13 +86,13 @@
                   <div class="row">
                     <div class="col">
                       <div class="form-group">
-                        <input [(ngModel)]="cantidad" name="canti" id="cantidad" class="form-control" type="number" placeholder="Cantidad"
+                        <input [(ngModel)]="cantidad" name="canti" id="cantidad" class="form-control fontChico" type="number" placeholder="Cantidad"
                           name="">
                       </div>
                     </div>
                     <div class="col">
                       <div class="row justify-content-end">
-                        <button (click)="agregar()" class="btn btn-diputado mr-3" type="button">
+                        <button (click)="agregar()" class="btn btn-diputado mr-3 btn-block" type="button">
                           Agregar
                         </button>
                       </div>
@@ -129,7 +131,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of solicitud.solicitud.insumos; let i = index">
+                  <tr class="fontChico" *ngFor="let item of solicitud.solicitud.insumos; let i = index">
                     <th scope="row">{{item.codigo}}</th>
                     <td>{{item.nombre}}</td>
                     <td> {{item.cantidad}}</td>
@@ -152,7 +154,7 @@
             <div class="col">
               <div class="form-group">
                 <label for="exampleFormControlTextarea1"><h5>Justificación del pedido:</h5></label>
-                <textarea [(ngModel)]="comentario" name="coment" class="form-control" id="exampleFormControlTextarea1"
+                <textarea [(ngModel)]="comentario" name="coment" class="form-control fontChico" id="exampleFormControlTextarea1"
                   rows="3"></textarea>
               </div>
             </div>
@@ -262,7 +264,7 @@
               
                   <div class="form-group">
                     <label for="exampleFormControlSelect2">Almacén:</label>
-                    <select [(ngModel)]="almacen_id" class="form-control" id="exampleFormControlSelect2">
+                    <select [(ngModel)]="almacen_id" class="form-control fontChico" id="exampleFormControlSelect2">
                       <option selected disabled [value]="null">Almacén</option>
                       <option *ngFor="let al of loginData.oficinaLogin.almacenes" [value]='al.id'>{{al.nombre}}</option>
                     </select>
@@ -308,7 +310,7 @@
         
                   <div class="form-group">
                     <label for="exampleFormControlSelect2">Oficina:</label>
-                    <ng-select [items]="loginData.almacenLogin.oficinas" bindLabel="nombre" bindValue="id" notFoundText='Sin resultados' placeholder="Elegir oficina"
+                    <ng-select class="fontChico" [items]="loginData.almacenLogin.oficinas" bindLabel="nombre" bindValue="id" notFoundText='Sin resultados' placeholder="Elegir oficina"
                       [(ngModel)]="oficina_id">
                     </ng-select>
                   </div>

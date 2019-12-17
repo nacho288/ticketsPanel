@@ -182,7 +182,7 @@
       <div class="col">
         <table class="table mb-0">
           <thead>
-            <tr>
+            <tr >
               <th scope="col">#</th>
               <th *ngIf="login.type == 0" scope="col">Almacén</th>
               <th scope="col">Creado en</th>
@@ -194,7 +194,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of pedidos.pedidosFiltrados | filtrarEntregadas: mostrarEntregadas | searchPedido: buscar | paginate: { itemsPerPage: 25, currentPage: p }">
+            <tr class="fontChico" *ngFor="let item of pedidos.pedidosFiltrados | filtrarEntregadas: mostrarEntregadas | searchPedido: buscar | paginate: { itemsPerPage: 25, currentPage: p }">
               <th scope="row">{{item.pedido_id}}</th>
               <td *ngIf="login.type == 0">{{item.almacen}}</td>
               <td>{{utils.parseDate(item.fecha)}}</td>
@@ -603,14 +603,14 @@
             <form>
               <div class="form-group">
                 <label for="exampleInputEmail1">Administrador que entrega la solicitud:</label>
-                <select [(ngModel)]="packEntregar.username" name="usu" id="usu" class="form-control">
+                <select [(ngModel)]="packEntregar.username" name="usu" id="usu" class="form-control fontChico">
                   <option selected disabled [value]="null">Administrador</option>
                   <option *ngFor="let item of login.almacenLogin.administradores" [value]="item.username">{{item.name}}</option>
                 </select>
               </div>
               <div class="form-group">
                 <label for="exampleInputPassword1">Contraseña</label>
-                <input [(ngModel)]="packEntregar.password" name="password" type="password" class="form-control"
+                <input [(ngModel)]="packEntregar.password" name="password" type="password" class="form-control fontChico"
                   id="exampleInputPassword1" placeholder="Contraseña">
               </div>
         
@@ -623,7 +623,7 @@
               <div class="form-group">
                 <label for="numero">Usuario que lo recibió:</label>
                 <select *ngIf="login.oficinaSolicitud" [(ngModel)]="packEntregar.empleado_id" name="usu" id="usu"
-                  class="form-control">
+                  class="form-control fontChico">
                   <option selected disabled [value]="null">Usuario que lo recibió</option>
                   <option *ngFor="let item of login.oficinaSolicitud.usuarios" [value]="item.id">{{item.name}}</option>
                 </select>
