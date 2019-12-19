@@ -131,6 +131,26 @@ export class SolicitudesComponent implements OnInit {
   }
 
   updateEvaluar = () => {
+
+    let negativo = false;
+
+    this.packEvaluar.forEach(producto => {
+      if (!producto.cantidad) {
+          negativo = true;
+      }
+      if (parseInt(producto.cantidad) < 0) {
+        negativo = true;
+      }
+    });
+
+    if (negativo) {
+      this.toastr.error('una o mas de las cantidades ingresadas no es válida', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-bottom-right'
+      });
+      return;
+    }
+
     this.pedidos.packAprobado = this.packEvaluar;
     this.conections.updatePedido(1, this.comentario);
   }

@@ -243,7 +243,8 @@ export class BienesComponent implements OnInit {
   toStock = (id) => {
     let insumo = this.insumosData.insumos.find(item => item.id == id);
     this.insumoStock = {
-      ...insumo
+      ...insumo,
+      stock: parseInt(insumo.stock)
     };
   }
 
@@ -401,6 +402,9 @@ export class BienesComponent implements OnInit {
   }
 
   updateStock = () => {
+    
+    console.log(this.insumoStock);
+    console.log('stock' + this.insumoStock.stock);
 
     if (!Number.isInteger(this.insumoStock.stock) || this.insumoStock.stock < 0) {
       this.toastr.error('no se ha insertado una cantidad de stock válida', 'Error', {
