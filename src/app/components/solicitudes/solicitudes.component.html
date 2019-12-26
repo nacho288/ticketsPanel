@@ -361,7 +361,7 @@
     <div class="row mt-2">
 
       <div class="col col-auto text-left">
-        <button (click)="toEstado = 4" *ngIf="pedidos.pedido.estado == 0 && login.type != 0" type="button" class="btn btn-danger mr-4"
+        <button (click)="toEstado = 4" *ngIf="pedidos.pedido.estado <= 1 && login.type != 0" type="button" class="btn btn-danger mr-4"
           data-toggle="modal" data-target="#exampleModal">
           Cancelar pedido
         </button>
